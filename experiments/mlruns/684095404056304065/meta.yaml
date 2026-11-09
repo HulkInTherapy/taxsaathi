@@ -1,0 +1,9 @@
+artifact_location: file:///opt/taxsaathi/experiments/mlruns/684095404056304065
+creation_time: 1793224420537
+effective_trace_archival_retention: null
+experiment_id: '684095404056304065'
+last_update_time: 1793224420537
+lifecycle_stage: active
+name: taxsaathi-m3
+trace_location: null
+workspace: default

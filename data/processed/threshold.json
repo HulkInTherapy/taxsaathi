@@ -1,0 +1,6 @@
+{
+  "rerank_threshold": -5.834,
+  "config": "C6",
+  "dev_refusal_accuracy": 0.9811320754716981,
+  "tuned_at": "2026-10-28T21:53:34+00:00"
+}

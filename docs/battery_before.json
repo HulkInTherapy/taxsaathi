@@ -1,0 +1,3218 @@
+[
+ {
+  "id": "R001",
+  "question": "It says no tax until 12L and also says 5% tax for 4-8L. I am confused. What does it mean?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R002",
+  "question": "What if my income is 12.8 lakh? How much tax under the new regime?",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1280000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 188760,
+   "new": 5200,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: marginal relief of ₹55,750 — tax limited to the income above ₹12,00,000 (₹5,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹12,80,000, standard deduction ₹75,000, taxable income ₹12,05,000, slab tax ₹60,750, rebate/relief ₹55,750, cess ₹200, total tax ₹5,200. [CALC] Old regime: gross ₹12,80,000, standard deduction ₹50,000, taxable income ₹12,30,000, slab tax ₹1,81,500, cess ₹7,260, total tax ₹1,88,760. [CALC] The new regime is better, savi",
+   "citations": [
+    "IT-OLD-REBATE"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R003",
+  "question": "Tax on ₹12,00,001?",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1200001,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 163800,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed ₹12,00,001 is your annual gross income.",
+    "New regime: rebate u/s 87A of ₹52,500 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹12,00,001, standard deduction ₹75,000, taxable income ₹11,25,001, slab tax ₹52,500, rebate/relief ₹52,500, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹12,00,001, standard deduction ₹50,000, taxable income ₹11,50,001, slab tax ₹1,57,500, cess ₹6,300, total tax ₹1,63,800. [CALC] The new regime is better, saving ₹1,",
+   "citations": [
+    "IT-SURCHARGE-MARGINAL"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R004",
+  "question": "Is the 75000 standard deduction only till 12.75 lakh? For income earned above 12.75 lakh, do we still get the standard deduction?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "So there is effectively no tax up to ₹12 lakh of taxable income (₹12.75 lakh of salary after the ₹75,000 standard deduction). [IT-NEW-REBATE-TY2627] For income above ₹12 lakh, marginal relief applies: the tax payable cannot exceed the amount by which total income exceeds ₹12,00,000. [IT-NEW-REBATE-TY2627] As a rule of thumb, the old regime wins only if your total deductions are large — for most sa",
+   "citations": [
+    "IT-NEW-REBATE-TY2627",
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R005",
+  "question": "Could someone please advise the standard deduction for old regime and new regime applicable for the Financial Year 2024-25 (salaries)?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Under section 16(ia) of the Income-tax Act, 1961, every salaried employee and pensioner gets a flat standard deduction from salary income without any bills or proof. [IT-NEW-STDDED-1961] For FY 2024-25 and FY 2025-26, it is ₹75,000 or the amount of salary, whichever is lower, if you are taxed under the new regime of section 115BAC(1A), and ₹50,000 or the salary, whichever is lower, under the old r",
+   "citations": [
+    "IT-NEW-STDDED-1961",
+    "IT-NEW-SLABS-FY2425"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R006",
+  "question": "Is FD interest tax free under 12.75L? Asking on behalf of my mother. She earns around ₹12L per year. I read that interest from FDs or debt mutual funds is tax-free up to ₹75,000.",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1200000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 163800,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹52,500 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹12,00,000, standard deduction ₹75,000, taxable income ₹11,25,000, slab tax ₹52,500, rebate/relief ₹52,500, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹12,00,000, standard deduction ₹50,000, taxable income ₹11,50,000, slab tax ₹1,57,500, cess ₹6,300, total tax ₹1,63,800. [CALC] The new regime is better, saving ₹1,",
+   "citations": [
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent calculation != question"
+  ]
+ },
+ {
+  "id": "R007",
+  "question": "Got a 9.41% hike on 12.53 LPA, so I'm going to around 13.7 LPA from October. It feels like I got nothing. Is this how tax works?",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != calculation",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R008",
+  "question": "How can I give zero tax under new tax regime? My CTC is 13.5 lakh.",
+  "expect": {
+   "intent": "calculation"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1350000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 210600,
+   "new": 74100,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹13,50,000, standard deduction ₹75,000, taxable income ₹12,75,000, slab tax ₹71,250, cess ₹2,850, total tax ₹74,100. [CALC] Old regime: gross ₹13,50,000, standard deduction ₹50,000, taxable income ₹13,00,000, slab tax ₹2,02,500, cess ₹8,100, total tax ₹2,10,600. [CALC] The new regime is better, saving ₹1,36,500. [CALC]",
+   "citations": [
+    "IT-DED-80CCD2"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R009",
+  "question": "Please explain tax calculation in FY 2025-26 and FY 2026-27 in new regime. Lot of confusion about SD and rebate of 60000. Income 12,70,000 for FY 2025-26 and 12,90,000 for FY 2026-27.",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 60000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2025-26",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for FY 2025-26 (AY 2026-27); health & education cess 4% included."
+   ],
+   "answer": "Tax year 2025-26 (Income-tax Act, 1961 s.115BAC / s.87A). [CALC] New regime: gross ₹60,000, standard deduction ₹60,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹60,000, standard deduction ₹50,000, taxable income ₹10,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] For FY 2025-26 (AY 2026-27), a resident individual under ",
+   "citations": [
+    "IT-NEW-REBATE-FY2526"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R010",
+  "question": "Does old regime still make sense for people in higher tax bracket? I keep seeing that people in 30% tax bracket are better off with the new regime in most cases (unless having huge deductions).",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The old regime has higher slab rates but lets you reduce taxable income with exemptions and deductions. [IT-OLD-DEDUCTIONS] As a rule of thumb, the old regime wins only if your total deductions are large — for most salaried people earning up to about ₹12.75 lakh, the new regime gives zero tax from FY 2025-26. [IT-OLD-DEDUCTIONS] Under the old (optional) tax regime, an individual below 60 years pay",
+   "citations": [
+    "IT-OLD-DEDUCTIONS",
+    "IT-OLD-SLABS-BELOW60"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R011",
+  "question": "If a person is earning Rs 10 lakh per annum in India which tax regime are you going to suggest him, new tax regime or old tax regime?",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1000000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 106600,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹32,500 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹10,00,000, standard deduction ₹75,000, taxable income ₹9,25,000, slab tax ₹32,500, rebate/relief ₹32,500, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹10,00,000, standard deduction ₹50,000, taxable income ₹9,50,000, slab tax ₹1,02,500, cess ₹4,100, total tax ₹1,06,600. [CALC] The new regime is better, saving ₹1,06",
+   "citations": [
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R012",
+  "question": "Old/new tax regime - which is better for a gross of 8LPA with 80c invest proofs and HRA?",
+  "expect": {
+   "intent": "calculation",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 800000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 65000,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹16,250 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹8,00,000, standard deduction ₹75,000, taxable income ₹7,25,000, slab tax ₹16,250, rebate/relief ₹16,250, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹8,00,000, standard deduction ₹50,000, taxable income ₹7,50,000, slab tax ₹62,500, cess ₹2,500, total tax ₹65,000. [CALC] The new regime is better, saving ₹65,000. [C",
+   "citations": [
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R013",
+  "question": "Given that one cannot shift back from the new tax regime to the old one, would anyone really forego all future deductions and shift to the new one in the first place?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "It is one of the few deductions allowed under the new regime. [IT-DED-80CCD2] Limits: under the new regime, up to 14% of salary (basic plus DA) for all employers, private or government; under the old regime, 14% for Central or State Government employers and 10% for others. [IT-DED-80CCD2] As a rule of thumb, the old regime wins only if your total deductions are large — for most salaried people ear",
+   "citations": [
+    "IT-DED-80CCD2",
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R014",
+  "question": "What deductions can I claim if I choose the new tax regime?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The old regime has higher slab rates but lets you reduce taxable income with exemptions and deductions. [IT-OLD-DEDUCTIONS] As a rule of thumb, the old regime wins only if your total deductions are large — for most salaried people earning up to about ₹12.75 lakh, the new regime gives zero tax from FY 2025-26. [IT-OLD-DEDUCTIONS] It is one of the few deductions allowed under the new regime. [IT-DED",
+   "citations": [
+    "IT-OLD-DEDUCTIONS",
+    "IT-DED-80CCD2"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R015",
+  "question": "One of my clients is a salaried employee whose income exceeds the Rs 7,00,000 threshold under the new regime for A.Y. 2025-26. How shall I save his income tax? I tried all the deductions applicable under the new tax regime.",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 700000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2024-25",
+   "old": 44200,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹16,250 (taxable income up to ₹7,00,000).",
+    "Rates for FY 2024-25 (AY 2025-26); health & education cess 4% included."
+   ],
+   "answer": "Tax year 2024-25 (Income-tax Act, 1961 s.115BAC / s.87A). [CALC] New regime: gross ₹7,00,000, standard deduction ₹75,000, taxable income ₹6,25,000, slab tax ₹16,250, rebate/relief ₹16,250, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹7,00,000, standard deduction ₹50,000, taxable income ₹6,50,000, slab tax ₹42,500, cess ₹1,700, total tax ₹44,200. [CALC] The new regime is better, saving ₹44,200.",
+   "citations": [
+    "IT-NEW-STDDED-1961"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent calculation != question"
+  ]
+ },
+ {
+  "id": "R016",
+  "question": "I have business income and opted for old regime in FY23-24. I wish to continue under old scheme for FY24-25, but erroneously filed Form 10IEA for re-entering new regime. Is there a way to revoke Form 10IEA before filing ITR?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "I could not find this in my verified sources, so I would rather not guess. For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R017",
+  "question": "Am I eligible for Rs. 50,000 standard deduction in the new tax regime?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The main ones for salaried people are: standard deduction ₹50,000; HRA exemption; leave travel allowance; professional tax; section 80C investments up to ₹1,50,000 (section 123 of the 2025 Act); extra NPS contribution under 80CCD(1B) up to ₹50,000; health insurance under 80D (₹25,000, or ₹50,000 for seniors, plus parents); savings interest under 80TTA (₹10,000) or 80TTB for seniors (₹50,000); educ",
+   "citations": [
+    "IT-OLD-DEDUCTIONS",
+    "IT-NEW-STDDED-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R018",
+  "question": "In the new tax regime can I claim deductions under chapter-VIA like section 80C, 80D, 80DD, 80G etc. [while filing the return]?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The main ones for salaried people are: standard deduction ₹50,000; HRA exemption; leave travel allowance; professional tax; section 80C investments up to ₹1,50,000 (section 123 of the 2025 Act); extra NPS contribution under 80CCD(1B) up to ₹50,000; health insurance under 80D (₹25,000, or ₹50,000 for seniors, plus parents); savings interest under 80TTA (₹10,000) or 80TTB for seniors (₹50,000); educ",
+   "citations": [
+    "IT-OLD-DEDUCTIONS",
+    "IT-MAP-80D-80E-80G"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R019",
+  "question": "Can I claim deduction of Interest on borrowed capital of Rs. 2,00,000/- for self occupied property [under house property in the new regime]?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Under section 24(b) of the Income-tax Act, 1961 (section 22 of the Income-tax Act, 2025), interest on a loan taken to buy or build a self-occupied house is deductible up to ₹2,00,000 a year (₹30,000 if the loan is for repairs or taken before 1 April 1999), with construction to be completed within five years. [IT-DED-24B] For a let-out property, interest is deductible without limit in both regimes,",
+   "citations": [
+    "IT-DED-24B",
+    "IT-NEW-DEDUCTIONS-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R020",
+  "question": "I am a senior citizen. In the old tax regime there are special advantages in tax rates for senior citizens. [Does the new regime give similar advantages?]",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The old regime gives older residents a higher exemption limit. [IT-OLD-SLABS-SENIOR] A resident senior citizen aged 60 to below 80 pays nil up to ₹3,00,000, 5% on ₹3,00,001 to ₹5,00,000, 20% on ₹5,00,001 to ₹10,00,000 and 30% above ₹10,00,000 (tax ₹10,000 at ₹5 lakh). [IT-OLD-SLABS-SENIOR] Section 202(1) of the Income-tax Act, 2025 (which replaces section 115BAC of the 1961 Act) sets the default n",
+   "citations": [
+    "IT-OLD-SLABS-SENIOR",
+    "IT-NEW-SLABS-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R021",
+  "question": "Is there any difference in tax rebate under section 87A in old and new tax regime?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The rebate of section 87A of the Income-tax Act, 1961 corresponds to Section 156 of the Income-tax Act, 2025 (₹12,500 up to ₹5 lakh in section 156(1); ₹60,000 up to ₹12 lakh for the new regime in section 156(2), with marginal relief). [IT-MAP-87A-115BAC] The new tax regime of section 115BAC of the 1961 Act corresponds to Section 202 of the Income-tax Act, 2025; the slabs are now written into secti",
+   "citations": [
+    "IT-MAP-87A-115BAC",
+    "IT-OLD-REBATE"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R022",
+  "question": "I am filing ITR in new regime for AY 2024-25. Can I switch between old and new tax regime in the next years?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Small taxpayers are exempt: Notification 15/2025-Central Tax (17 September 2025) exempts registered persons whose aggregate turnover in a financial year is up to Rs 2 crore from filing the annual return for FY 2024-25 onwards; similar year-by-year exemptions were given for earlier years. [GST-RET-GSTR9] An annual return cannot be filed more than three years after its due date (section 44(2)). [GST",
+   "citations": [
+    "GST-RET-GSTR9",
+    "GST-COMP-FORMS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R023",
+  "question": "Afaik we cannot claim HRA exemption in new tax regime. But my friend got his ITR filed by a CA and he claimed HRA under new tax regime. Is that possible?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From Tax Year 2026-27, the HRA exemption continues under the Income-tax Act, 2025 as an exemption listed in Schedule III (the corresponding provision of section 10(13A) of the 1961 Act), with the calculation rules in the Income-tax Rules, 2026. [IT-DED-HRA-TY2627] HRA remains unavailable under the new regime of section 202. [IT-DED-HRA-TY2627] The main ones for salaried people are: standard deduct",
+   "citations": [
+    "IT-DED-HRA-TY2627",
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R024",
+  "question": "My employer used the new tax regime for TDS, but I filed my ITR under the old regime. Is that allowed?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "It is one of the few deductions allowed under the new regime. [IT-DED-80CCD2] Asking the employer to restructure part of CTC as NPS is a common way to save tax in the new regime. [IT-DED-80CCD2] Under section 202(2) of the Income-tax Act, 2025, total income in the new regime is computed without most exemptions in Schedule III (such as house rent allowance and leave travel concession) and without t",
+   "citations": [
+    "IT-DED-80CCD2",
+    "IT-NEW-DEDUCTIONS-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R025",
+  "question": "I did not submit any rent receipts/agreement to my employer; they deducted full TDS with no HRA exemption in Form 16. Can I claim HRA only in the ITR?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Form 16 is the certificate an employer issues for tax deducted from salary under section 192 of the Income-tax Act, 1961; it must be issued by 15 June after the end of the financial year. [IT-FL-FORM16] Part A shows TAN, PAN and quarterly TDS deposited; Part B shows the salary break-up, exemptions such as HRA, the standard deduction, Chapter VI-A deductions, the regime chosen and the tax computed.",
+   "citations": [
+    "IT-FL-FORM16",
+    "IT-MAP-SALARY-HP"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R026",
+  "question": "I am planning to use my family member's PAN to claim HRA. A rent agreement and rent receipts will be prepared, but there won't be any actual rent paid.",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R027",
+  "question": "My ABSLI tax certificate says Section 123. Is this basically the old 80C? Pure term policy, annual premium ₹18,420, tax year 2026–27, filing under old regime.",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Section 80C of the Income-tax Act, 1961 corresponds to Section 123 of the Income-tax Act, 2025. [IT-MAP-80C] Yes, the 80C deduction still exists from Tax Year 2026-27, only under a new number: section 123 allows up to ₹1,50,000 for the payments listed in Schedule XV (PF, PPF, life insurance, ELSS, tuition fees, home-loan principal and so on). [IT-MAP-80C] Section 80C of the Income-tax Act, 1961 al",
+   "citations": [
+    "IT-MAP-80C",
+    "IT-DED-80C"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R028",
+  "question": "What is the concept of \"Tax Year\" and how will the income be assessed in view of removal of \"Assessment Year\" ('AY') concept?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R029",
+  "question": "Does the Income Tax Act, 2025 completely replace the Income Tax Act, 1961?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Income earned up to 31 March 2026 (FY 2025-26 and earlier years) remains governed by the Income-tax Act, 1961 and is assessed under it (FY 2025-26 = AY 2026-27). [IT-ACT-WHICH-LAW] Section 536(2) of the Income-tax Act, 2025 saves the 1961 Act for proceedings relating to years beginning before 1 April 2026, even if those proceedings start after that date. [IT-ACT-WHICH-LAW] The Income-tax Act, 2025",
+   "citations": [
+    "IT-ACT-WHICH-LAW",
+    "IT-ACT-COMMENCEMENT"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R030",
+  "question": "For how long will the old and new Acts run in parallel? What does this mean for taxpayers practically?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers and businesses using presumptive taxation (section 44AD or 44ADA, now section 58) need not pay four instalments: they can pay 100% of their advance tax in a single instalment on or before 15 March of the year. [IT-FL-ADVANCE-PRESUMPTIVE] If advance tax is not paid or is short, interest is charged: under section 234B (section 424 of the Income-tax Act, 2025), simple interest of 1% per m",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE",
+    "IT-OLD-DEDUCTIONS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R031",
+  "question": "I have opted for new tax regime under the Income Tax Act, 1961. Do I have to opt for it again in the new Income Tax Act, 2025?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The Income-tax Act, 2025 (Act 30 of 2025) replaced the Income-tax Act, 1961. [IT-ACT-COMMENCEMENT] The Income-tax Rules, 2026 were notified on 20 March 2026 to operationalise the new Act, cutting the rules from 511 to 333 and the forms from 399 to 190, and new form numbers apply from 1 April 2026. [IT-ACT-COMMENCEMENT] The rebate of section 87A of the Income-tax Act, 1961 corresponds to Section 15",
+   "citations": [
+    "IT-ACT-COMMENCEMENT",
+    "IT-MAP-87A-115BAC"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R032",
+  "question": "What has changed in provisions relating to presumptive taxation of residents in the new Income Tax Act, 2025?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Assessment provisions are renumbered in the Income-tax Act, 2025. [IT-MAP-ASSESSMENT] Processing and scrutiny assessment under Section 143 of the Income-tax Act, 1961 corresponds to Section 270 of the 2025 Act. [IT-MAP-ASSESSMENT] The three presumptive-taxation provisions of the Income-tax Act, 1961 — Section 44AD (small business, 8%/6% of turnover), Section 44ADA (professionals, 50% of receipts) ",
+   "citations": [
+    "IT-MAP-ASSESSMENT",
+    "IT-MAP-PRESUMPTIVE-AUDIT"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R033",
+  "question": "How will pending proceedings and notices issued under the Income Tax Act, 1961 be treated after the new Act comes into force?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The Income-tax Act, 2025 (Act 30 of 2025) replaced the Income-tax Act, 1961. [IT-ACT-COMMENCEMENT] Save as otherwise provided, the new Act came into force on 1 April 2026, and the 1961 Act stands repealed from that date (subject to the savings clause in section 536). [IT-ACT-COMMENCEMENT] Section 536(2) of the Income-tax Act, 2025 saves the 1961 Act for proceedings relating to years beginning befo",
+   "citations": [
+    "IT-ACT-COMMENCEMENT",
+    "IT-ACT-WHICH-LAW"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent question != out_of_scope",
+   "refused False != True"
+  ]
+ },
+ {
+  "id": "R034",
+  "question": "Do General Anti-Avoidance Rules ('GAAR') continue under the ITA 2025?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "question",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "I could not find this in my verified sources, so I would rather not guess. For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent question != out_of_scope"
+  ]
+ },
+ {
+  "id": "R035",
+  "question": "44ADA and less than 50% expenses: can I still declare only 50% profit under 44ADA if my actual expenses are lower?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From Tax Year 2026-27, sections 44AD, 44ADA and 44AE of the 1961 Act are consolidated into a single section 58 of the Income-tax Act, 2025, in a table format. [IT-FL-SEC58-TY2627] The core rules carry over: eligible professionals declare 50% of gross receipts as profit (receipts up to ₹50 lakh, or ₹75 lakh if cash receipts are within 5%); eligible small businesses declare 8% of turnover, or 6% of ",
+   "citations": [
+    "IT-FL-SEC58-TY2627",
+    "IT-MAP-PRESUMPTIVE-AUDIT"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R036",
+  "question": "I earned some income through software freelancing and heard that under Section 44ADA, 50% of the professional income is treated as expenses. Do we get 50% exemption on freelancing income?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The three presumptive-taxation provisions of the Income-tax Act, 1961 — Section 44AD (small business, 8%/6% of turnover), Section 44ADA (professionals, 50% of receipts) and Section 44AE (goods carriages) — are consolidated into a single Section 58 of the Income-tax Act, 2025, which sets them out in one table. [IT-MAP-PRESUMPTIVE-AUDIT] A freelancer who used 44ADA for FY 2025-26 will use section 58",
+   "citations": [
+    "IT-MAP-PRESUMPTIVE-AUDIT",
+    "IT-FL-SEC58-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R037",
+  "question": "Can a salaried employee in an MNC, doing freelancing, use 44ADA for the freelancing income alone?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The three presumptive-taxation provisions of the Income-tax Act, 1961 — Section 44AD (small business, 8%/6% of turnover), Section 44ADA (professionals, 50% of receipts) and Section 44AE (goods carriages) — are consolidated into a single Section 58 of the Income-tax Act, 2025, which sets them out in one table. [IT-MAP-PRESUMPTIVE-AUDIT] A freelancer who used 44ADA for FY 2025-26 will use section 58",
+   "citations": [
+    "IT-MAP-PRESUMPTIVE-AUDIT",
+    "IT-FL-ADVANCE-PRESUMPTIVE"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R038",
+  "question": "My son has income of Rs 10 lacs from abroad as a freelance job plus 7 lacs salary in India. No books maintained. Is all the freelance amount taxable, or 50 percent, or 6 percent? My CA says if you go under section 44AD chances are notice.",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question"
+  ]
+ },
+ {
+  "id": "R039",
+  "question": "First time freelancer, forgot about advance tax. What happens now?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers and businesses using presumptive taxation (section 44AD or 44ADA, now section 58) need not pay four instalments: they can pay 100% of their advance tax in a single instalment on or before 15 March of the year. [IT-FL-ADVANCE-PRESUMPTIVE] Example: a freelancer with ₹30 lakh receipts under 44ADA declares ₹15 lakh profit and should pay the full advance tax by 15 March. [IT-FL-ADVANCE-PRES",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE",
+    "IT-FL-ADVANCE-TAX"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R040",
+  "question": "Advance tax for freelancers using 44ADA: do we only need to pay advance tax by March 15, 2026, and only if tax liability is more than 10k?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 10000,
+   "income_type": "business/professional (no std ded)",
+   "age": "below60",
+   "tax_year": "2024-25",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 10k is your annual gross income.",
+    "Calculator supports 2024-25, 2025-26, 2026-27 only; used 2024-25 for 2014-15.",
+    "Looks like business/professional income: no standard deduction applied.",
+    "Not salaried: no standard deduction applied."
+   ],
+   "answer": "Tax year 2024-25 (Income-tax Act, 1961 s.115BAC / s.87A). [CALC] New regime: gross ₹10,000, standard deduction ₹0, taxable income ₹10,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹10,000, standard deduction ₹0, taxable income ₹10,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC]",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent calculation != question"
+  ]
+ },
+ {
+  "id": "R041",
+  "question": "Employer's NPS deduction in new regime FY25-26: can I claim it?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Under the new regime of section 115BAC of the Income-tax Act, 1961 (FY 2024-25 and FY 2025-26), most exemptions and Chapter VI-A deductions are not allowed. [IT-NEW-DEDUCTIONS-1961] What is still allowed: the ₹75,000 standard deduction, the employer's contribution to NPS under section 80CCD(2) up to 14% of salary for all employers, the Agniveer Corpus Fund deduction under section 80CCH, and intere",
+   "citations": [
+    "IT-NEW-DEDUCTIONS-1961",
+    "IT-DED-80CCD2"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R042",
+  "question": "I am a salaried individual, used to filing ITR-1 all these years. Recently I purchased mutual funds worth Rs 10,000 and sold them in the short term. ITR-1 or 2?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The Income-tax Rules, 2026 renumbered almost all forms, so the return forms may carry new names or numbers instead of the familiar ITR-1 to ITR-7; check the final form names and eligibility limits on the e-filing portal once notified. [IT-ITR-FORMS-TY2627] Until then, the AY 2026-27 rules — ₹50 lakh income cap for ITR-1/ITR-4, LTCG under section 112A (now the corresponding capital-gains section of",
+   "citations": [
+    "IT-ITR-FORMS-TY2627",
+    "IT-DUE-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R043",
+  "question": "Is ITR filing necessary for someone earning 5 lakhs in salary? No TDS is being deducted and she has no other income.",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "When a business or professional client pays a resident freelancer fees for professional services, it must deduct TDS under section 194J of the Income-tax Act, 1961 — 10% for professional fees and royalty, 2% for fees for technical services and certain other payments — once payments to that person cross ₹50,000 in a financial year (threshold raised from ₹30,000 by the Finance Act, 2025, from 1 Apri",
+   "citations": [
+    "IT-FL-TDS-194J",
+    "IT-ITR-FORMS-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R044",
+  "question": "No tax, but penalty for late filing? Why was a late fee charged when I had no tax to pay?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Section 47 of the CGST Act levies a late fee for filing returns after the due date, reduced by notifications following the 43rd GST Council meeting. [GST-RET-LATEFEE] Interest at 18% a year is separately payable on late tax payment. [GST-RET-LATEFEE] Section 428 replaces section 234F of the 1961 Act: the fee for a late return is ₹1,000 if total income does not exceed ₹5 lakh and ₹5,000 otherwise, ",
+   "citations": [
+    "GST-RET-LATEFEE",
+    "IT-BELATED-REVISED-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R045",
+  "question": "₹5000 fine for delayed ITR filing despite zero tax: I didn't file before July 31st because my income was below the tax exemption limit.",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Returns for Tax Year 2026-27, the first year under the Income-tax Act, 2025, will be filed in 2027 under section 263 using return forms prescribed under the Income-tax Rules, 2026. [IT-ITR-FORMS-TY2627] The Income-tax Rules, 2026 renumbered almost all forms, so the return forms may carry new names or numbers instead of the familiar ITR-1 to ITR-7; check the final form names and eligibility limits ",
+   "citations": [
+    "IT-ITR-FORMS-TY2627",
+    "IT-BELATED-REVISED-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R046",
+  "question": "GST registration mandatory for freelancers?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers, consultants, designers, developers, tutors and content creators supply services, so the services threshold applies: registration is required once aggregate turnover in a financial year exceeds Rs 20 lakh (Rs 10 lakh in Manipur, Mizoram, Nagaland and Tripura). [GST-REG-FREELANCER] Billing clients in other states does not by itself force registration for service providers below this lim",
+   "citations": [
+    "GST-REG-FREELANCER",
+    "GST-REG-VOLUNTARY"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R047",
+  "question": "I just started freelancing as a software consultant. My current turnover is below ₹20L but I may add more clients going forward. Is GST registration mandatory?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Billing clients in other states does not by itself force registration for service providers below this limit, because Notification 10/2017-Integrated Tax exempts inter-state service suppliers up to the threshold. [GST-REG-FREELANCER] Income from foreign clients is an export of services, which is zero-rated: once registered, the freelancer can export without paying IGST by filing a Letter of Undert",
+   "citations": [
+    "GST-REG-FREELANCER",
+    "GST-REG-COMPULSORY"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R048",
+  "question": "When should a freelancer register for GST?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Section 25(3) of the CGST Act lets a person who is not liable to register under section 22 or 24 take GST registration voluntarily. [GST-REG-VOLUNTARY] Once registered, all provisions of the Act apply as for any registered person: the business must charge GST on its taxable supplies, issue tax invoices, file returns such as GSTR-1 and GSTR-3B (or CMP-08 and GSTR-4 under composition), and can claim",
+   "citations": [
+    "GST-REG-VOLUNTARY",
+    "GST-REG-FREELANCER"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R049",
+  "question": "Crossed ₹20L in August 2024 as a freelancer exporting services to a US-based company (~₹58L/year). What do I need to do for GST?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question"
+  ]
+ },
+ {
+  "id": "R050",
+  "question": "What happens if freelancers in India do not register for GST?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Section 24 of the CGST Act requires certain persons to register even if turnover is below the threshold. [GST-REG-COMPULSORY] These include persons making inter-state taxable supplies; casual taxable persons; persons liable to pay tax under reverse charge; non-resident taxable persons; persons required to deduct TDS under section 51; agents supplying on behalf of other taxable persons; input servi",
+   "citations": [
+    "GST-REG-COMPULSORY",
+    "GST-REG-FREELANCER"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R051",
+  "question": "I started freelancing (chip design services). I'm in Tamil Nadu, the company is in Karnataka, and they said the payment is inclusive of GST. I expect above 40L for FY26. What GST and income tax applies to me, and how can I minimise tax?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers, consultants, designers, developers, tutors and content creators supply services, so the services threshold applies: registration is required once aggregate turnover in a financial year exceeds Rs 20 lakh (Rs 10 lakh in Manipur, Mizoram, Nagaland and Tripura). [GST-REG-FREELANCER] Income from foreign clients is an export of services, which is zero-rated: once registered, the freelancer",
+   "citations": [
+    "GST-REG-FREELANCER",
+    "IT-ACT-WHICH-LAW"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R052",
+  "question": "I run a small service-based business and my turnover is close to the GST threshold. Does GST registration become mandatory immediately after crossing the limit, and how should tax be charged on invoices issued during the transition period?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Once registered, all provisions of the Act apply as for any registered person: the business must charge GST on its taxable supplies, issue tax invoices, file returns such as GSTR-1 and GSTR-3B (or CMP-08 and GSTR-4 under composition), and can claim input tax credit on business purchases. [GST-REG-VOLUNTARY] Small businesses often register voluntarily because registered B2B buyers prefer suppliers ",
+   "citations": [
+    "GST-REG-VOLUNTARY",
+    "GST-REG-COMPULSORY"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R053",
+  "question": "Can anyone explain the Simplified GST Registration Scheme for Small and Low-Risk Businesses applicable from 1st November 2025?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "The 56th GST Council recommended an optional simplified registration scheme, operational from 1 November 2025 (CGST Rule 14A, notified by Notification 18/2025-Central Tax). [GST-REG-SIMPLIFIED] Only one registration per PAN per state is allowed under the scheme, and a person can later withdraw from it. [GST-REG-SIMPLIFIED] The composition scheme under section 10 of the CGST Act is a simple, low-ra",
+   "citations": [
+    "GST-REG-SIMPLIFIED",
+    "GST-COMP-ELIGIBILITY"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R054",
+  "question": "Bhai mujhe GST lena h. Mere PAN card pr name me first name or middle name h, last name nahi h, to ban jayega? Rent agreement pr GST mil jayega?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question"
+  ]
+ },
+ {
+  "id": "R055",
+  "question": "Is there any change in threshold of the registration required for goods under CGST Act, 2017?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Section 24 of the CGST Act requires certain persons to register even if turnover is below the threshold. [GST-REG-COMPULSORY] Two relaxations exist: service providers making inter-state supplies are exempt up to the normal services threshold (Notification 10/2017-Integrated Tax), and from 1 October 2023 small goods sellers on e-commerce platforms can sell within their own state without registratio",
+   "citations": [
+    "GST-REG-COMPULSORY",
+    "GST-REG-VOLUNTARY"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R056",
+  "question": "I have one GST number (regular). Can I apply for another GST number as a composition dealer?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "A registered person who supplies exempt goods or services, or who has opted for the composition scheme, cannot charge GST and must issue a bill of supply instead of a tax invoice (section 31(3)(c) and rule 49). [GST-INV-BILLOFSUPPLY] A composition dealer must also write \"composition taxable person, not eligible to collect tax on supplies\" on top of the bill. [GST-INV-BILLOFSUPPLY] A composition de",
+   "citations": [
+    "GST-INV-BILLOFSUPPLY",
+    "GST-ITC-BLOCKED"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R057",
+  "question": "I am a supplier who sells goods through Flipkart, Meesho (ECO). I'm from Maharashtra and supply goods outside Maharashtra through ECO. Am I eligible for composition scheme?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R058",
+  "question": "How do I apply for Composition Scheme if I am already registered as a regular taxpayer?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "To opt into composition for a financial year, an existing registered person files intimation in Form GST CMP-02 on the GST portal before the start of that year; a new applicant can choose composition in the registration application. [GST-COMP-FORMS] A composition taxpayer then has two filings under rule 62: Form GST CMP-08, a quarterly statement-cum-challan for paying self-assessed tax, due by the",
+   "citations": [
+    "GST-COMP-FORMS",
+    "GST-COMP-SERVICES"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R059",
+  "question": "Can I opt for Composition Levy, if I have dealt in services?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "I could not find this in my verified sources, so I would rather not guess. For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R060",
+  "question": "What are the returns to be filed by a Composition taxpayer?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R061",
+  "question": "When will the changes in GST rates come into force?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 1 February 2026 the deferred GST 2.0 rates for tobacco goods came into force. [GST-RATE-TOBACCO-POST] GST on these goods is computed on the declared retail sale price (RSP) instead of transaction value. [GST-RATE-TOBACCO-POST] The 56th GST Council meeting, held in New Delhi on 3 September 2025 under Finance Minister Nirmala Sitharaman, approved the \"next-generation GST reforms\", popularly cal",
+   "citations": [
+    "GST-RATE-TOBACCO-POST",
+    "GST-STRUCT-20"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R062",
+  "question": "What is the revised GST rate on small petrol, LPG, CNG, or diesel cars? What is covered under small cars?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, small cars moved from 28% to 18% GST. [GST-RATE-VEHICLE-POST] A small car means a petrol, LPG or CNG car with engine capacity up to 1200cc and length up to 4000 mm, or a diesel car up to 1500cc and 4000 mm. [GST-RATE-VEHICLE-POST] GST compensation cess was an extra levy, over and above GST, on luxury and demerit goods such as cars, aerated drinks, tobacco and pan masala. [G",
+   "citations": [
+    "GST-RATE-VEHICLE-POST",
+    "GST-CESS-STATUS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R063",
+  "question": "What is the new GST rate on toilet soap bar? Why has a distinction been kept between liquid soap and soap in bars?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Hair oil, shampoo, toothpaste, dental floss, toilet soap bars, talcum and face powder and shaving cream and aftershave moved from 18% to 5%, tooth powder moved from 12% to 5%, and toothbrushes are also at 5%. [GST-RATE-PERSONALCARE-POST] So toothpaste, soap and shampoo are no longer at 18%; a shop selling them today should charge 5% GST. [GST-RATE-PERSONALCARE-POST] Refrigerators and washing machi",
+   "citations": [
+    "GST-RATE-PERSONALCARE-POST",
+    "GST-RATE-AC-POST"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R064",
+  "question": "What is the GST rate on Air Conditioners, TVs, monitors and dishwashers?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025 under GST 2.0, air-conditioning machines and dishwashing machines moved from 28% to 18% GST. [GST-RATE-AC-POST] All television sets, including LCD and LED TVs, and monitors and projectors are now uniformly taxed at 18%, whatever the screen size; earlier only TVs up to 32 inches were at 18%. [GST-RATE-AC-POST] Under GST 2.0, the Council decided to end the compensation cess le",
+   "citations": [
+    "GST-RATE-AC-POST",
+    "GST-CESS-STATUS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R065",
+  "question": "Which policies are covered under the ambit of the GST exemption recommended on health insurance?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, GST on all individual life insurance policies, whether term, ULIP or endowment, and on all individual health insurance policies, including family floater and senior-citizen policies, was exempted (18% to nil). [GST-RATE-INSURANCE-POST] The exemption is for individual policies; group policies taken by employers are not covered by this change. [GST-RATE-INSURANCE-POST] Sectio",
+   "citations": [
+    "GST-RATE-INSURANCE-POST",
+    "IT-DED-80D"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R066",
+  "question": "Whether the hotel accommodation services, where the value of supply is up to Rs. 7500 per unit per day, or equivalent, will be taxed at 18%?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question",
+   "refused True != False"
+  ]
+ },
+ {
+  "id": "R067",
+  "question": "What is the GST rate on medicines?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Under GST 2.0, the Council decided to end the compensation cess levy and to fold its effect into the new 40% rate. [GST-CESS-STATUS] For pan masala, cigarettes, chewing tobacco, unmanufactured tobacco and bidi, the old GST rate plus cess continued until the cess loans were repaid. [GST-CESS-STATUS] From 1 February 2026 the deferred GST 2.0 rates for tobacco goods came into force. [GST-RATE-TOBACCO",
+   "citations": [
+    "GST-CESS-STATUS",
+    "GST-RATE-TOBACCO-POST"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R068",
+  "question": "What happens to the applicable rate of tax, if I had supplied goods/services or both before the changes in GST rates come into force but the invoices were issued later?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "A registered person making a taxable supply must issue a tax invoice under section 31 of the CGST Act. [GST-INV-FIELDS] Rule 46 lists what it must contain: name, address and GSTIN of the supplier; a consecutive serial number of up to 16 characters, unique for the financial year; date of issue; name, address and GSTIN of the recipient if registered; for unregistered buyers, name, delivery address a",
+   "citations": [
+    "GST-INV-FIELDS",
+    "GST-REG-AGG-TURNOVER"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R069",
+  "question": "Will I get the benefit of 0% GST on paying premium after 22nd September 2025?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, GST on all individual life insurance policies, whether term, ULIP or endowment, and on all individual health insurance policies, including family floater and senior-citizen policies, was exempted (18% to nil). [GST-RATE-INSURANCE-POST] So an individual buying a term plan or a personal health policy pays no GST on the premium today. [GST-RATE-INSURANCE-POST] From 22 Septembe",
+   "citations": [
+    "GST-RATE-INSURANCE-POST",
+    "GST-RATE-PERSONALCARE-POST"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R070",
+  "question": "The health insurance renewal date is 20th September. I have a policy for my parents, both senior citizens, and now I have to renew it. Will I pay GST?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, GST on all individual life insurance policies, whether term, ULIP or endowment, and on all individual health insurance policies, including family floater and senior-citizen policies, was exempted (18% to nil). [GST-RATE-INSURANCE-POST] So an individual buying a term plan or a personal health policy pays no GST on the premium today. [GST-RATE-INSURANCE-POST] A separate limit",
+   "citations": [
+    "GST-RATE-INSURANCE-POST",
+    "IT-DED-80D"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R071",
+  "question": "It was all over news few months back that GST on health insurance premium would either be decreased or completely removed, but there's no news. What happened to removal of GST on health insurance?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, GST on all individual life insurance policies, whether term, ULIP or endowment, and on all individual health insurance policies, including family floater and senior-citizen policies, was exempted (18% to nil). [GST-RATE-INSURANCE-POST] So an individual buying a term plan or a personal health policy pays no GST on the premium today. [GST-RATE-INSURANCE-POST] GST compensation",
+   "citations": [
+    "GST-RATE-INSURANCE-POST",
+    "GST-CESS-STATUS"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R072",
+  "question": "The coffee price got increased by 20rs, previously it was 110 now it's 130. How is it even possible as the GST on coffee got reduced from 18% to 5%? Does GST reduction really benefit the consumer?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025 under GST 2.0, air-conditioning machines and dishwashing machines moved from 28% to 18% GST. [GST-RATE-AC-POST] All television sets, including LCD and LED TVs, and monitors and projectors are now uniformly taxed at 18%, whatever the screen size; earlier only TVs up to 32 inches were at 18%. [GST-RATE-AC-POST] Chocolates, biscuits, cakes, ice cream, cornflakes, pasta, instant",
+   "citations": [
+    "GST-RATE-AC-POST",
+    "GST-RATE-FOOD-POST"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R073",
+  "question": "I know the monitors/projectors/TV tax has been reduced from 28% to 18%, but what about GPUs and other stuff?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question"
+  ]
+ },
+ {
+  "id": "R074",
+  "question": "How does the government clarify the GST on clothes above ₹2500, as in rural towns customers are charged 28% on total bills rather than accounting individual items?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, the cut-off for clothes and footwear is Rs 2,500. [GST-RATE-APPAREL-POST] Apparel, clothing accessories and made-up textile articles with a sale value up to Rs 2,500 per piece are taxed at 5%; above Rs 2,500 per piece they are taxed at 18% (up from 12%). [GST-RATE-APPAREL-POST] Rule 7 of the CGST Rules prescribes composition rates as a percentage of turnover in the state; e",
+   "citations": [
+    "GST-RATE-APPAREL-POST",
+    "GST-COMP-RATES"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R075",
+  "question": "We have 28% and 12% GST items; most now come under 18% and 5% from today. How to adjust input due to change in rate, is there any change in closing stock value, and how to handle sales returns at the old rate?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != question"
+  ]
+ },
+ {
+  "id": "R076",
+  "question": "GST rate of an item reduced from 12% to 5% from 22nd September 2025. If goods sold before 22nd Sept at 12% are returned after 22nd September, what should be the GST rate on the credit note: 12% or 5%?",
+  "expect": {
+   "intent": "question"
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "From 22 September 2025, hotel accommodation valued up to Rs 7,500 per unit per day is taxed at 5% without input tax credit (earlier 12%); rooms above Rs 7,500 stay at 18%. [GST-RATE-SERVICES-POST] \"Without ITC\" means the salon, gym or hotel cannot claim credit of GST paid on its own purchases against this 5% output tax. [GST-RATE-SERVICES-POST] From 22 September 2025, GST on common personal-care i",
+   "citations": [
+    "GST-RATE-SERVICES-POST",
+    "GST-RATE-PERSONALCARE-POST"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R077",
+  "question": "I have a residential status query for AY 2026-27 (FY 2025-26) after returning to India permanently. Am I resident under Section 6?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Income earned up to 31 March 2026 (FY 2025-26 and earlier years) remains governed by the Income-tax Act, 1961 and is assessed under it (FY 2025-26 = AY 2026-27). [IT-ACT-WHICH-LAW] Section 536(2) of the Income-tax Act, 2025 saves the 1961 Act for proceedings relating to years beginning before 1 April 2026, even if those proceedings start after that date. [IT-ACT-WHICH-LAW] If you miss the due date",
+   "citations": [
+    "IT-ACT-WHICH-LAW",
+    "IT-BELATED-REVISED-FY2526"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent question != out_of_scope",
+   "refused False != True"
+  ]
+ },
+ {
+  "id": "R078",
+  "question": "When we sell Solana to USDT and realise a profit of 1 lac, should we pay tax on this? Or when we transfer it out? 30% tax on what?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R079",
+  "question": "Tax on LRS (US stocks)? If I buy and sell US stocks, how is it taxed?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "R080",
+  "question": "I'm filing ITR-2 for AY 2026-27 under the new regime. Salary plus STCG of ₹11,387: should I really pay ₹2,370 tax?",
+  "expect": {
+   "intent": "out_of_scope",
+   "refused": true
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 11387,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2025-26",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for FY 2025-26 (AY 2026-27); health & education cess 4% included."
+   ],
+   "answer": "Tax year 2025-26 (Income-tax Act, 1961 s.115BAC / s.87A). [CALC] New regime: gross ₹11,387, standard deduction ₹11,387, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹11,387, standard deduction ₹11,387, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] Its due date for AY 2026-27 is 31 July 2026, the same as ITR-1",
+   "citations": [
+    "IT-ITR2"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent calculation != out_of_scope",
+   "refused False != True"
+  ]
+ },
+ {
+  "id": "T01",
+  "question": "how much tax do i have to pay if i am earning 5k us dollars per month remote",
+  "expect": {
+   "intent": "calculation",
+   "gross": 5713668.0,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 5000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹5,000, standard deduction ₹5,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹5,000, standard deduction ₹5,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] If your tax liability for the year, after subtracting TDS and TCS, is",
+   "citations": [
+    "IT-FL-ADVANCE-TAX"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "gross 5000 != 5713668",
+   "income_type salary != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T02",
+  "question": "I make 80k a month, how much tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 960000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 960000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 98280,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 80k a month is your annual gross income.",
+    "New regime: rebate u/s 87A of ₹28,500 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹9,60,000, standard deduction ₹75,000, taxable income ₹8,85,000, slab tax ₹28,500, rebate/relief ₹28,500, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹9,60,000, standard deduction ₹50,000, taxable income ₹9,10,000, slab tax ₹94,500, cess ₹3,780, total tax ₹98,280. [CALC] The new regime is better, saving ₹98,280. [C",
+   "citations": [
+    "GST-RET-QRMP"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T03",
+  "question": "CTC 18 LPA, which regime is better?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 1800000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1800000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 351000,
+   "new": 150800,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹18,00,000, standard deduction ₹75,000, taxable income ₹17,25,000, slab tax ₹1,45,000, cess ₹5,800, total tax ₹1,50,800. [CALC] Old regime: gross ₹18,00,000, standard deduction ₹50,000, taxable income ₹17,50,000, slab tax ₹3,37,500, cess ₹13,500, total tax ₹3,51,000. [CALC] The new regime is better, saving ₹2,00,200. [",
+   "citations": [
+    "IT-DED-80CCD2"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T04",
+  "question": "my dad is 65 and gets 6 lakh pension, how much tax will he pay?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 600000,
+   "income_type": "salary",
+   "age": "60to80"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 600000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 23400,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 6 lakh is your annual gross income.",
+    "New regime: rebate u/s 87A of ₹6,250 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹6,00,000, standard deduction ₹75,000, taxable income ₹5,25,000, slab tax ₹6,250, rebate/relief ₹6,250, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹6,00,000, standard deduction ₹50,000, taxable income ₹5,50,000, slab tax ₹22,500, cess ₹900, total tax ₹23,400. [CALC] The new regime is better, saving ₹23,400. [CALC]",
+   "citations": [
+    "IT-OLD-REBATE"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "age below60 != 60to80"
+  ]
+ },
+ {
+  "id": "T05",
+  "question": "freelance designer earning 2 lakh per month, how much tax",
+  "expect": {
+   "intent": "calculation",
+   "gross": 2400000,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 2400000,
+   "income_type": "business/professional (no std ded)",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 553800,
+   "new": 312000,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "2 lakh per month treated as monthly: ×12 = 2,400,000 per year.",
+    "Looks like business/professional income: no standard deduction applied.",
+    "Not salaried: no standard deduction applied.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹24,00,000, standard deduction ₹0, taxable income ₹24,00,000, slab tax ₹3,00,000, cess ₹12,000, total tax ₹3,12,000. [CALC] Old regime: gross ₹24,00,000, standard deduction ₹0, taxable income ₹24,00,000, slab tax ₹5,32,500, cess ₹21,300, total tax ₹5,53,800. [CALC] The new regime is better, saving ₹2,41,800. [CALC] If ",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "income_type business/professional (no std ded) != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T06",
+  "question": "YouTube income 30 lakh, how much tax do I pay?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 3000000,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 3000000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 725400,
+   "new": 475800,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹30,00,000, standard deduction ₹75,000, taxable income ₹29,25,000, slab tax ₹4,57,500, cess ₹18,300, total tax ₹4,75,800. [CALC] Old regime: gross ₹30,00,000, standard deduction ₹50,000, taxable income ₹29,50,000, slab tax ₹6,97,500, cess ₹27,900, total tax ₹7,25,400. [CALC] The new regime is better, saving ₹2,49,600. ",
+   "citations": [
+    "IT-OLD-SLABS-BELOW60"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "income_type salary != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T07",
+  "question": "meri salary 1 lakh mahina hai kitna tax lagega",
+  "expect": {
+   "intent": "calculation",
+   "gross": 1200000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 100000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹1,00,000, standard deduction ₹75,000, taxable income ₹25,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹1,00,000, standard deduction ₹50,000, taxable income ₹50,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] If advance tax is not paid or is short, interest is",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "gross 100000 != 1200000"
+  ]
+ },
+ {
+  "id": "T08",
+  "question": "I earn $3000 per month from a US client as a software consultant, tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 3428200.8000000003,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != calculation",
+   "gross None != 3428200",
+   "income_type None != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T09",
+  "question": "salary 50k per month how much tax",
+  "expect": {
+   "intent": "calculation",
+   "gross": 600000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 600000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 23400,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "50k per month treated as monthly: ×12 = 600,000 per year.",
+    "New regime: rebate u/s 87A of ₹6,250 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹6,00,000, standard deduction ₹75,000, taxable income ₹5,25,000, slab tax ₹6,250, rebate/relief ₹6,250, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹6,00,000, standard deduction ₹50,000, taxable income ₹5,50,000, slab tax ₹22,500, cess ₹900, total tax ₹23,400. [CALC] The new regime is better, saving ₹23,400. [CALC]",
+   "citations": [
+    "GST-RET-QRMP"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T10",
+  "question": "I get 1.2L monthly salary, tax in new regime?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 1440000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1440000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 238680,
+   "new": 88140,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "1.2L monthly treated as monthly: ×12 = 1,440,000 per year.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹14,40,000, standard deduction ₹75,000, taxable income ₹13,65,000, slab tax ₹84,750, cess ₹3,390, total tax ₹88,140. [CALC] Old regime: gross ₹14,40,000, standard deduction ₹50,000, taxable income ₹13,90,000, slab tax ₹2,29,500, cess ₹9,180, total tax ₹2,38,680. [CALC] The new regime is better, saving ₹1,50,540. [CALC]",
+   "citations": [
+    "IT-DED-80CCD2"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T11",
+  "question": "earning 12 lakh per annum, tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 1200000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1200000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 163800,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹52,500 (taxable income up to ₹12,00,000).",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹12,00,000, standard deduction ₹75,000, taxable income ₹11,25,000, slab tax ₹52,500, rebate/relief ₹52,500, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹12,00,000, standard deduction ₹50,000, taxable income ₹11,50,000, slab tax ₹1,57,500, cess ₹6,300, total tax ₹1,63,800. [CALC] The new regime is better, saving ₹1,",
+   "citations": [
+    "IT-NEW-REBATE-TY2627"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T12",
+  "question": "how much tax on 1.5 cr salary",
+  "expect": {
+   "intent": "calculation",
+   "gross": 15000000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 15000000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 5139810,
+   "new": 4852770,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Old regime: surcharge ₹6,44,625.",
+    "New regime: surcharge ₹6,08,625.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹1,50,00,000, standard deduction ₹75,000, taxable income ₹1,49,25,000, slab tax ₹40,57,500, surcharge ₹6,08,625, cess ₹1,86,645, total tax ₹48,52,770. [CALC] Old regime: gross ₹1,50,00,000, standard deduction ₹50,000, taxable income ₹1,49,50,000, slab tax ₹42,97,500, surcharge ₹6,44,625, cess ₹1,97,685, total tax ₹51,3",
+   "citations": [
+    "IT-DED-80C"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T13",
+  "question": "I earn €4000 a month working remotely for a German company as a contractor, how much tax",
+  "expect": {
+   "intent": "calculation",
+   "gross": 5081476.8,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != calculation",
+   "gross None != 5081476",
+   "income_type None != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T14",
+  "question": "£2,500 per month freelance income, how much tax in india",
+  "expect": {
+   "intent": "calculation",
+   "gross": 3793971.0,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 30000,
+   "income_type": "business/professional (no std ded)",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "2,500 per month treated as monthly: ×12 = 30,000 per year.",
+    "Looks like business/professional income: no standard deduction applied.",
+    "Not salaried: no standard deduction applied.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹30,000, standard deduction ₹0, taxable income ₹30,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹30,000, standard deduction ₹0, taxable income ₹30,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] When a business or professional client pays a resident freelancer",
+   "citations": [
+    "IT-FL-TDS-194J"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "gross 30000 != 3793971",
+   "income_type business/professional (no std ded) != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T15",
+  "question": "i earn 2000 dollars per week freelancing, tax?",
+  "expect": {
+   "intent": "calculation",
+   "income_type": "professional_presumptive",
+   "escalate": true
+  },
+  "got": {
+   "intent": "question",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "I could not find this in my verified sources, so I would rather not guess. For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent question != calculation",
+   "escalate False != True"
+  ]
+ },
+ {
+  "id": "T16",
+  "question": "salry 15 lakh kitna tax",
+  "expect": {
+   "intent": "calculation",
+   "gross": 1500000,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 1500000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 257400,
+   "new": 97500,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 15 lakh is your annual gross income.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹15,00,000, standard deduction ₹75,000, taxable income ₹14,25,000, slab tax ₹93,750, cess ₹3,750, total tax ₹97,500. [CALC] Old regime: gross ₹15,00,000, standard deduction ₹50,000, taxable income ₹14,50,000, slab tax ₹2,47,500, cess ₹9,900, total tax ₹2,57,400. [CALC] The new regime is better, saving ₹1,59,900. [CALC]",
+   "citations": [
+    "IT-FL-ADVANCE-TAX"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T17",
+  "question": "how much tax do i pay",
+  "expect": {
+   "intent": "calculation",
+   "follow_up": true
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": true,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "To calculate your tax I need your annual gross salary or income. For example: \"My salary is ₹14 lakh, 80C ₹1.5 lakh, FY 2025-26\".",
+   "citations": []
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T18",
+  "question": "I am a doctor with private practice earning 40 lakh a year, tax under presumptive scheme?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 4000000,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 4000000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 1037400,
+   "new": 787800,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹40,00,000, standard deduction ₹75,000, taxable income ₹39,25,000, slab tax ₹7,57,500, cess ₹30,300, total tax ₹7,87,800. [CALC] Old regime: gross ₹40,00,000, standard deduction ₹50,000, taxable income ₹39,50,000, slab tax ₹9,97,500, cess ₹39,900, total tax ₹10,37,400. [CALC] The new regime is better, saving ₹2,49,600.",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "income_type salary != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T19",
+  "question": "income 5 thousand per month, do i pay tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 60000
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 60000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "5 thousand per month treated as monthly: ×12 = 60,000 per year.",
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹60,000, standard deduction ₹60,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹60,000, standard deduction ₹50,000, taxable income ₹10,000, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] Tax must still be paid every month: for the first two months",
+   "citations": [
+    "GST-RET-QRMP"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T20",
+  "question": "my wife earns 25k pm, does she have to pay tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 300000
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != calculation",
+   "gross None != 300000"
+  ]
+ },
+ {
+  "id": "T21",
+  "question": "tax on 7.5 lakh salary for FY 2024-25",
+  "expect": {
+   "intent": "calculation",
+   "gross": 750000,
+   "tax_year": "2024-25"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 750000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2024-25",
+   "old": 54600,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "New regime: rebate u/s 87A of ₹18,750 (taxable income up to ₹7,00,000).",
+    "Rates for FY 2024-25 (AY 2025-26); health & education cess 4% included."
+   ],
+   "answer": "Tax year 2024-25 (Income-tax Act, 1961 s.115BAC / s.87A). [CALC] New regime: gross ₹7,50,000, standard deduction ₹75,000, taxable income ₹6,75,000, slab tax ₹18,750, rebate/relief ₹18,750, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹7,50,000, standard deduction ₹50,000, taxable income ₹7,00,000, slab tax ₹52,500, cess ₹2,100, total tax ₹54,600. [CALC] The new regime is better, saving ₹54,600.",
+   "citations": [
+    "IT-NEW-SLABS-FY2425"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T22",
+  "question": "kitna tax lagega agar meri kamai 20 lakh saal hai",
+  "expect": {
+   "intent": "calculation",
+   "gross": 2000000
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 2000000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 413400,
+   "new": 192400,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹20,00,000, standard deduction ₹75,000, taxable income ₹19,25,000, slab tax ₹1,85,000, cess ₹7,400, total tax ₹1,92,400. [CALC] Old regime: gross ₹20,00,000, standard deduction ₹50,000, taxable income ₹19,50,000, slab tax ₹3,97,500, cess ₹15,900, total tax ₹4,13,400. [CALC] The new regime is better, saving ₹2,21,000. [",
+   "citations": [
+    "IT-OLD-SLABS-BELOW60"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T23",
+  "question": "self employed consultant, 60 lakh receipts, how much tax",
+  "expect": {
+   "intent": "calculation",
+   "gross": 6000000,
+   "income_type": "professional_presumptive"
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 6000000,
+   "income_type": "business/professional (no std ded)",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 1844700,
+   "new": 1578720,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 60 lakh is your annual gross income.",
+    "Looks like business/professional income: no standard deduction applied.",
+    "Old regime: surcharge ₹1,61,250.",
+    "New regime: surcharge ₹1,38,000."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹60,00,000, standard deduction ₹0, taxable income ₹60,00,000, slab tax ₹13,80,000, surcharge ₹1,38,000, cess ₹60,720, total tax ₹15,78,720. [CALC] Old regime: gross ₹60,00,000, standard deduction ₹0, taxable income ₹60,00,000, slab tax ₹16,12,500, surcharge ₹1,61,250, cess ₹70,950, total tax ₹18,44,700. [CALC] The new ",
+   "citations": [
+    "IT-OLD-SLABS-BELOW60"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "income_type business/professional (no std ded) != professional_presumptive"
+  ]
+ },
+ {
+  "id": "T24",
+  "question": "freelancer with 90 lakh receipts how much tax",
+  "expect": {
+   "intent": "calculation",
+   "escalate": true
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 9000000,
+   "income_type": "business/professional (no std ded)",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 2874300,
+   "new": 2608320,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Assumed 90 lakh is your annual gross income.",
+    "Looks like business/professional income: no standard deduction applied.",
+    "Old regime: surcharge ₹2,51,250.",
+    "New regime: surcharge ₹2,28,000."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹90,00,000, standard deduction ₹0, taxable income ₹90,00,000, slab tax ₹22,80,000, surcharge ₹2,28,000, cess ₹1,00,320, total tax ₹26,08,320. [CALC] Old regime: gross ₹90,00,000, standard deduction ₹0, taxable income ₹90,00,000, slab tax ₹25,12,500, surcharge ₹2,51,250, cess ₹1,10,550, total tax ₹28,74,300. [CALC] The ",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "escalate False != True"
+  ]
+ },
+ {
+  "id": "T25",
+  "question": "I earn 50k, how much tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 50000,
+   "assumed": true
+  },
+  "got": {
+   "intent": "calculation",
+   "refused": false,
+   "follow_up": false,
+   "gross": 50000,
+   "income_type": "salary",
+   "age": "below60",
+   "tax_year": "2026-27",
+   "old": 0,
+   "new": 0,
+   "headline": null,
+   "escalate": false,
+   "notes": [
+    "Rates for Tax Year 2026-27; health & education cess 4% included."
+   ],
+   "answer": "Tax year 2026-27 (Income-tax Act, 2025 s.202 / s.156). [CALC] New regime: gross ₹50,000, standard deduction ₹50,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Old regime: gross ₹50,000, standard deduction ₹50,000, taxable income ₹0, slab tax ₹0, cess ₹0, total tax ₹0. [CALC] Both regimes give the same tax. [CALC] Under the old (optional) tax regime, an individual below 60 years",
+   "citations": [
+    "IT-OLD-SLABS-BELOW60"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "no assumption note"
+  ]
+ },
+ {
+  "id": "T26",
+  "question": "What is GST on export of services for freelancers?",
+  "expect": {
+   "intent": "question",
+   "refused": false
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers, consultants, designers, developers, tutors and content creators supply services, so the services threshold applies: registration is required once aggregate turnover in a financial year exceeds Rs 20 lakh (Rs 10 lakh in Manipur, Mizoram, Nagaland and Tripura). [GST-REG-FREELANCER] Income from foreign clients is an export of services, which is zero-rated: once registered, the freelancer",
+   "citations": [
+    "GST-REG-FREELANCER",
+    "GST-REG-THRESHOLD"
+   ]
+  },
+  "pass": true,
+  "fails": []
+ },
+ {
+  "id": "T27",
+  "question": "remote job for a US company paying 6000 USD monthly as an employee on payroll, tax?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 6856401.600000001,
+   "income_type": "salary"
+  },
+  "got": {
+   "intent": "out_of_scope",
+   "refused": true,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "This question is outside what TaxSaathi can answer reliably (it covers individual income tax and GST basics only). For this, please consult a Chartered Accountant (CA) or a GST practitioner. You can find a CA through the ICAI directory (icai.org) or use the Income Tax Department helpline 1800 103 0025.",
+   "citations": []
+  },
+  "pass": false,
+  "fails": [
+   "intent out_of_scope != calculation",
+   "gross None != 6856401",
+   "income_type None != salary"
+  ]
+ },
+ {
+  "id": "T28",
+  "question": "mera mahine ka 40 hazaar hai, tax lagega kya?",
+  "expect": {
+   "intent": "calculation",
+   "gross": 480000
+  },
+  "got": {
+   "intent": "question",
+   "refused": false,
+   "follow_up": false,
+   "gross": null,
+   "income_type": null,
+   "age": null,
+   "tax_year": null,
+   "old": null,
+   "new": null,
+   "headline": null,
+   "escalate": false,
+   "notes": [],
+   "answer": "Freelancers and businesses using presumptive taxation (section 44AD or 44ADA, now section 58) need not pay four instalments: they can pay 100% of their advance tax in a single instalment on or before 15 March of the year. [IT-FL-ADVANCE-PRESUMPTIVE] If advance tax is not paid or is short, interest is charged: under section 234B (section 424 of the Income-tax Act, 2025), simple interest of 1% per m",
+   "citations": [
+    "IT-FL-ADVANCE-PRESUMPTIVE",
+    "GST-RET-QRMP"
+   ]
+  },
+  "pass": false,
+  "fails": [
+   "intent question != calculation",
+   "gross None != 480000"
+  ]
+ }
+]

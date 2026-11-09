@@ -1,0 +1,14 @@
+artifact_uri: file:///opt/taxsaathi/experiments/mlruns/684095404056304065/442bd2bed66a4b28949e0fbb46e0733a/artifacts
+end_time: 1793235517503
+entry_point_name: ''
+experiment_id: '684095404056304065'
+lifecycle_stage: active
+run_id: 442bd2bed66a4b28949e0fbb46e0733a
+run_name: B1-dev-gen
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1793235517482
+status: 3
+tags: []
+user_id: root

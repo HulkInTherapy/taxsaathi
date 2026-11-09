@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>TaxSaathi · Indian income tax and GST, answered with sources</title>
+  <meta name="description" content="TaxSaathi answers Indian GST and income-tax questions in English and Hinglish, and cites an official source for every answer." />
+  <meta name="theme-color" content="#F7F8F8" />
+  <meta name="color-scheme" content="light" />
+  <link rel="preload" href="fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-pill" id="navPill">
+      <a class="brand" href="#ask" aria-label="TaxSaathi home">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect class="mark-tile" width="32" height="32" rx="9"/><path class="mark-body" d="M10.5 7H19l5 5v8.5a2.5 2.5 0 0 1-2.5 2.5H14l-4 3.4V23a2.5 2.5 0 0 1-2-2.45V9.5A2.5 2.5 0 0 1 10.5 7Z"/><path class="mark-fold" d="M19 7v3.6a1.4 1.4 0 0 0 1.4 1.4H24Z"/><path class="mark-check" pathLength="1" d="m11.9 15.5 2.8 2.8 5-5.3"/></svg>
+        <span class="brand-name">Tax<span>Saathi</span></span>
+      </a>
+      <span class="nav-div" aria-hidden="true"></span>
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+        <span class="tab-ind" aria-hidden="true"></span>
+        <button class="tab" role="tab" data-view="ask" id="tab-ask" aria-controls="view-ask"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8 8 0 0 1-11.9 7L4 19.8l1.3-4.3A8 8 0 1 1 20.5 11.5Z"/></svg><span class="tab-label">Ask</span></button>
+        <button class="tab" role="tab" data-view="compare" id="tab-compare" aria-controls="view-compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.5 20.5h9M5 7.5h14M5 7.5l-2.6 6.2a3 3 0 0 0 5.2 0zM19 7.5l-2.6 6.2a3 3 0 0 0 5.2 0z"/></svg><span class="tab-label">Compare</span></button>
+        <button class="tab" role="tab" data-view="calculator" id="tab-calculator" aria-controls="view-calculator"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="2.5" width="15" height="19" rx="3"/><path d="M8.5 7h7M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15v2.5M8.5 18h.01M12 18h.01"/></svg><span class="tab-label">Calculator</span></button>
+        <button class="tab" role="tab" data-view="experiments" id="tab-experiments" aria-controls="view-experiments"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5h16M7 16.5v-4M12 16.5v-9M17 16.5V10"/></svg><span class="tab-label">Results</span></button>
+        <button class="tab" role="tab" data-view="how" id="tab-how" aria-controls="view-how"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.3"/><circle cx="19" cy="5.5" r="2.3"/><circle cx="19" cy="18.5" r="2.3"/><path d="M7.3 12h3.2c1.5 0 2-.6 3-2l2.6-3.4M10.5 12c1.5 0 2 .6 3 2l2.6 3.4"/></svg><span class="tab-label">How it works</span></button>
+      </nav>
+      <span class="nav-div" aria-hidden="true"></span>
+      <div class="nav-tools">
+        <div class="health" id="health" role="status" aria-live="polite" title="Connecting to the TaxSaathi server">
+          <span class="health-dot" aria-hidden="true"></span>
+          <span class="health-text">Connecting</span>
+        </div>
+        <button class="icon-btn adv-btn" id="advBtn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="advPanel" aria-label="Advanced settings" title="Advanced settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg>
+          <span class="adv-cfg" id="advCfg" hidden></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="aurora" id="aurora" aria-hidden="true"><i class="au a1"></i><i class="au a2"></i><i class="au a3"></i></div>
+
+  <!-- Advanced: pipeline config, auto-trace, server details, demo mode -->
+  <div class="popover adv-panel" id="advPanel" role="dialog" aria-modal="false" aria-labelledby="advTitle" hidden>
+    <div class="pop-head">
+      <div>
+        <h2 id="advTitle">Advanced</h2>
+        <p>For showing how the system was built. Not needed to ask a question.</p>
+      </div>
+      <button type="button" class="icon-btn sm" id="advClose" aria-label="Close advanced settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="pop-sec">
+      <div class="pop-label"><span>Pipeline configuration</span></div>
+      <div class="cfg-grid" id="configSeg" role="radiogroup" aria-label="Pipeline configuration"></div>
+      <p class="pop-desc" id="configDesc"></p>
+      <p class="pop-note">B0 is a plain LLM with no sources. Each config adds one component. C6 is the final system and the default.</p>
+    </div>
+    <label class="pop-sec switch-row">
+      <span><b>Show the pipeline trace automatically</b><small>Opens “How this was found” after every answer</small></span>
+      <input type="checkbox" id="autoTrace" class="switch" />
+    </label>
+    <div class="pop-sec" id="advServer"></div>
+    <div class="pop-sec pop-foot">
+      <a class="btn btn-secondary btn-sm" id="demoLink" href="?mock=1">Switch to offline demo mode</a>
+    </div>
+  </div>
+
+  <div class="mode-banner" id="modeBanner" hidden></div>
+
+  <main id="main">
+    <!-- ============================== ASK ============================== -->
+    <section class="view view-ask" id="view-ask" role="tabpanel" aria-labelledby="tab-ask">
+      <div class="ask-wrap">
+        <div class="hero" id="chatEmpty">
+          <div class="hero-mark" aria-hidden="true"><svg class="mark mark-lg" viewBox="0 0 32 32" aria-hidden="true"><rect class="mark-tile" width="32" height="32" rx="9"/><path class="mark-body" d="M10.5 7H19l5 5v8.5a2.5 2.5 0 0 1-2.5 2.5H14l-4 3.4V23a2.5 2.5 0 0 1-2-2.45V9.5A2.5 2.5 0 0 1 10.5 7Z"/><path class="mark-fold" d="M19 7v3.6a1.4 1.4 0 0 0 1.4 1.4H24Z"/><path class="mark-check" pathLength="1" d="m11.9 15.5 2.8 2.8 5-5.3"/></svg></div>
+          <h1 class="hero-title">Ask anything about Indian tax.</h1>
+          <p class="hero-sub">Income tax and GST <span class="sep" aria-hidden="true">·</span> English or Hinglish <span class="sep sep-2" aria-hidden="true">·</span> <span class="hs-3">every answer cited</span></p>
+        </div>
+
+        <div class="thread" id="messages" aria-live="polite"></div>
+
+        <form class="composer" id="askForm" autocomplete="off">
+          <div class="composer-box">
+            <textarea id="askInput" rows="1" placeholder="Ask a tax question in English or Hinglish" aria-label="Your tax question" aria-keyshortcuts="/"></textarea>
+            <kbd class="slash-hint" aria-hidden="true">/</kbd>
+            <button class="send-btn" id="askSend" type="submit" aria-label="Ask TaxSaathi">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>
+            </button>
+          </div>
+          <div class="composer-foot">
+            <span class="composer-hint"><kbd>Enter</kbd> to send <span class="sep" aria-hidden="true">·</span> <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</span>
+            <button class="text-btn new-chat" id="clearChat" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New question
+            </button>
+          </div>
+        </form>
+
+        <div class="examples" id="examplesWrap">
+          <div class="example-list" id="exampleGrid"></div>
+          <div class="real-block">
+            <p class="eyebrow">Asked by real people</p>
+            <div class="real-list" id="realGrid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ COMPARE ============================ -->
+    <section class="view page cmp-page" id="view-compare" role="tabpanel" aria-labelledby="tab-compare" hidden>
+      <header class="page-head center">
+        <h1 class="page-title">Normal chatbot <span class="vs">vs</span> TaxSaathi</h1>
+        <p class="page-sub">Same question, same AI model. One answers from memory, one checks the law in force.</p>
+      </header>
+      <form class="cmp-form" id="compareForm" autocomplete="off">
+        <div class="cmp-box">
+          <input id="compareInput" type="text" placeholder="Ask both the same question…" aria-label="Question to compare" />
+          <button class="btn btn-primary" type="submit" id="compareSend"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.5 20.5h9M5 7.5h14M5 7.5l-2.6 6.2a3 3 0 0 0 5.2 0zM19 7.5l-2.6 6.2a3 3 0 0 0 5.2 0z"/></svg>Compare</button>
+        </div>
+        <div class="cmp-traps">
+          <span class="eyebrow">Try a trap</span>
+          <div class="pill-row" id="comparePresets" aria-label="Questions where the law changed"></div>
+        </div>
+      </form>
+      <div class="cmp-stage" id="compareStage"></div>
+    </section>
+
+    <!-- =========================== CALCULATOR ========================== -->
+    <section class="view page calc-page" id="view-calculator" role="tabpanel" aria-labelledby="tab-calculator" hidden>
+      <header class="page-head center">
+        <h1 class="page-title">Old or new regime?</h1>
+        <p class="page-sub">Type what you earn. Exact maths, done by code, not the AI.</p>
+      </header>
+      <div class="calc2">
+        <form class="panel calc-q" id="calcForm" novalidate autocomplete="off">
+          <div class="seg seg-type" id="typeSeg" role="radiogroup" aria-label="Income type">
+            <span class="seg-ind" aria-hidden="true"></span>
+            <button type="button" role="radio" data-value="salary" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V7M3 12.5h18"/></svg>Salary</button>
+            <button type="button" role="radio" data-value="professional_presumptive" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8 20.5h8M12 16.5v4"/></svg>Freelancer</button>
+          </div>
+          <label class="cq-label" for="f-gross_salary" id="l-gross_salary">What do you earn in a year?</label>
+          <div class="cq-amount field">
+            <span class="cq-rupee" aria-hidden="true">₹</span>
+            <input class="cq-input num" type="text" inputmode="numeric" autocomplete="off" name="gross_salary" id="f-gross_salary" value="12,00,000" placeholder="0" aria-describedby="h-gross_salary" />
+          </div>
+          <p class="cq-words" id="h-gross_salary" aria-live="polite"></p>
+          <div class="pill-row tight cq-chips" id="salChips" aria-label="Quick picks"></div>
+
+          <div class="cq-row">
+            <span class="cq-row-k" id="yearLbl">Tax year</span>
+            <div class="seg seg-sm" id="yearSeg" role="radiogroup" aria-labelledby="yearLbl">
+              <span class="seg-ind" aria-hidden="true"></span>
+              <button type="button" role="radio" data-value="2024-25" aria-checked="false" title="Financial Year 2024-25">FY 24-25</button>
+              <button type="button" role="radio" data-value="2025-26" aria-checked="false" title="Financial Year 2025-26">FY 25-26</button>
+              <button type="button" role="radio" data-value="2026-27" aria-checked="true" title="Tax Year 2026-27 (Income-tax Act, 2025)">TY 26-27</button>
+            </div>
+          </div>
+
+          <details class="cq-more" id="dedBox">
+            <summary>
+              <span class="cq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+              <span class="cq-more-t"><b>Add deductions</b><small>80C, health insurance, rent, home loan…</small></span>
+              <span class="ded-badge" id="dedBadge" hidden></span>
+            </summary>
+            <p class="cq-note">These only lower tax in the <b>old</b> regime (except employer NPS).</p>
+            <div class="ded-grid" id="calcFields"></div>
+          </details>
+          <details class="cq-more" id="optBox">
+            <summary>
+              <span class="cq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+              <span class="cq-more-t"><b>More options</b><small>Age</small></span>
+              <span class="ded-badge" id="optBadge" hidden></span>
+            </summary>
+            <div class="cq-row">
+              <span class="cq-row-k" id="ageLbl">Your age</span>
+              <div class="seg seg-sm" id="ageSeg" role="radiogroup" aria-labelledby="ageLbl">
+                <span class="seg-ind" aria-hidden="true"></span>
+                <button type="button" role="radio" data-value="below60" aria-checked="true">Under 60</button>
+                <button type="button" role="radio" data-value="60to80" aria-checked="false">60–79</button>
+                <button type="button" role="radio" data-value="above80" aria-checked="false">80+</button>
+              </div>
+            </div>
+          </details>
+          <button class="sr-only" type="submit" id="calcSend">Calculate</button>
+        </form>
+        <div class="calc-out" id="calcResults" aria-live="polite"></div>
+      </div>
+      <div class="calc-samples">
+        <span class="eyebrow">Try a sample person</span>
+        <div class="pill-row tight" id="calcPresets"></div>
+      </div>
+    </section>
+
+    <!-- =========================== EXPERIMENTS ========================= -->
+    <section class="view page res-page" id="view-experiments" role="tabpanel" aria-labelledby="tab-experiments" hidden>
+      <header class="page-head center">
+        <h1 class="page-title">Does each part really help?</h1>
+        <p class="page-sub">We built TaxSaathi one step at a time and scored every step on the same questions.</p>
+        <div class="page-meta" id="expMeta"></div>
+      </header>
+      <div id="expBody"><div class="kpis"><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div></div><div class="skeleton sk-block"></div></div>
+    </section>
+
+    <!-- ============================ HOW ================================ -->
+    <section class="view page how-page" id="view-how" role="tabpanel" aria-labelledby="tab-how" hidden>
+      <header class="page-head center">
+        <h1 class="page-title">How TaxSaathi works</h1>
+        <p class="page-sub">Every question takes the same path. Press play, or tap any step.</p>
+      </header>
+      <div id="howBody"></div>
+    </section>
+  </main>
+
+  <!-- Side sheet: source passages and the pipeline trace -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawerTitle" hidden>
+    <header class="drawer-head">
+      <div class="drawer-titles">
+        <p class="drawer-kicker" id="drawerKicker"></p>
+        <h2 id="drawerTitle"></h2>
+      </div>
+      <button type="button" class="icon-btn sm" id="drawerClose" aria-label="Close panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="mock.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="views.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# systemd unit for TaxSaathi. Install manually:
+#   sudo cp deploy/taxsaathi.service /etc/systemd/system/ && sudo systemctl daemon-reload
+#   sudo systemctl enable --now taxsaathi
+[Unit]
+Description=TaxSaathi RAG tax assistant (FastAPI)
+After=network.target ollama.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/taxsaathi
+Environment=TAXSAATHI_LLM=qwen2.5:3b
+Environment=OMP_NUM_THREADS=4
+ExecStart=/opt/taxsaathi/.venv/bin/uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+RestartSec=5
+MemoryMax=4G
+
+[Install]
+WantedBy=multi-user.target

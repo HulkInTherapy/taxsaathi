@@ -1,0 +1,367 @@
+{
+  "n": 80,
+  "coverage": {
+    "full": 51,
+    "partial": 18,
+    "none": 11
+  },
+  "configs": [
+    {
+      "name": "B1",
+      "description": "BM25 top-5",
+      "generated": false,
+      "metrics": {
+        "n": 80,
+        "recall@5": 0.7102,
+        "mrr@10": 0.7022,
+        "ndcg@5": 0.6332,
+        "refusal_accuracy": 0.875,
+        "period_accuracy": 1.0,
+        "calc_accuracy": 0.1667,
+        "oos_refusal_rate": 0.4286,
+        "false_refusal_rate": 0.0822,
+        "latency_p50_ms": 3,
+        "latency_p95_ms": 4
+      },
+      "per_category": {
+        "calculation": {
+          "n": 7,
+          "recall@5": 0.25,
+          "mrr@10": 0.5,
+          "ndcg@5": 0.2554,
+          "refusal_accuracy": 0.8571,
+          "period_accuracy": null,
+          "calc_accuracy": 0.1667,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.1429,
+          "latency_p50_ms": 3,
+          "latency_p95_ms": 3
+        },
+        "gst": {
+          "n": 23,
+          "recall@5": 0.7857,
+          "mrr@10": 0.7211,
+          "ndcg@5": 0.6867,
+          "refusal_accuracy": 0.9565,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0435,
+          "latency_p50_ms": 3,
+          "latency_p95_ms": 3
+        },
+        "hinglish": {
+          "n": 1,
+          "recall@5": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@5": 0.0,
+          "refusal_accuracy": 0.0,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 1.0,
+          "latency_p50_ms": 7,
+          "latency_p95_ms": 7
+        },
+        "income_tax": {
+          "n": 31,
+          "recall@5": 0.7778,
+          "mrr@10": 0.7579,
+          "ndcg@5": 0.6932,
+          "refusal_accuracy": 0.9355,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0645,
+          "latency_p50_ms": 3,
+          "latency_p95_ms": 4
+        },
+        "out_of_scope": {
+          "n": 7,
+          "recall@5": null,
+          "mrr@10": null,
+          "ndcg@5": null,
+          "refusal_accuracy": 0.4286,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": 0.4286,
+          "false_refusal_rate": null,
+          "latency_p50_ms": 3,
+          "latency_p95_ms": 4
+        },
+        "time_trap": {
+          "n": 11,
+          "recall@5": 0.75,
+          "mrr@10": 0.7083,
+          "ndcg@5": 0.6773,
+          "refusal_accuracy": 0.9091,
+          "period_accuracy": 1.0,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0909,
+          "latency_p50_ms": 3,
+          "latency_p95_ms": 3
+        }
+      },
+      "by_coverage": {
+        "full": {
+          "n": 51,
+          "refused_rate": 0.059,
+          "recall@5": 0.7794,
+          "mrr@10": 0.7326
+        },
+        "partial": {
+          "n": 16,
+          "refused_rate": 0.125,
+          "recall@5": 0.4896,
+          "mrr@10": 0.6052
+        },
+        "none": {
+          "n": 6,
+          "refused_rate": 0.167,
+          "recall@5": null,
+          "mrr@10": null
+        }
+      },
+      "oos_refused_rate": 0.429
+    },
+    {
+      "name": "C2",
+      "description": "Hybrid BM25 + dense with RRF (k=60) top-5",
+      "generated": false,
+      "metrics": {
+        "n": 80,
+        "recall@5": 0.796,
+        "mrr@10": 0.7665,
+        "ndcg@5": 0.7074,
+        "refusal_accuracy": 0.875,
+        "period_accuracy": 1.0,
+        "calc_accuracy": 0.1667,
+        "oos_refusal_rate": 0.4286,
+        "false_refusal_rate": 0.0822,
+        "latency_p50_ms": 29,
+        "latency_p95_ms": 44
+      },
+      "per_category": {
+        "calculation": {
+          "n": 7,
+          "recall@5": 0.3452,
+          "mrr@10": 0.6071,
+          "ndcg@5": 0.3391,
+          "refusal_accuracy": 0.8571,
+          "period_accuracy": null,
+          "calc_accuracy": 0.1667,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.1429,
+          "latency_p50_ms": 30,
+          "latency_p95_ms": 43
+        },
+        "gst": {
+          "n": 23,
+          "recall@5": 0.8492,
+          "mrr@10": 0.7676,
+          "ndcg@5": 0.7333,
+          "refusal_accuracy": 0.9565,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0435,
+          "latency_p50_ms": 28,
+          "latency_p95_ms": 37
+        },
+        "hinglish": {
+          "n": 1,
+          "recall@5": 1.0,
+          "mrr@10": 0.2,
+          "ndcg@5": 0.3869,
+          "refusal_accuracy": 0.0,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 1.0,
+          "latency_p50_ms": 33,
+          "latency_p95_ms": 33
+        },
+        "income_tax": {
+          "n": 31,
+          "recall@5": 0.8361,
+          "mrr@10": 0.8094,
+          "ndcg@5": 0.7606,
+          "refusal_accuracy": 0.9355,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0645,
+          "latency_p50_ms": 32,
+          "latency_p95_ms": 50
+        },
+        "out_of_scope": {
+          "n": 7,
+          "recall@5": null,
+          "mrr@10": null,
+          "ndcg@5": null,
+          "refusal_accuracy": 0.4286,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": 0.4286,
+          "false_refusal_rate": null,
+          "latency_p50_ms": 29,
+          "latency_p95_ms": 74
+        },
+        "time_trap": {
+          "n": 11,
+          "recall@5": 0.875,
+          "mrr@10": 0.8125,
+          "ndcg@5": 0.8023,
+          "refusal_accuracy": 0.9091,
+          "period_accuracy": 1.0,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0909,
+          "latency_p50_ms": 26,
+          "latency_p95_ms": 35
+        }
+      },
+      "by_coverage": {
+        "full": {
+          "n": 51,
+          "refused_rate": 0.059,
+          "recall@5": 0.8611,
+          "mrr@10": 0.8067
+        },
+        "partial": {
+          "n": 16,
+          "refused_rate": 0.125,
+          "recall@5": 0.5885,
+          "mrr@10": 0.6381
+        },
+        "none": {
+          "n": 6,
+          "refused_rate": 0.167,
+          "recall@5": null,
+          "mrr@10": null
+        }
+      },
+      "oos_refused_rate": 0.429
+    },
+    {
+      "name": "C6",
+      "description": "C5 but reranker used only for the refusal gate (fusion order kept)",
+      "generated": false,
+      "metrics": {
+        "n": 80,
+        "recall@5": 0.5734,
+        "mrr@10": 0.6469,
+        "ndcg@5": 0.5518,
+        "refusal_accuracy": 0.875,
+        "period_accuracy": 1.0,
+        "calc_accuracy": 0.1667,
+        "oos_refusal_rate": 0.5714,
+        "false_refusal_rate": 0.0959,
+        "latency_p50_ms": 4739,
+        "latency_p95_ms": 5704
+      },
+      "per_category": {
+        "calculation": {
+          "n": 7,
+          "recall@5": 0.2738,
+          "mrr@10": 0.5238,
+          "ndcg@5": 0.2885,
+          "refusal_accuracy": 0.8571,
+          "period_accuracy": null,
+          "calc_accuracy": 0.1667,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.1429,
+          "latency_p50_ms": 4777,
+          "latency_p95_ms": 5340
+        },
+        "gst": {
+          "n": 23,
+          "recall@5": 0.8492,
+          "mrr@10": 0.8152,
+          "ndcg@5": 0.7685,
+          "refusal_accuracy": 0.913,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.087,
+          "latency_p50_ms": 4444,
+          "latency_p95_ms": 5473
+        },
+        "hinglish": {
+          "n": 1,
+          "recall@5": 0.0,
+          "mrr@10": 0.1429,
+          "ndcg@5": 0.0,
+          "refusal_accuracy": 0.0,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 1.0,
+          "latency_p50_ms": 5511,
+          "latency_p95_ms": 5511
+        },
+        "income_tax": {
+          "n": 31,
+          "recall@5": 0.4722,
+          "mrr@10": 0.5306,
+          "ndcg@5": 0.4658,
+          "refusal_accuracy": 0.9355,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0645,
+          "latency_p50_ms": 4842,
+          "latency_p95_ms": 5846
+        },
+        "out_of_scope": {
+          "n": 7,
+          "recall@5": null,
+          "mrr@10": null,
+          "ndcg@5": null,
+          "refusal_accuracy": 0.5714,
+          "period_accuracy": null,
+          "calc_accuracy": null,
+          "oos_refusal_rate": 0.5714,
+          "false_refusal_rate": null,
+          "latency_p50_ms": 5336,
+          "latency_p95_ms": 5682
+        },
+        "time_trap": {
+          "n": 11,
+          "recall@5": 0.5625,
+          "mrr@10": 0.8125,
+          "ndcg@5": 0.6049,
+          "refusal_accuracy": 0.9091,
+          "period_accuracy": 1.0,
+          "calc_accuracy": null,
+          "oos_refusal_rate": null,
+          "false_refusal_rate": 0.0909,
+          "latency_p50_ms": 4791,
+          "latency_p95_ms": 5835
+        }
+      },
+      "by_coverage": {
+        "full": {
+          "n": 51,
+          "refused_rate": 0.078,
+          "recall@5": 0.6225,
+          "mrr@10": 0.6923
+        },
+        "partial": {
+          "n": 16,
+          "refused_rate": 0.125,
+          "recall@5": 0.4167,
+          "mrr@10": 0.5022
+        },
+        "none": {
+          "n": 6,
+          "refused_rate": 0.167,
+          "recall@5": null,
+          "mrr@10": null
+        }
+      },
+      "oos_refused_rate": 0.571
+    }
+  ]
+}
