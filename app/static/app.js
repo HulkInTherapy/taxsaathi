@@ -1,4 +1,4 @@
-/* TaxSaathi demo UI: core, API layer, header, router, Ask view, drawer and pipeline trace.
+/* Taxot demo UI: core, API layer, header, router, Ask view, drawer and pipeline trace.
  * Plain ES2017, no framework, no build step. views.js adds the other tabs.
  */
 (function () {
@@ -255,7 +255,7 @@
       function (res) {
         clearTimeout(timer);
         if (res.status === 404 && path === "/health" && window.TaxMock && !opts.noMockFallback) {
-          // Something is serving the files, but it is not the TaxSaathi API
+          // Something is serving the files, but it is not the Taxot API
           setMock("noapi");
           return window.TaxMock.handle(path, opts.body);
         }
@@ -285,7 +285,7 @@
         // Only the first /health probe may switch the whole UI to mock mode. Once we know the live
         // backend is there, a failed request is shown as an error instead of fake data.
         if (path === "/health" && !state.live && window.TaxMock && !opts.noMockFallback) { setMock("unreachable"); return window.TaxMock.handle(path, opts.body); }
-        throw new Error("Couldn't reach the TaxSaathi server (" + ((err && err.message) || "network error") + ").");
+        throw new Error("Couldn't reach the Taxot server (" + ((err && err.message) || "network error") + ").");
       }
     );
   }
@@ -746,9 +746,9 @@
   }
 
   var REASONS = {
-    out_of_scope: "The intent classifier marked this as outside individual income tax and GST, so TaxSaathi won't answer it, whatever the search found.",
-    prompt_injection: "The question looked like an attempt to change TaxSaathi's instructions.",
-    low_retrieval_score: "Even the best passage in the knowledge base wasn't a confident match (reranker score below the threshold), so TaxSaathi would rather not guess.",
+    out_of_scope: "The intent classifier marked this as outside individual income tax and GST, so Taxot won't answer it, whatever the search found.",
+    prompt_injection: "The question looked like an attempt to change Taxot's instructions.",
+    low_retrieval_score: "Even the best passage in the knowledge base wasn't a confident match (reranker score below the threshold), so Taxot would rather not guess.",
   };
   function reasonText(r) { return r ? REASONS[r] || String(r).replace(/_/g, " ") : ""; }
   TS.reasonText = reasonText;
@@ -1131,9 +1131,9 @@
   var HINGLISH_RE = /\b(naye|naya|nayi|mein|kitna|kitni|hai|kya|kaise|tha|mera|meri|mujhe|kaunsa|konsa|accha|behtar|purane|lagega|batao|milta|chahiye|kab|kitne|wala|wali)\b/i;
 
   var SIMPLE_REASONS = {
-    out_of_scope: "This goes beyond the general income-tax and GST rules TaxSaathi covers, or it asks how to get around the law.",
-    prompt_injection: "The question looked like it was trying to change TaxSaathi's rules.",
-    low_retrieval_score: "TaxSaathi couldn't find an official passage that clearly answers this, and it would rather not guess.",
+    out_of_scope: "This goes beyond the general income-tax and GST rules Taxot covers, or it asks how to get around the law.",
+    prompt_injection: "The question looked like it was trying to change Taxot's rules.",
+    low_retrieval_score: "Taxot couldn't find an official passage that clearly answers this, and it would rather not guess.",
   };
 
   var ask = { config: "C6", messages: [], pending: false, seq: 0, followUpBase: null, autoTrace: false };
@@ -1461,7 +1461,7 @@
       if (la.note) bits.push("<span>" + esc(la.note) + "</span>");
     }
     if (!bits.length) return "";
-    return '<div class="turn-meta" title="' + esc(la && la.assumed ? "No date in the question, so TaxSaathi used the law in force today." : "TaxSaathi found this date in your question and only used law in force then.") + '">' + icon("calendar") + bits.join('<span class="dot" aria-hidden="true"></span>') + "</div>";
+    return '<div class="turn-meta" title="' + esc(la && la.assumed ? "No date in the question, so Taxot used the law in force today." : "Taxot found this date in your question and only used law in force then.") + '">' + icon("calendar") + bits.join('<span class="dot" aria-hidden="true"></span>') + "</div>";
   }
 
   function relatedFor(msg) {
@@ -1486,7 +1486,7 @@
   function answerHtml(msg) {
     if (msg.status === "error") {
       return '<div class="notice error-card">' + '<span class="notice-illo">' + TS.illo("offline") + "</span>" + '<div><p class="notice-title">' + (msg.timeout ? "That took too long" : "We couldn't get an answer") + "</p><p>" +
-        esc(msg.timeout ? "The server is very busy right now. Please try again in a moment." : "The TaxSaathi server didn't respond properly. Please try again.") +
+        esc(msg.timeout ? "The server is very busy right now. Please try again in a moment." : "The Taxot server didn't respond properly. Please try again.") +
         '</p><p class="notice-detail">' + esc(msg.error) + '</p><div class="notice-actions"><button type="button" class="btn btn-primary btn-sm retry">' + icon("refresh") + "Try again</button>" +
         (state.mock ? "" : '<a class="btn btn-secondary btn-sm" href="?mock=1">Use offline demo</a>') + "</div></div></div>";
     }
@@ -1496,7 +1496,7 @@
       html +=
         '<div class="ca-card">' + '<span class="ca-illo">' + TS.illo("ca") + "</span><div class=\"ca-main\">" +
         '<h3 class="ca-title">This needs a Chartered Accountant</h3>' +
-        '<p class="ca-why">' + esc(r.refusal_reason ? SIMPLE_REASONS[r.refusal_reason] || reasonText(r.refusal_reason) : "TaxSaathi chose not to guess on this one.") + "</p>" +
+        '<p class="ca-why">' + esc(r.refusal_reason ? SIMPLE_REASONS[r.refusal_reason] || reasonText(r.refusal_reason) : "Taxot chose not to guess on this one.") + "</p>" +
         (r.answer ? '<div class="ca-answer prose">' + richText(r.answer, r.citations, "ask") + "</div>" : "") +
         '<div class="ca-next"><a class="btn btn-amber btn-sm" href="https://www.icai.org/" target="_blank" rel="noopener noreferrer">Find a CA on the ICAI website' + icon("arrowUpRight") + '</a><span>A CA can look at your full situation and documents.</span></div>' +
         "</div></div>";
@@ -1587,7 +1587,7 @@
       (r.retrieved && r.retrieved.length ? '<p class="how-retrieved"><span class="eyebrow">Top passages found</span>' + r.retrieved.slice(0, 6).map(function (x) { return "<code>" + esc(x) + "</code>"; }).join(" ") + "</p>" : "");
     var btn = $(".how-toggle", msgEl);
     openDrawer({
-      key: key, wide: true, trigger: trigger || btn, kicker: "Pipeline trace", title: "How TaxSaathi found this", html: html,
+      key: key, wide: true, trigger: trigger || btn, kicker: "Pipeline trace", title: "How Taxot found this", html: html,
       onClose: function () { if (btn) btn.setAttribute("aria-expanded", "false"); },
       after: function (body) {
         if (btn) btn.setAttribute("aria-expanded", "true");
@@ -1611,7 +1611,7 @@
     out += txt.trim();
     if (la && !r.refused) out += "\n\nLaw applied: " + la.when + (la.laws.length ? " (" + la.laws.join(" + ") + ")" : "");
     if (r.citations && r.citations.length) out += "\n\nSources:\n" + r.citations.map(function (c, i) { return "[" + (i + 1) + "] " + (c.title || c.id) + (c.source_url ? " — " + c.source_url : ""); }).join("\n");
-    return out + "\n\n(TaxSaathi)";
+    return out + "\n\n(Taxot)";
   }
   function copyAnswer(m, btn) {
     if (!m || !m.result) return;

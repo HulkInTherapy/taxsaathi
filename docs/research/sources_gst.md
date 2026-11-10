@@ -1,4 +1,4 @@
-# GST sources and verification log (TaxSaathi KB, accessed 2026-10-29)
+# GST sources and verification log (Taxot KB, accessed 2026-10-29)
 
 Method: official pages were fetched as text (curl, then HTML stripped) or checked through search results. No PDFs were downloaded. "Official" means a government site: pib.gov.in, taxinformation.cbic.gov.in, cbic-gst.gov.in, gstcouncil.gov.in, tutorial.gst.gov.in, gst.gov.in, newsonair.gov.in. When a claim rests only on secondary sources, its KB chunk is marked `verified: partial`.
 
@@ -60,4 +60,4 @@ Method: official pages were fetched as text (curl, then HTML stripped) or checke
 - The Notification 18/2025-CT number for Rule 14A comes from secondary sources. The Rule 14A page on taxinformation.cbic.gov.in did not load at the URL pattern tried.
 - Late-fee caps: the notification tables give per-Act (CGST) amounts. The KB states combined CGST+SGST totals, following the 43rd Council summary.
 - Some Rs 40 lakh opt-in states (for example Telangana) may have changed their state-level choice. This was not re-verified for 2026.
-- The CLAUDE.md Tavily workflow could not be used: there is no `.env` with Tavily keys in ~/taxsaathi. The built-in WebSearch/WebFetch tools and curl were used instead, as the task instructed. pib.gov.in blocks WebFetch (403), so its pages were fetched with curl.
+- The CLAUDE.md Tavily workflow could not be used: there is no `.env` with Tavily keys in ~/taxot. The built-in WebSearch/WebFetch tools and curl were used instead, as the task instructed. pib.gov.in blocks WebFetch (403), so its pages were fetched with curl.

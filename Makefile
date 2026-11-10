@@ -1,4 +1,4 @@
-# TaxSaathi — common commands. Run from the project root (on the VPS: /opt/taxsaathi).
+# Taxot — common commands. Run from the project root (on the VPS: /opt/taxot).
 PY ?= .venv/bin/python
 
 .PHONY: setup ingest train-intent test eda experiments experiments-gen tune test-split serve all

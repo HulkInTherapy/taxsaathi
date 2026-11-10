@@ -1,4 +1,4 @@
-/* TaxSaathi — MOCK MODE
+/* Taxot — MOCK MODE
  * Built-in sample responses that follow the API contract in SPEC.md exactly.
  * Used when the URL has ?mock=1 or when the backend is unreachable.
  * The facts are illustrative demo data, written to look like real pipeline output.
@@ -7,7 +7,7 @@
   "use strict";
 
   var DISCLAIMER =
-    "TaxSaathi gives general information from official sources. It is not professional tax advice. Check with a Chartered Accountant before you file.";
+    "Taxot gives general information from official sources. It is not professional tax advice. Check with a Chartered Accountant before you file.";
   var LLM = "qwen2.5:3b";
 
   /* ------------------------------------------------------------------ */
@@ -564,7 +564,7 @@
         cites: ["IT-NEW-VDA-30PCT"],
       },
       refusal_reason:
-        "This asks how to avoid tax on foreign crypto income. TaxSaathi doesn't give tax-avoidance strategies, and foreign assets (Schedule FA reporting, tax treaties, crypto/VDA rules) need a qualified Chartered Accountant.",
+        "This asks how to avoid tax on foreign crypto income. Taxot doesn't give tax-avoidance strategies, and foreign assets (Schedule FA reporting, tax treaties, crypto/VDA rules) need a qualified Chartered Accountant.",
       answer:
         "I can't help with ways to avoid tax. In general, Indian residents are taxed on their worldwide income and must report foreign assets in their return. A Chartered Accountant can help you report foreign crypto income correctly and claim any treaty relief you are entitled to.",
       plain:
@@ -585,7 +585,7 @@
         cites: ["IT-NEW-SLABS-TY2627"],
       },
       refusal_reason:
-        "Low confidence: the best matching passage scored -1.84, below the safety threshold of 0.0. Rather than guess, TaxSaathi hands this to a CA. (Mock mode only has sample answers for the example questions, so try one of the chips.)",
+        "Low confidence: the best matching passage scored -1.84, below the safety threshold of 0.0. Rather than guess, Taxot hands this to a CA. (Mock mode only has sample answers for the example questions, so try one of the chips.)",
       answer: "",
       plain: "I'm not completely sure, but generally this depends on your specific situation and the latest rules. Please check the income tax website for details.",
     },
@@ -864,7 +864,7 @@
         var q = (body && body.question) || "";
         var plain = ask({ question: q, config: "B0" });
         var ts = ask({ question: q, config: "C6" });
-        return delay(2400, { plain: plain, taxsaathi: ts });
+        return delay(2400, { plain: plain, taxot: ts });
       }
       case "/calculate":
         return delay(350, calculate(body));

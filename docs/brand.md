@@ -1,11 +1,11 @@
-# TaxSaathi brand mark
+# Taxot brand mark
 
 **Concept: an answer that is also a document.**
 
-The mark is a speech bubble (the conversation with your *saathi*, your companion) that is
+The mark is a speech bubble (the conversation with the assistant) that is
 also a page of law: its top-right corner is folded like a document. Inside sits a check mark.
 
-- **Bubble** = TaxSaathi talks with you, in English or Hinglish.
+- **Bubble** = Taxot talks with you, in English or Hinglish.
 - **Folded corner** = every answer is backed by an official source document.
 - **Check** = the answer was verified: right law, right date, citations checked.
 
@@ -17,7 +17,7 @@ It reads as one simple shape, so it works at 16 px (favicon) and in the 30 px he
   short tail at the bottom left.
 - Check stroke 2.3, round caps. The fold is filled mint (#99F6E4) to show depth.
 - Colours: accent tile **#0F766E** (deep teal), white bubble. Monochrome version: ink tile **#0A0A0A**.
-- Wordmark: Inter 650, tight tracking: "Tax" in ink, "Saathi" in teal.
+- Wordmark: Inter 650, tight tracking: "Tax" in ink, "ot" in teal.
 
 ## Motion (the mark is alive, quietly)
 

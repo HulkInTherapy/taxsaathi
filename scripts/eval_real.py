@@ -1,5 +1,5 @@
 """
-Evaluate TaxSaathi on REAL questions asked by real taxpayers (Reddit, Quora, CA forums, official FAQs).
+Evaluate Taxot on REAL questions asked by real taxpayers (Reddit, Quora, CA forums, official FAQs).
 
 The gold set was written by the team; this checks whether the system also works on how people
 actually phrase things. Retrieval-only (fast): Recall@5 / MRR on questions our knowledge base
@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 from experiments.run_experiments import _agg, evaluate_config
-from src.pipeline import TaxSaathi
+from src.pipeline import Taxot
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -25,7 +25,7 @@ def main() -> None:
     ap.add_argument("--generate", action="store_true")
     a = ap.parse_args()
     rows = [json.loads(l) for l in open(ROOT / "data/eval/real_questions.jsonl") if l.strip()]
-    ts = TaxSaathi()
+    ts = Taxot()
     out = {"n": len(rows), "coverage": {k: sum(r["covered"] == k for r in rows) for k in ("full", "partial", "none")},
            "configs": []}
     for name in a.configs.split(","):

@@ -1,4 +1,4 @@
-# Viva Prep: TaxSaathi
+# Viva Prep: Taxot
 
 Short, correct answers. Say the first sentence, then add detail only if they ask. Paper numbers like [2] refer to `related_work.md`.
 
@@ -156,7 +156,7 @@ Almost all of it is the 3B LLM writing on a 4-vCPU CPU server with no GPU: promp
 80 questions: Reddit 36, official FAQs 25 (incometax.gov.in, GST Council/PIB 56th Council FAQ, GST tutorial portal), CAclubindia 11 plus 1 YouTube comment, Quora 7. Found with about 45 web searches; about 20 pages opened. Only public pages, no logins or private groups. No usernames, names, PANs or phone numbers stored; posts were trimmed to the core question without changing facts. Each row keeps its source link, it is used only for non-commercial research evaluation (fair dealing), and we don't redistribute it as a dataset. Reference answers come from our own passages, not copied from the pages. Full method: `docs/research/real_questions_sources.md`.
 
 **46. What does the logo mean?**
-A speech bubble that is also a page of law. The bubble is the conversation with your *saathi* (companion), in English or Hinglish. Its top-right corner is folded like a document: every answer is backed by an official source. The check mark inside: the answer was verified (right law, right date, citations checked). Deep teal (#0F766E). It "breathes" while an answer is being prepared and pulses once when the answer lands.
+A speech bubble that is also a page of law. The bubble is the conversation with the assistant, in English or Hinglish. Its top-right corner is folded like a document: every answer is backed by an official source. The check mark inside: the answer was verified (right law, right date, citations checked). Deep teal (#0F766E). It "breathes" while an answer is being prepared and pulses once when the answer lands.
 
 ---
 
@@ -171,15 +171,15 @@ A speech bubble that is also a page of law. The bubble is the conversation with 
 
 ## Demo script (P4, about 4 min)
 
-Live site: https://taxsaathi.taild58d86.ts.net. Answers take **15–40 s** on CPU (Compare 1–2 min). **Fill every wait** by opening "How this was found" on the previous answer, or by saying what the pipeline is doing right now.
+Live site: https://taxot.taild58d86.ts.net. Answers take **15–40 s** on CPU (Compare 1–2 min). **Fill every wait** by opening "How this was found" on the previous answer, or by saying what the pipeline is doing right now.
 
-1. **Compare tab:** click the trap pill "GST on AC in Aug 2025" (or type *What was GST on AC in August 2025?*) → Compare. Left: the plain LLM, no source. Right: TaxSaathi, **28%**, cited, "law for August 2025", "8 outdated passages dropped". Point at the timeline at the bottom.
+1. **Compare tab:** click the trap pill "GST on AC in Aug 2025" (or type *What was GST on AC in August 2025?*) → Compare. Left: the plain LLM, no source. Right: Taxot, **28%**, cited, "law for August 2025", "8 outdated passages dropped". Point at the timeline at the bottom.
 2. **Ask tab, Hinglish:** *Naye regime mein standard deduction kitna hai?* → ₹75,000 under section 19 of the Income-tax Act, 2025. Open "How this was found": the Hinglish fix (naye → new, kitna → how much) and "no date mentioned, using current law".
 3. *Is 80C still available in the new Income-tax Act?* → yes, as section 123, up to ₹1,50,000; and the new regime does not allow it. Point at the "Section map · 80C → 123" source card.
 4. *how much tax do i have to pay if i am earning 5k us dollars per month remote* → the calculator card: US$ converted at the RBI reference rate, freelancer under section 58 (50%), new regime ₹4,54,532 vs old ₹6,96,332. Say: "numbers by code, not the AI".
 5. *How do I avoid tax on foreign crypto income?* → refused: "This needs a Chartered Accountant". Say: saying no is a feature.
 
-**Backup plan.** If the server is slow or down: Advanced (sliders icon, top right) → "Switch to offline demo mode", or open https://taxsaathi.taild58d86.ts.net/?mock=1. It replays recorded answers with the same screens. If even the site won't load, use the screenshots in the slides. One-page version: `docs/DEMO_CHEATSHEET.md`.
+**Backup plan.** If the server is slow or down: Advanced (sliders icon, top right) → "Switch to offline demo mode", or open https://taxot.taild58d86.ts.net/?mock=1. It replays recorded answers with the same screens. If even the site won't load, use the screenshots in the slides. One-page version: `docs/DEMO_CHEATSHEET.md`.
 
 ### Q47. Some answers look hand-written. Isn't that cheating?
-For a few very common confusions (for example "no tax up to ₹12 lakh, but 5% from ₹4 lakh?", which came up in 10 real Reddit posts), the knowledge-base passage carries a **reviewed short answer** written and checked by the team. When that passage is the top search result, TaxSaathi shows the reviewed answer word for word, with its citation, instead of letting the small 3B model paraphrase it. The model had been dropping the key step ("the rebate then cancels the slab tax"), which made the answer contradict itself. Search still has to find the right passage, and the safety gate and citation check still apply. It is the same idea as a help desk's reviewed FAQ: deterministic where correctness matters most, like the calculator.
+For a few very common confusions (for example "no tax up to ₹12 lakh, but 5% from ₹4 lakh?", which came up in 10 real Reddit posts), the knowledge-base passage carries a **reviewed short answer** written and checked by the team. When that passage is the top search result, Taxot shows the reviewed answer word for word, with its citation, instead of letting the small 3B model paraphrase it. The model had been dropping the key step ("the rebate then cancels the slab tax"), which made the answer contradict itself. Search still has to find the right passage, and the safety gate and citation check still apply. It is the same idea as a help desk's reviewed FAQ: deterministic where correctness matters most, like the calculator.

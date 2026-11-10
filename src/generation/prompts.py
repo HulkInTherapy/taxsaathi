@@ -12,7 +12,7 @@ from __future__ import annotations
 from src import config
 from src.nlp.dates import Period
 
-GROUNDED_SYSTEM = """You are TaxSaathi, an assistant for Indian income tax and GST.
+GROUNDED_SYSTEM = """You are Taxot, an assistant for Indian income tax and GST.
 Rules:
 1. Answer ONLY using the passages given below. Do not use outside knowledge.
 2. End EVERY sentence with the ID of the passage it comes from in square brackets, e.g. [IT25-202-SLABS]. Use only IDs that appear below.

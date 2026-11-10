@@ -1,6 +1,6 @@
-# TaxSaathi: Period-Aware, Citation-Grounded Retrieval-Augmented QA for Indian Income Tax and GST in English and Hinglish
+# Taxot: Period-Aware, Citation-Grounded Retrieval-Augmented QA for Indian Income Tax and GST in English and Hinglish
 
-*Technical report, milestones M1–M3 · 2026-10-29 · TaxSaathi team (4th-year NLP course project)*
+*Technical report, milestones M1–M3 · 2026-10-29 · Taxot team (4th-year NLP course project)*
 
 ---
 
@@ -10,7 +10,7 @@ Indian taxpayers rely heavily on chartered accountants (CAs) for routine questio
 changes made this worse: the Income-tax Act, 2025 (in force 1 April 2026, introducing the "Tax Year")
 and the GST rate rationalisation ("GST 2.0", effective 22 September 2025). A general-purpose LLM cannot
 tell which law applies to which period, cannot cite its sources, and makes arithmetic errors. We present
-**TaxSaathi**, a retrieval-augmented QA system that (i) accepts English and romanised Hindi–English
+**Taxot**, a retrieval-augmented QA system that (i) accepts English and romanised Hindi–English
 (Hinglish), (ii) attaches a verifiable citation with an effective-date range to every claim, (iii)
 extracts the period a question refers to and filters the knowledge base to the law in force for that
 period, (iv) abstains and escalates to a CA when the question is out of scope or retrieval confidence is

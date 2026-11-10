@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 from src import config
-from src.pipeline import TaxSaathi
+from src.pipeline import Taxot
 
 # expect: intent, gross (annual ₹, ±2%), income_type, age, follow_up, escalate, refused
 TRICKY = [
@@ -67,7 +67,7 @@ def _calc_inputs(resp: dict) -> dict:
     return {}
 
 
-def run_one(ts: TaxSaathi, qid: str, q: str, expect: dict, cfg: str) -> dict:
+def run_one(ts: Taxot, qid: str, q: str, expect: dict, cfg: str) -> dict:
     r = ts.ask(q, cfg)
     cd = _calc_inputs(r)
     inputs = cd.get("inputs") or {}
@@ -102,7 +102,7 @@ def main():
     ap.add_argument("--out", default="/tmp/battery.json")
     ap.add_argument("--config", default="C6")
     a = ap.parse_args()
-    ts = TaxSaathi(use_llm=False)
+    ts = Taxot(use_llm=False)
     rows = []
     for line in (config.ROOT / "data/eval/real_questions.jsonl").read_text().splitlines():
         if not line.strip():

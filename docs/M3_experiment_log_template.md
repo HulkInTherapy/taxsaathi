@@ -1,9 +1,9 @@
-# M3 Experiment Log: TaxSaathi (B0–C5)
+# M3 Experiment Log: Taxot (B0–C5)
 
 **Rules of this log**
 1. Hypotheses below were written **before** any run (2026-10-29) and must not be edited afterwards. Add corrections as dated notes underneath.
 2. All runs use the **dev split** (`data/eval/splits.json`). Test is run once per frozen config, at the end, and logged in §Final test.
-3. Every run is also in MLflow (experiment `taxsaathi-m3`) and `experiments/results.json`. Paste the MLflow run ID.
+3. Every run is also in MLflow (experiment `taxot-m3`) and `experiments/results.json`. Paste the MLflow run ID.
 4. Report numbers exactly as produced. Failed or odd runs are kept, not deleted.
 
 **Common setup (fill once)**

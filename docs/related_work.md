@@ -1,4 +1,4 @@
-# Related Work: TaxSaathi
+# Related Work: Taxot
 
 Each entry below was checked on 2026-10-29 against the arXiv API, the ACL Anthology, Crossref (DOI), or the publisher's proceedings page. Figures quoted in the "relevance" notes come from the paper's own abstract. Entries are grouped by the design question they inform.
 
@@ -19,7 +19,7 @@ Each entry below was checked on 2026-10-29 against the arXiv API, the ACL Anthol
 *Relevance.* E5 was "the first model that outperforms the strong BM25 baseline on the BEIR retrieval benchmark without using any labeled data". mE5 extends the recipe with contrastive pre-training on about 1 billion multilingual text pairs, released in small, base and large sizes. We use `intfloat/multilingual-e5-small`: 12 layers, 384-dimensional embeddings, inputs prefixed "query: " / "passage: " (per the [model card](https://huggingface.co/intfloat/multilingual-e5-small)). The small size fits our CPU budget and the model is multilingual.
 
 **[5] Chen et al. (2024), BGE M3-Embedding.** Jianlv Chen, Shitao Xiao, Peitian Zhang, Kun Luo, Defu Lian, Zheng Liu. *M3-Embedding: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation.* Findings of ACL 2024, pp. 2318–2335. [arXiv:2402.03216](https://arxiv.org/abs/2402.03216) · [ACL Anthology](https://aclanthology.org/2024.findings-acl.137)
-*Relevance.* BGE-M3 does dense, sparse and multi-vector retrieval in one model across 100+ languages. That confirms the community view that lexical and semantic signals complement each other, which is the idea behind our hybrid design. Our reranker comes from the same BAAI family. Its multilingual successor `bge-reranker-v2-m3` is a candidate upgrade (see "How TaxSaathi builds on this").
+*Relevance.* BGE-M3 does dense, sparse and multi-vector retrieval in one model across 100+ languages. That confirms the community view that lexical and semantic signals complement each other, which is the idea behind our hybrid design. Our reranker comes from the same BAAI family. Its multilingual successor `bge-reranker-v2-m3` is a candidate upgrade (see "How Taxot builds on this").
 
 ## B. Reranking
 
@@ -35,7 +35,7 @@ Each entry below was checked on 2026-10-29 against the arXiv API, the ACL Anthol
 *Relevance.* RAGAS breaks RAG evaluation into dimensions such as context relevance and faithfulness (is the answer supported by the retrieved passages?), with reference-free metrics. Our "faithfulness proxy" (report §6) borrows this idea in a cheaper form suited to a CPU-only setup.
 
 **[9] Gao et al. (2023), ALCE.** Tianyu Gao, Howard Yen, Jiatong Yu, Danqi Chen. *Enabling Large Language Models to Generate Text with Citations.* EMNLP 2023. [arXiv:2305.14627](https://arxiv.org/abs/2305.14627) · [ACL Anthology](https://aclanthology.org/2023.emnlp-main.398)
-*Relevance.* ALCE is a benchmark for LLM answers with inline citations, scored on fluency, correctness and citation quality. It found that "even the best models lack complete citation support 50% of the time" on ELI5. This is why TaxSaathi does not trust the LLM's citations: a post-hoc citation check (pipeline step 10) drops sentences whose `[CHUNK-ID]` is missing or invalid.
+*Relevance.* ALCE is a benchmark for LLM answers with inline citations, scored on fluency, correctness and citation quality. It found that "even the best models lack complete citation support 50% of the time" on ELI5. This is why Taxot does not trust the LLM's citations: a post-hoc citation check (pipeline step 10) drops sentences whose `[CHUNK-ID]` is missing or invalid.
 
 ## D. Hallucination and retrieval in the legal domain
 
@@ -75,7 +75,7 @@ Each entry below was checked on 2026-10-29 against the arXiv API, the ACL Anthol
 ## H. LLMs, arithmetic and tools
 
 **[19] Gao et al. (2023), PAL.** Luyu Gao, Aman Madaan, Shuyan Zhou, Uri Alon, Pengfei Liu, Yiming Yang, Jamie Callan, Graham Neubig. *PAL: Program-aided Language Models.* ICML 2023 (PMLR 202). [arXiv:2211.10435](https://arxiv.org/abs/2211.10435) · [PMLR](https://proceedings.mlr.press/v202/gao23f.html)
-*Relevance.* LLMs "often make logical and arithmetic mistakes in the solution part, even when the problem is decomposed correctly". Handing the computation to a Python interpreter fixes this. TaxSaathi goes one step further: the arithmetic is a **hand-written, unit-tested calculator**, and the LLM is never asked to compute.
+*Relevance.* LLMs "often make logical and arithmetic mistakes in the solution part, even when the problem is decomposed correctly". Handing the computation to a Python interpreter fixes this. Taxot goes one step further: the arithmetic is a **hand-written, unit-tested calculator**, and the LLM is never asked to compute.
 
 **[20] Schick et al. (2023), Toolformer.** Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Luke Zettlemoyer, Nicola Cancedda, Thomas Scialom. *Toolformer: Language Models Can Teach Themselves to Use Tools.* NeurIPS 2023. [arXiv:2302.04761](https://arxiv.org/abs/2302.04761) · [NeurIPS proceedings](https://papers.nips.cc/paper_files/paper/2023/hash/d842425e4bf79ba039352da0f658a906-Abstract-Conference.html)
 *Relevance.* LMs "struggle with basic functionality, such as arithmetic or factual lookup, where much simpler and smaller models excel". The fix is calling tools, including a calculator and a calendar. This underpins two design choices: the calculator route (pipeline step 8) and the planned agentic layer (M4+), where tool selection could be learned or prompted rather than rule-routed.
@@ -94,7 +94,7 @@ Each entry below was checked on 2026-10-29 against the arXiv API, the ACL Anthol
 
 ---
 
-## How TaxSaathi builds on this
+## How Taxot builds on this
 
 | Design decision | What the literature says | Our adaptation | Config / step |
 |---|---|---|---|

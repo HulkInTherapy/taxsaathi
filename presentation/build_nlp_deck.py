@@ -1,5 +1,5 @@
 """
-Build the 7-slide technical deck for the NLP teacher: presentation/TaxSaathi_NLP_Explained.pptx
+Build the 7-slide technical deck for the NLP teacher: presentation/Taxot_NLP_Explained.pptx
 
 Not a pitch: it explains what we built for M1–M3 and how a question is processed end to end.
 Numbers are read from experiments/results.json and data files at build time.
@@ -19,7 +19,7 @@ from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt, Emu
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "presentation" / "TaxSaathi_NLP_Explained.pptx"
+OUT = ROOT / "presentation" / "Taxot_NLP_Explained.pptx"
 LOGO = ROOT / "presentation" / "assets" / "logo.png"
 
 INK = RGBColor(0x11, 0x14, 0x18)
@@ -121,7 +121,7 @@ def header(slide, kicker, title, n):
     text(slide, 0.6, 0.6, 12, 0.7, title, size=28, bold=True)
     if LOGO.exists():
         slide.shapes.add_picture(str(LOGO), Inches(0.6), Inches(7.0), height=Inches(0.24))
-    text(slide, 0.9, 6.99, 6, 0.3, [[("Tax", {"bold": True, "size": 10}), ("Saathi", {"bold": True, "size": 10, "color": TEAL}),
+    text(slide, 0.9, 6.99, 6, 0.3, [[("Tax", {"bold": True, "size": 10}), ("ot", {"bold": True, "size": 10, "color": TEAL}),
                                     ("  ·  NLP course project · milestones M1–M3", {"size": 10, "color": MUTED})]])
     text(slide, 12.2, 6.99, 0.6, 0.3, f"{n} / 7", size=10, color=MUTED, align=PP_ALIGN.RIGHT)
 

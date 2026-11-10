@@ -1,4 +1,4 @@
-# TaxSaathi for people who have never studied NLP
+# Taxot for people who have never studied NLP
 
 *If you can follow a cricket scorecard, you can follow this.*
 
@@ -61,7 +61,7 @@ At the door stands a bouncer with two rules:
 1. If the receptionist said "out of scope", the bouncer stops it.
 2. If even the best card got a low score from the careful reader (meaning we don't really have an answer), the bouncer stops it.
 
-When stopped, TaxSaathi says politely: *"I'm not confident about this one. Please consult a Chartered Accountant."* **Saying "I don't know" is a feature, not a failure.**
+When stopped, Taxot says politely: *"I'm not confident about this one. Please consult a Chartered Accountant."* **Saying "I don't know" is a feature, not a failure.**
 
 ### 9. Calculator vs. a person doing mental maths (deterministic calculator)
 If the question is a "calculation", we **do not** ask the language model to do the maths. Language models are like a confident friend doing mental maths: usually close, sometimes badly wrong, and never unsure. We use a real **calculator program** written by hand and checked by **99 automatic tests** (including hand-worked examples). It computes tax under the old and new regimes and says which is cheaper. If your salary is missing, it asks you instead of guessing.
@@ -94,7 +94,7 @@ And the whole journey through steps 1–12 is saved as a **trace**, so in the de
 
 We built the system one piece at a time (B0 → B1 → C1 … → C6) and measured after every piece, on 53 practice ("dev") questions. The final version is **C6**.
 
-| What we measured | Plain AI (B0) | TaxSaathi (C6) | Target |
+| What we measured | Plain AI (B0) | Taxot (C6) | Target |
 |---|---|---|---|
 | Right card in the top 5 (Recall@5) | — | **0.917** | ≥ 0.85 ✅ |
 | Answers containing all the key facts | **10%** | **69%** | — |
@@ -117,7 +117,7 @@ What we found:
 - **Our library fully answers 64%** of them, partly 23%, not at all 14%. Most misses are long forum posts mixing three problems, or GST "changeover" questions (old stock, credit notes).
 - **The most common confusion (10 posts):** *"No tax up to ₹12 lakh, but the slab table says 5% from ₹4 lakh. Which is it?"* Both are true (the rebate cancels the slab tax up to ₹12 lakh). We had no card that said this plainly, so we **wrote an explainer card**. That is how we got to 107 cards.
 - **People write money the way they think:** "$5k a month remote", "1.2 L per month", "freelance ₹40 lakh". That is why the calculator learned **foreign currency, per-month amounts and freelancers** (step 9).
-- **Finding the right rule: 78%** of the fully covered real questions, against 92% on our own questions. Real wording is messier. Also, many 2025 posts were labelled with *last year's* card, while TaxSaathi deliberately answers with *today's* law (counting "the same rule, any year" gives the 78%).
+- **Finding the right rule: 78%** of the fully covered real questions, against 92% on our own questions. Real wording is messier. Also, many 2025 posts were labelled with *last year's* card, while Taxot deliberately answers with *today's* law (counting "the same rule, any year" gives the 78%).
 - **Refusing is harder in real life:** only **4 of 7 (57%)** real out-of-scope questions (NRI, crypto, US stocks…) were refused, against 100% on our own. People wrap them in normal-sounding tax words. Fixing this is next.
 - **Real Hinglish is rare in writing:** we found only 1 genuine Hinglish question. People write to forums in English; Hinglish lives in speech and YouTube.
 

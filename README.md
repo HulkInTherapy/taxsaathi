@@ -1,4 +1,4 @@
-# TaxSaathi — GST & Income-Tax Copilot
+# Taxot — GST & Income-Tax Copilot
 
 **Ask an Indian tax question in English or Hinglish → get a short answer where every sentence
 cites the official rule it came from, using the law that applied *on the date you asked about*.**
@@ -6,7 +6,7 @@ Numbers come from a calculator, never from the AI. If it isn't sure, it says so 
 
 4th-year NLP course project · milestones **M1–M3** done (problem brief, data prep, baseline + experiments).
 
-🔴 **Live demo:** http://167.86.114.152:8000  (tabs: Ask · Plain LLM vs TaxSaathi · Calculator · Experiments · How it works)
+🔴 **Live demo:** http://167.86.114.152:8000  (tabs: Ask · Plain LLM vs Taxot · Calculator · Experiments · How it works)
 
 ---
 
@@ -15,7 +15,7 @@ Numbers come from a calculator, never from the AI. If it isn't sure, it says so 
 | You want to… | Open |
 |---|---|
 | Understand the whole thing with zero NLP background | [`docs/EXPLAINED_SIMPLY.md`](docs/EXPLAINED_SIMPLY.md) |
-| Present it | [`presentation/TaxSaathi.pptx`](presentation/TaxSaathi.pptx) (speaker notes on every slide) |
+| Present it | [`presentation/Taxot.pptx`](presentation/Taxot.pptx) (speaker notes on every slide) |
 | Prepare for the viva + demo script | [`docs/viva_prep.md`](docs/viva_prep.md) |
 | M1 — problem & business case | [`docs/M1_problem_brief.md`](docs/M1_problem_brief.md) |
 | M2 — data card, EDA | [`docs/data_card.md`](docs/data_card.md), [`docs/eda.md`](docs/eda.md) |
@@ -60,11 +60,11 @@ app/static/            demo web UI (no build step)
 experiments/           run_experiments.py, results.json, MLflow runs
 scripts/eda.py         EDA figures → docs/figures
 tests/                 pytest (calculator hand-worked cases, NLP utils, guardrails)
-presentation/          TaxSaathi.pptx / .pdf + build_deck.py
+presentation/          Taxot.pptx / .pdf + build_deck.py
 deploy/                systemd unit
 ```
 
-## Run it (VPS: /opt/taxsaathi, Ubuntu, 4 vCPU / 8 GB, no GPU)
+## Run it (VPS: /opt/taxot, Ubuntu, 4 vCPU / 8 GB, no GPU)
 
 ```bash
 make setup                     # venv + CPU torch + requirements
@@ -72,7 +72,7 @@ ollama pull qwen2.5:3b         # local LLM
 make ingest                    # data/raw/curated/*.md -> data/processed/chunks.jsonl
 make train-intent              # intent classifier
 make test                      # pytest
-make serve                     # API + UI on :8000   (deployed as systemd service `taxsaathi`)
+make serve                     # API + UI on :8000   (deployed as systemd service `taxot`)
 python -m src.pipeline "80C ki limit kya hai?" --config C6     # one question from the CLI
 ```
 

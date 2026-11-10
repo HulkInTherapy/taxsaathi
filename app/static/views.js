@@ -1,4 +1,4 @@
-/* TaxSaathi demo UI: Compare, Calculator, Results and How-it-works views. */
+/* Taxot demo UI: Compare, Calculator, Results and How-it-works views. */
 (function () {
   "use strict";
   var TS = window.TS;
@@ -44,9 +44,9 @@
       var cp = e.target.closest(".cite-calc");
       if (cp) { var mc = cp.closest(".cmp-card").querySelector(".calc-block"); if (mc) TS.flashEl(mc); return; }
       var oc = e.target.closest(".open-calc");
-      if (oc && cmp.last && cmp.last.taxsaathi.calculation && TS.showCalc) { TS.showCalc(cmp.last.taxsaathi.calculation); return; }
+      if (oc && cmp.last && cmp.last.taxot.calculation && TS.showCalc) { TS.showCalc(cmp.last.taxot.calculation); return; }
       var tr = e.target.closest(".open-trace");
-      if (tr && cmp.last && TS.injectAsk) TS.injectAsk(cmp.lastQ, cmp.last.taxsaathi);
+      if (tr && cmp.last && TS.injectAsk) TS.injectAsk(cmp.lastQ, cmp.last.taxot);
     });
     renderCompareEmpty();
   }
@@ -59,7 +59,7 @@
     var plain = kind === "plain";
     return '<article class="panel cmp-card ' + kind + '">' +
       '<header class="cc-head"><span class="cc-icon' + (plain ? "" : " accent") + '" aria-hidden="true">' + (plain ? '<svg viewBox="0 0 24 24"><path d="M20.5 11.5a8 8 0 0 1-11.9 7L4 19.8l1.3-4.3A8 8 0 1 1 20.5 11.5Z"/></svg>' : TS.markSvg()) + "</span>" +
-      "<div><h2>" + (plain ? "Normal chatbot" : "TaxSaathi") + "</h2><p>" + (plain ? "Same AI, no documents" : "Checks the official law first") + '</p></div><span class="cc-lat"></span></header>' +
+      "<div><h2>" + (plain ? "Normal chatbot" : "Taxot") + "</h2><p>" + (plain ? "Same AI, no documents" : "Checks the official law first") + '</p></div><span class="cc-lat"></span></header>' +
       '<div class="cc-body">' + body + "</div></article>";
   }
 
@@ -88,7 +88,7 @@
     TS.api("/compare", { body: { question: q }, timeout: 300000 })
       .then(function (d) {
         if (my !== cmp.seq) return;
-        cmp.last = { plain: TS.normalize(d.plain), taxsaathi: TS.normalize(d.taxsaathi) };
+        cmp.last = { plain: TS.normalize(d.plain), taxot: TS.normalize(d.taxot) };
         cmp.lastQ = q;
         renderCompare(cmp.last);
         TS.markLanded();
@@ -123,7 +123,7 @@
   }
 
   function renderCompare(last) {
-    var p = last.plain, t = last.taxsaathi;
+    var p = last.plain, t = last.taxot;
     var per = TS.stepData(t.trace, "period") || t.period || null;
     var gate = TS.stepData(t.trace, "gate"), cc = TS.stepData(t.trace, "citation_check"), df = TS.stepData(t.trace, "date_filter");
     var pk = keyNumber(p.answer), tk = t.refused ? null : keyNumber(t.answer);
@@ -205,7 +205,7 @@
       '<div class="tl-grid">' +
       '<span class="tl-k"></span><div class="tl-axis">' + years + events + "</div>" +
       '<span class="tl-k">Normal chatbot</span><div class="tl-track"><span class="tl-fog"></span><span class="tl-fog-label">memory, date unknown</span></div>' +
-      '<span class="tl-k ts">TaxSaathi</span><div class="tl-track ts">' + cites + tsRow + "</div>" +
+      '<span class="tl-k ts">Taxot</span><div class="tl-track ts">' + cites + tsRow + "</div>" +
       "</div></section>";
   }
 

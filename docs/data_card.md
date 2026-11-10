@@ -1,4 +1,4 @@
-# Data card — TaxSaathi knowledge base & evaluation set (M2)
+# Data card — Taxot knowledge base & evaluation set (M2)
 
 *Version KB-2026-10-29. Rebuild everything with `python -m src.ingest.ingest` (KB) and
 `python -m experiments.run_experiments --resplit` (splits).*

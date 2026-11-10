@@ -3,7 +3,7 @@
 File: `data/eval/real_questions.jsonl` (80 rows, ids R001–R080). Collected 2026-10-29.
 
 The gold set (`data/eval/gold.jsonl`) was written by the team. This file holds questions that real Indian
-taxpayers asked in public, plus official FAQ questions, so we can check TaxSaathi on real wording and real
+taxpayers asked in public, plus official FAQ questions, so we can check Taxot on real wording and real
 confusions and measure how much of real demand the 106-chunk knowledge base covers.
 
 ## How the data was collected
@@ -33,7 +33,7 @@ confusions and measure how much of real demand the 106-chunk knowledge base cove
    - `gold_chunk_ids` is filled only when a chunk clearly answers the question.
    - `covered`: full means the KB answers the whole question, partial means part of it, none means the KB
      does not answer it.
-   - `answerable=false` marks questions outside TaxSaathi's scope: NRI or residency, crypto, foreign stocks,
+   - `answerable=false` marks questions outside Taxot's scope: NRI or residency, crypto, foreign stocks,
      capital-gains detail, notices, assessment and GAAR, ITR-U, and help with tax evasion.
    - `key_facts` is given only when the correct answer is certain.
 6. **Validation.** Checked with system `python3`: every line parses, all 12 fields are present, the enum

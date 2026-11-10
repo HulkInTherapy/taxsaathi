@@ -4,7 +4,7 @@ Tiny client for the local LLM served by Ollama (http://127.0.0.1:11434).
 We call the /api/chat endpoint with temperature 0 (deterministic, no creativity) and a short
 output limit, because the model only has to write 2-5 sentences. One retry on network errors;
 any failure raises LLMError so the caller can fall back to an extractive answer.
-Model name comes from the TAXSAATHI_LLM environment variable (default qwen2.5:3b).
+Model name comes from the TAXOT_LLM environment variable (default qwen2.5:3b).
 """
 from __future__ import annotations
 

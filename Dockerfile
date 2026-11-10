@@ -1,4 +1,4 @@
-# TaxSaathi API + UI. Ollama is expected on the host (set OLLAMA_URL, e.g. http://host.docker.internal:11434).
+# Taxot API + UI. Ollama is expected on the host (set OLLAMA_URL, e.g. http://host.docker.internal:11434).
 FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 HF_HOME=/app/.hf

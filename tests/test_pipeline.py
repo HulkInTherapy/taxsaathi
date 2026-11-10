@@ -2,7 +2,7 @@
 from pathlib import Path
 
 from src.ingest.ingest import load_all
-from src.pipeline import TaxSaathi
+from src.pipeline import Taxot
 
 FIXTURES = Path(__file__).parent / "fixtures" / "kb"
 KEYS = {"answer", "refused", "refusal_reason", "follow_up", "citations", "calculation",
@@ -10,7 +10,7 @@ KEYS = {"answer", "refused", "refusal_reason", "follow_up", "citations", "calcul
 
 
 def make():
-    return TaxSaathi(chunks=load_all(FIXTURES, None), use_llm=False)
+    return Taxot(chunks=load_all(FIXTURES, None), use_llm=False)
 
 
 def test_ask_shape_and_extractive_answer():

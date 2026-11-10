@@ -1,6 +1,6 @@
-# TaxSaathi — build spec (shared contract for everyone working on this repo)
+# Taxot — build spec (shared contract for everyone working on this repo)
 
-TaxSaathi answers Indian income-tax and GST questions in English and Hinglish, cites the
+Taxot answers Indian income-tax and GST questions in English and Hinglish, cites the
 official source for every claim, is aware of which law applies to which period, refuses /
 escalates to a CA when unsure, and computes tax with a deterministic calculator (never the LLM).
 This is a 4th-year NLP course project. Scope = milestones M1–M3 (problem brief, data prep,
@@ -10,15 +10,15 @@ baseline + experiments B0–C5) plus a demo web app and a presentation.
 1 Apr 2026, "Tax Year 2026-27"). Income earned up to 31 Mar 2026 = Income-tax Act, 1961.
 GST 2.0 rates in force from 22 Sep 2025.
 
-Code runs on a Linux VPS (4 vCPU, 8 GB RAM, no GPU) in /opt/taxsaathi; it is authored on the
-Mac in ~/taxsaathi and rsynced. Python 3.12. Local LLM via Ollama (http://127.0.0.1:11434),
-model `qwen2.5:3b` or `qwen2.5:1.5b` (env TAXSAATHI_LLM). Embeddings `intfloat/multilingual-e5-small`
+Code runs on a Linux VPS (4 vCPU, 8 GB RAM, no GPU) in /opt/taxot; it is authored on the
+Mac in ~/taxot and rsynced. Python 3.12. Local LLM via Ollama (http://127.0.0.1:11434),
+model `qwen2.5:3b` or `qwen2.5:1.5b` (env TAXOT_LLM). Embeddings `intfloat/multilingual-e5-small`
 (prefix "query: " / "passage: "). Reranker `BAAI/bge-reranker-base` (CrossEncoder).
 
 ## Repository layout
 
 ```
-taxsaathi/
+taxot/
 ├── data/raw/curated/*.md      # knowledge base source files (format below)
 ├── data/processed/chunks.jsonl# produced by `python -m src.ingest.ingest`
 ├── data/eval/gold.jsonl       # gold Q&A set (format below)
@@ -30,7 +30,7 @@ taxsaathi/
 ├── src/guardrails/            # intent.py (TF-IDF+LogReg), refusal.py, pii.py, citation_check.py
 ├── src/generation/            # llm.py (ollama client), prompts.py, generate.py
 ├── src/calculator/            # tax.py (deterministic), parse.py (query → inputs)
-├── src/pipeline.py            # TaxSaathi.ask(question, config) -> AnswerResult with full trace
+├── src/pipeline.py            # Taxot.ask(question, config) -> AnswerResult with full trace
 ├── src/api/main.py            # FastAPI: /ask /compare /calculate /health /experiments /kb/stats; serves app/static
 ├── app/static/                # demo web UI (index.html, app.js, style.css) — no build step
 ├── experiments/run_experiments.py  # B0–C5 on dev set, logs to MLflow + experiments/results.json
@@ -121,7 +121,7 @@ C3 hybrid top-20→rerank→top-5 · C4 C3+date filter · C5 C4+Hinglish normali
   intent `{"label","probs":{"question":0.9,...}}`; period `{"start","end","reason","assumed_current":bool}`;
   bm25/dense/fusion/rerank `{"results":[{"id","title","score"}]}`; date_filter `{"before":20,"after":14,"removed":[ids]}`;
   gate `{"passed":bool,"top_score":float,"threshold":float}`; citation_check `{"kept":n,"dropped":n,"invalid_ids":[]}`.
-- `POST /compare` `{"question"}` → `{"plain": <B0 result>, "taxsaathi": <C5 result>}`
+- `POST /compare` `{"question"}` → `{"plain": <B0 result>, "taxot": <C5 result>}`
 - `POST /calculate` `{"gross_salary":int,"deductions_80c":int,"deductions_80d":int,"hra_exemption":int,
   "home_loan_interest":int,"nps_80ccd1b":int,"other_deductions":int,"employer_nps":int,"age":"below60|60to80|above80",
   "tax_year":"2024-25|2025-26|2026-27","salaried":true}` →

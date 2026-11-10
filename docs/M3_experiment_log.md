@@ -1,8 +1,8 @@
-# M3 Experiment Log — TaxSaathi (B0 → C6)
+# M3 Experiment Log — Taxot (B0 → C6)
 
 Hypotheses were written before the runs (see `M3_experiment_log_template.md`, kept unchanged).
 All numbers are on the **dev split (53 questions)**; the 70% test split is untouched and reserved for M4.
-Every run is in MLflow (`experiments/mlruns`, experiment `taxsaathi-m3`) and `experiments/results.json`.
+Every run is in MLflow (`experiments/mlruns`, experiment `taxot-m3`) and `experiments/results.json`.
 
 ## Common setup
 

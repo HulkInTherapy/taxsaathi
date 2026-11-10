@@ -30,7 +30,7 @@ from src import config
 from src.calculator.parse import parse_calc_query
 from src.calculator.tax import calculate, summary_text
 from src.nlp.dates import extract_period
-from src.pipeline import CONFIGS, TaxSaathi
+from src.pipeline import CONFIGS, Taxot
 from src.retrieval.date_filter import chunk_range
 
 GOLD_PATH = config.EVAL_DIR / "gold.jsonl"
@@ -190,7 +190,7 @@ def calc_text_for(row: dict) -> str | None:
 
 
 # ============================================================ evaluation
-def evaluate_config(ts: TaxSaathi, name: str, rows: list[dict], generate: bool) -> dict:
+def evaluate_config(ts: Taxot, name: str, rows: list[dict], generate: bool) -> dict:
     by_id = {c["id"]: c for c in ts.chunks}
     per_row = []
     for n, row in enumerate(rows, 1):
@@ -298,7 +298,7 @@ def log_mlflow(result: dict, split: str, threshold: float, generate: bool) -> No
         return
     try:
         mlflow.set_tracking_uri(f"file:{config.MLRUNS_DIR}")
-        mlflow.set_experiment("taxsaathi-m3")
+        mlflow.set_experiment("taxot-m3")
         with mlflow.start_run(run_name=f"{result['name']}-{split}{'-gen' if generate else ''}"):
             cfg = CONFIGS[result["name"]]
             mlflow.log_params({"config": result["name"], "split": split, "generate": generate,
@@ -317,7 +317,7 @@ def log_mlflow(result: dict, split: str, threshold: float, generate: bool) -> No
 
 
 # ============================================================ threshold tuning
-def tune_threshold(ts: TaxSaathi, rows: list[dict], name: str) -> dict:
+def tune_threshold(ts: Taxot, rows: list[dict], name: str) -> dict:
     """Sweep the rerank threshold on dev; choose the one with the best refusal accuracy."""
     scored = []
     for row in rows:
@@ -359,7 +359,7 @@ def tune_threshold(ts: TaxSaathi, rows: list[dict], name: str) -> dict:
 
 # ============================================================ main
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="Run TaxSaathi experiments B0..C5 on the gold set")
+    ap = argparse.ArgumentParser(description="Run Taxot experiments B0..C5 on the gold set")
     ap.add_argument("--split", choices=["dev", "test", "all"], default="dev")
     ap.add_argument("--configs", default=None, help="comma list, e.g. B1,C2,C5 (default: B1..C5; B0 too with --generate)")
     ap.add_argument("--generate", action="store_true", help="also run the LLM and score answers (slow)")
@@ -378,7 +378,7 @@ def main(argv=None) -> int:
     if args.limit:
         eval_rows = eval_rows[:args.limit]
 
-    ts = TaxSaathi()
+    ts = Taxot()
     if not ts.chunks:
         sys.exit("No chunks: run `python -m src.ingest.ingest` first")
 

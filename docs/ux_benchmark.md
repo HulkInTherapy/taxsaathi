@@ -1,4 +1,4 @@
-# TaxSaathi: Competitive UX Benchmark
+# Taxot: Competitive UX Benchmark
 
 **Date:** 2026-10-29
 **Method:** All product claims below were checked by web search on 2026-10-29 (WebSearch, standard mode), and the key pages were opened with WebFetch. Each claim cites a URL from the Sources list. Where we could not confirm a claim, the cell says **not verified**. Absence of evidence is not evidence of absence: "not verified" means we could not confirm the feature, not that the product lacks it. Most Indian-tax product claims come from the vendors' own marketing pages or from press coverage, and we label them that way. We did not test any product hands-on.
@@ -10,7 +10,7 @@
 
 Legend: **Yes** = verified from a cited source; **Partial** = verified with caveats; **No** = a source states it is absent; **not verified** = no source found.
 
-| Feature | Perplexity | ChatGPT / Claude | Google AI Overviews | ClearTax | TaxBuddy | Quicko | Kar Saathi (ITD) | TaxSaathi (ours) |
+| Feature | Perplexity | ChatGPT / Claude | Google AI Overviews | ClearTax | TaxBuddy | Quicko | Kar Saathi (ITD) | Taxot (ours) |
 |---|---|---|---|---|---|---|---|---|
 | **Citations to sources** | Yes. "Each answer includes numbered citations linking to the original sources" [S1] | Yes, when web search is used. Claude: "Every response includes citations" [S5]; ChatGPT: inline citations + Sources panel, per secondary sources only [S4] | Yes. Snapshot "with key information and links to dig deeper" [S6] | not verified (the AI page does not mention citations) [S10] | not verified (AI page does not mention citations) [S13] | n/a (calculator); the page cites sections of IT Act 2025 [S15] | not verified (press does not mention citations) [S18][S19] | Yes. Numbered source chips + chunk IDs for retrieved official passages |
 | **Period / date awareness of law** | not verified | not verified | not verified | not verified | Partial. Regime article labelled "FY 2025-26" [S14] | Partial. Calculator slabs are labelled FY 2025-26 while the text cites IT Act 2025 sections [S15] | Partial. Launched for the IT Act 2025 transition and "Tax Year" terminology [S17][S18] | Yes. A period extractor + date filter applies only the law in force on the asked date (GST 2.0 from 22 Sep 2025; IT Act 1961 vs IT Act 2025 from 1 Apr 2026, "Tax Year 2026-27") |
@@ -21,7 +21,7 @@ Legend: **Yes** = verified from a cited source; **Partial** = verified with cave
 | **Speed** | Fast for Search; Research takes "a few minutes" [S1] | not verified | not verified (shown inline in search results) | Vendor claims filing "in under three minutes" [S11] | not verified | not verified | not verified ("real time" claimed) [S19] | Worse. ~10-60 s per answer (small LLM on a CPU server) |
 | **Simplicity of first run** | not verified | not verified | Yes. No setup; appears in normal Search [S6] | Partial. Chat filing needs an OTP login first [S10] | not verified (only a "Login" link seen) [S13] | not verified | Yes. General questions need no login; widget on incometax.gov.in [S20] | Yes. No account; type a question. (No filing, no accounts) |
 
-**Coverage caveat (TaxSaathi):** answers are limited to a curated corpus of individual income tax + GST. General assistants and the ITD bot cover far more ground.
+**Coverage caveat (Taxot):** answers are limited to a curated corpus of individual income tax + GST. General assistants and the ITD bot cover far more ground.
 
 ---
 
@@ -64,9 +64,9 @@ Legend: **Yes** = verified from a cited source; **Partial** = verified with cave
 
 ---
 
-## 3. What TaxSaathi adopts
+## 3. What Taxot adopts
 
-| Pattern | Borrowed from | TaxSaathi implementation |
+| Pattern | Borrowed from | Taxot implementation |
 |---|---|---|
 | Answer-first | Perplexity [S1], AI Overviews [S6] | A one-paragraph direct answer at the top; detail below |
 | Numbered source chips | Perplexity [S1], Claude [S5] | `[1] [2]` chips inline; clicking one opens the official passage + chunk ID |
@@ -81,22 +81,22 @@ Legend: **Yes** = verified from a cited source; **Partial** = verified with cave
 
 ---
 
-## 4. Where TaxSaathi is genuinely better
+## 4. Where Taxot is genuinely better
 
-- **Period-correct law.** We found no evidence that any benchmarked product filters retrieved law by the date in question. TaxSaathi applies only the provisions in force on that date: GST rates before vs after 22 Sep 2025, and IT Act 1961 vs IT Act 2025 / Tax Year 2026-27. Quicko's calculator page shows the risk: an FY 2025-26 slab heading sits next to IT Act 2025 section numbers [S15].
+- **Period-correct law.** We found no evidence that any benchmarked product filters retrieved law by the date in question. Taxot applies only the provisions in force on that date: GST rates before vs after 22 Sep 2025, and IT Act 1961 vs IT Act 2025 / Tax Year 2026-27. Quicko's calculator page shows the risk: an FY 2025-26 slab heading sits next to IT Act 2025 section numbers [S15].
 - **Calculation does not depend on the LLM.** Regime tax comes from deterministic code, and the `[CALC]` lines are shown. Quicko is also deterministic and transparent [S15], but it is a calculator, not a Q&A assistant. TaxBuddy and ClearTax do not describe how they compute [S10][S14].
-- **Citations to official passages, at chunk level.** Perplexity and Claude cite web pages [S1][S5]. TaxSaathi cites the specific official passage. We did not find citations described for ClearTax AI, TaxBuddy AI or Kar Saathi.
+- **Citations to official passages, at chunk level.** Perplexity and Claude cite web pages [S1][S5]. Taxot cites the specific official passage. We did not find citations described for ClearTax AI, TaxBuddy AI or Kar Saathi.
 - **Inspectable pipeline.** A full step-by-step trace is available. None of the products we examined documents an equivalent view. This matches the HIG "be fully transparent" principle [S23].
 - **Explicit refusal plus a CA suggestion** for out-of-scope or low-confidence questions. Kar Saathi coverage describes no escalation path [S20].
 
-## 5. Where TaxSaathi is honestly worse
+## 5. Where Taxot is honestly worse
 
 - **Speed:** ~10-60 s per answer (small LLM on a CPU server). Perplexity's standard search and AI Overviews are effectively instant by comparison, and ClearTax claims sub-3-minute *filing* [S11].
 - **Coverage:** only a curated corpus of individual income tax + GST. There is no capital gains depth, business income, notices or refunds. Kar Saathi claims "2,000+ topics" [S17], and general assistants cover the open web.
 - **Languages:** we handle Hinglish normalisation only. ClearTax supports 7 languages [S11], and Kar Saathi supports Hindi + English [S20].
 - **No accounts and no filing:** we cannot fetch AIS/26AS, file returns or check refunds. ClearTax [S10], TaxBuddy [S13] and Kar Saathi (with login) [S20] go further.
 - **No human behind the CA card:** we suggest a CA but do not connect to one, unlike TaxBuddy [S12][S13] or Quicko [S15].
-- **No authority:** Kar Saathi is the department's own channel [S18]. TaxSaathi is a university project and its answers are informational only.
+- **No authority:** Kar Saathi is the department's own channel [S18]. Taxot is a university project and its answers are informational only.
 
 ---
 

@@ -29,7 +29,7 @@ def get_model():
             import torch
             from sentence_transformers import CrossEncoder
             params = inspect.signature(CrossEncoder.__init__).parameters
-            kwargs = {"max_length": int(os.environ.get("TAXSAATHI_RERANK_MAXLEN", "384")), "device": "cpu"}
+            kwargs = {"max_length": int(os.environ.get("TAXOT_RERANK_MAXLEN", "384")), "device": "cpu"}
             # sentence-transformers renamed this argument across versions
             if "activation_fn" in params:
                 kwargs["activation_fn"] = torch.nn.Identity()

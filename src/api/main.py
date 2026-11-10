@@ -1,7 +1,7 @@
 """
-FastAPI web server for TaxSaathi (port 8000).
+FastAPI web server for Taxot (port 8000).
 
-Endpoints (see SPEC "API contract"): /health, /ask, /compare (plain LLM vs TaxSaathi),
+Endpoints (see SPEC "API contract"): /health, /ask, /compare (plain LLM vs Taxot),
 /calculate (calculator only), /experiments (results.json), /kb/stats, /feedback.
 It also serves the demo web UI from app/static at "/". Every query is logged as one JSON
 line in logs/queries.jsonl with personal data masked.
@@ -29,7 +29,7 @@ from src.generation.llm import is_available
 from src.guardrails.pii import mask_pii
 from src.pipeline import CONFIGS, get_pipeline
 
-app = FastAPI(title="TaxSaathi API", version="1.0")
+app = FastAPI(title="Taxot API", version="1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 _LOG_LOCK = threading.Lock()
@@ -127,7 +127,7 @@ def compare(req: CompareRequest):
     plain = p.ask(req.question, "B0")
     full = p.ask(req.question, "C6")
     _log_query("/compare", req.question, full)
-    return {"plain": plain, "taxsaathi": full}
+    return {"plain": plain, "taxot": full}
 
 
 @app.post("/calculate")
@@ -191,5 +191,5 @@ if config.STATIC_DIR.exists():
 else:
     @app.get("/")
     def root():
-        return {"message": "TaxSaathi API is running. UI not found in app/static.",
+        return {"message": "Taxot API is running. UI not found in app/static.",
                 "time": time.strftime("%Y-%m-%d %H:%M:%S")}

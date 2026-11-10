@@ -1,4 +1,4 @@
-# M1 — Problem Brief: TaxSaathi
+# M1 — Problem Brief: Taxot
 
 *A grounded, period-aware tax helper for Indian income tax and GST, in English and Hinglish.*
 Version 1.0 · 2026-10-29 · Course project (4th-year NLP), milestones M1 to M3
@@ -28,7 +28,7 @@ In 2025–26 the problem got worse, because **two major law changes landed withi
 - Tax Year 2026-27 onward → Income-tax Act, 2025 (Tax Year vocabulary, renumbered sections).
 - GST supplies before 22 Sep 2025 → old slabs; from 22 Sep 2025 → 5% / 18% / 40%.
 
-A model trained on pre-2026 web text cannot know which applies. TaxSaathi therefore treats **the period as an input to retrieval**: every knowledge chunk carries `effective_from` / `effective_to` dates (SPEC §KB format).
+A model trained on pre-2026 web text cannot know which applies. Taxot therefore treats **the period as an input to retrieval**: every knowledge chunk carries `effective_from` / `effective_to` dates (SPEC §KB format).
 
 ## 3. Scale of the problem (verified statistics)
 
@@ -53,7 +53,7 @@ A model trained on pre-2026 web text cannot know which applies. TaxSaathi theref
 | **Arjun, 27, freelancer / content creator** | YouTube + brand deals + some freelance design | "YouTube income pe tax kaise lagta hai — salary ya business?" · "Do I need GST registration for brand deals?" · "Presumptive taxation freelancers ke liye applicable hai kya?" | Correct *category* of income, thresholds, a clear signal when the case is complex enough to need a CA |
 | **Ramesh-ji, 52, small kirana/hardware shop owner** | Composition-scheme GST dealer in a tier-3 town | "22 September ke baad cement pe GST kitna hai?" · "Composition scheme mein kya main bill pe GST charge kar sakta hoon?" · "Pichhle saal ke invoice pe purana rate lagega ya naya?" | Period-correct GST rates (before/after 22 Sep 2025), Hinglish, short answers, refusal plus "talk to your CA" on notices or disputes |
 
-> Example questions are illustrative and written by the team. TaxSaathi's answers to them come from the curated knowledge base, not from this brief.
+> Example questions are illustrative and written by the team. Taxot's answers to them come from the curated knowledge base, not from this brief.
 
 ## 5. Business objective
 
@@ -89,15 +89,15 @@ Secondary diagnostics (defined in `report_draft.md` §6): MRR, nDCG@5, period ac
 | Evaluation | No public Indian-tax QA benchmark that we found | Team-authored gold set with a stratified dev/test split. Limitation: not yet CA-reviewed. |
 | Legal / ethical | Users may treat answers as advice | Clear "informational, not professional advice" disclaimer; refusals on notices, disputes and personal-liability questions |
 | Privacy | Users may type PAN, Aadhaar or phone numbers | Regex PII scrub before logging (SPEC step 1) |
-| Naming | The I-T Department launched an AI assistant called **"Kar Saathi"** (*kar* = tax) in April 2026 | Make clear in the demo that TaxSaathi is a student project with no link to the department; consider renaming before any public release |
+| Naming | The I-T Department launched an AI assistant called **"Kar Saathi"** (*kar* = tax) in April 2026 | Make clear in the demo that Taxot is a student project with no link to the department; consider renaming before any public release |
 
 ## 8. Positioning: a helper, not a CA
 
-TaxSaathi is an **informational assistant**. It explains what the law says, for which period, and where it says it. It does not file returns, give personalised professional advice, or represent anyone before the department. When the question goes beyond the knowledge base, or retrieval confidence is low, it says so and recommends a CA.
+Taxot is an **informational assistant**. It explains what the law says, for which period, and where it says it. It does not file returns, give personalised professional advice, or represent anyone before the department. When the question goes beyond the knowledge base, or retrieval confidence is low, it says so and recommends a CA.
 
 ## 9. Landscape (verified claims only)
 
-| Offering | What we verified | How TaxSaathi differs |
+| Offering | What we verified | How Taxot differs |
 |---|---|---|
 | **Income Tax Department "Kar Saathi"** | An "AI-based virtual assistant integrated into the newly revamped Income Tax portal", announced 2 Apr 2026. It answers questions on filing, notices, refunds and compliance, and its FAQs and guidance cover "over 2,000+ topics" ([Business Today, 12 Apr 2026](https://www.businesstoday.in/personal-finance/tax/story/bt-explainer-what-is-kar-saathi-income-tax-depts-ai-chatbot-to-simplify-itr-filing-525230-2026-04-12)). The article does not say which languages it supports or how accurate it is. | Ours is an open, inspectable research prototype. It shows per-answer citations with effective dates, Hinglish normalisation, an explicit period trace, and a published evaluation. |
 | **ClearTax (assisted filing)** | Sells CA/expert-assisted filing plans; salaried plan listed at ₹999 / ₹1,999 on the pricing page ([clear.in/s/pricing](https://www.clear.in/s/pricing/)). One plan lists "Accuracy Check (AI + Expert)" ([cleartax.in/ca-for-itr-filing](https://cleartax.in/ca-for-itr-filing)). | Ours is free, explains rather than files, and escalates to a CA instead of selling a filing service. |

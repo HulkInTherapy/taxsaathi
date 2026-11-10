@@ -1,5 +1,5 @@
 """
-The TaxSaathi pipeline: one question in, one grounded and cited answer out (with a trace).
+The Taxot pipeline: one question in, one grounded and cited answer out (with a trace).
 
 Steps (same order every time, see SPEC): PII scrub -> Hinglish normalisation -> intent ->
 period extraction -> section entities -> BM25 + dense -> RRF fusion -> date filter ->
@@ -83,7 +83,7 @@ def _citation(c: dict) -> dict:
     return out
 
 
-class TaxSaathi:
+class Taxot:
     """Main entry point. `ask()` for full answers, `retrieve_only()` for fast experiments."""
 
     def __init__(self, chunks: list[dict] | None = None, chunks_path=None, use_llm: bool = True):
@@ -357,7 +357,7 @@ class TaxSaathi:
                     "On GST: work for foreign clients is an export of services, which is zero-rated — once registered "
                     "(needed above ₹20 lakh turnover) you can bill without IGST under a Letter of Undertaking (LUT); "
                     "take refund and filing details to a CA. [GST-REG-FREELANCER]" if src.get("gst") else
-                    "GST on export of services is outside what TaxSaathi covers — please ask a CA.")
+                    "GST on export of services is outside what Taxot covers — please ask a CA.")
             resp["calculation"] = calc
 
         with trace.step("generate") as s:
@@ -427,27 +427,27 @@ def _disclaimer() -> str:
     return config.DISCLAIMER
 
 
-_INSTANCE: TaxSaathi | None = None
+_INSTANCE: Taxot | None = None
 
 
-def get_pipeline() -> TaxSaathi:
+def get_pipeline() -> Taxot:
     """Process-wide singleton used by the API and scripts."""
     global _INSTANCE
     if _INSTANCE is None:
-        _INSTANCE = TaxSaathi()
+        _INSTANCE = Taxot()
     return _INSTANCE
 
 
 if __name__ == "__main__":
     import argparse
     import json
-    ap = argparse.ArgumentParser(description="Ask TaxSaathi one question from the command line")
+    ap = argparse.ArgumentParser(description="Ask Taxot one question from the command line")
     ap.add_argument("question")
     ap.add_argument("--config", default="C5", choices=list(CONFIGS))
     ap.add_argument("--no-llm", action="store_true")
     ap.add_argument("--trace", action="store_true", help="print the full trace")
     a = ap.parse_args()
-    out = TaxSaathi(use_llm=not a.no_llm).ask(a.question, a.config)
+    out = Taxot(use_llm=not a.no_llm).ask(a.question, a.config)
     if not a.trace:
         out["trace"] = [{k: t[k] for k in ("step", "summary", "ms")} for t in out["trace"]]
     print(json.dumps(out, indent=2, ensure_ascii=False))

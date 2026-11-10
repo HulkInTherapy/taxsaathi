@@ -1,5 +1,5 @@
 """
-Refusal gate: decide whether TaxSaathi should answer or politely refuse and escalate to a CA.
+Refusal gate: decide whether Taxot should answer or politely refuse and escalate to a CA.
 
 Two reasons to refuse: (1) the intent classifier says the question is out of scope (crypto,
 foreign income, evasion, prompt injection, chit-chat, complex CA-only cases), or (2) the best
@@ -36,7 +36,7 @@ def gate(intent: dict, top_score: float | None, threshold: float | None, use_sco
                    "and I can't change how I work. ")
         else:
             reason = "out_of_scope"
-            msg = ("This question is outside what TaxSaathi can answer reliably (it covers "
+            msg = ("This question is outside what Taxot can answer reliably (it covers "
                    "individual income tax and GST basics only). ")
         return GateResult(False, reason, msg + config.CA_ESCALATION, top_score, threshold)
     if use_score and label != "calculation" and threshold is not None:

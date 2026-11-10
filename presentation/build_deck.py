@@ -1,4 +1,4 @@
-"""Build the TaxSaathi class presentation (presentation/TaxSaathi.pptx).
+"""Build the Taxot class presentation (presentation/Taxot.pptx).
 
 Run from the repo root (needs python-pptx):
     .venv/bin/python presentation/build_deck.py
@@ -30,7 +30,7 @@ from pptx.util import Emu, Inches, Pt
 ROOT = Path(__file__).resolve().parents[1]
 PRES_DIR = ROOT / "presentation"
 ASSETS = PRES_DIR / "assets"
-OUT = PRES_DIR / "TaxSaathi.pptx"
+OUT = PRES_DIR / "Taxot.pptx"
 RESULTS = ROOT / "experiments" / "results.json"
 REAL_RESULTS = ROOT / "experiments" / "real_results.json"
 CHUNKS = ROOT / "data" / "processed" / "chunks.jsonl"
@@ -300,7 +300,7 @@ def set_bg(slide, color=BG):
 def footer(s):
     if LOGO.exists():
         s.shapes.add_picture(str(LOGO), Inches(0.6), Inches(6.98), Inches(0.26), Inches(0.26))
-    text(s, 0.95, 6.97, 6, 0.3, [[("Tax", {"bold": True, "color": INK}), ("Saathi", {"bold": True, "color": TEAL}),
+    text(s, 0.95, 6.97, 6, 0.3, [[("Tax", {"bold": True, "color": INK}), ("ot", {"bold": True, "color": TEAL}),
                                   ("   ·   NLP course project", {"color": MUTED})]], size=12, name="Footer",
          anchor=MSO_ANCHOR.MIDDLE)
     text(s, 11.73, 6.97, 1.0, 0.3, str(_slide_no), size=12, color=MUTED, align=PP_ALIGN.RIGHT, name="SlideNumber",
@@ -343,7 +343,7 @@ s = prs.slides.add_slide(BLANK)
 set_bg(s)
 if LOGO.exists():
     s.shapes.add_picture(str(LOGO), Inches(0.75), Inches(0.95), Inches(1.15), Inches(1.15))
-text(s, 0.72, 2.3, 6.6, 1.1, [[("Tax", {"color": INK}), ("Saathi", {"color": TEAL})]], size=64, bold=True)
+text(s, 0.72, 2.3, 6.6, 1.1, [[("Tax", {"color": INK}), ("ot", {"color": TEAL})]], size=64, bold=True)
 text(s, 0.75, 3.45, 6.2, 1.4, "Ask an Indian tax question. Get a short answer that cites the official rule, "
      "for the right date.", size=24, color=INK3, line=1.05)
 # logo decode
@@ -357,8 +357,8 @@ text(s, 0.75, 6.15, 6.4, 0.7, [[("4th-year NLP course project", {"bold": True, "
 picture(s, ASSETS / "shot_ask.jpg", 7.45, 0.95, w=5.25, crop=(0.22, 0.0, 0.22, 0.14))
 text(s, 7.45, 6.2, 5.25, 0.4, "The live app, 29 Oct 2026", size=12, color=MUTED, italic=True)
 notes(s, """
-Good morning. We are presenting TaxSaathi.
-"Saathi" means companion. It is a helper for Indian tax questions: income tax and GST, in English or in Hinglish.
+Good morning. We are presenting Taxot.
+It is a helper for Indian tax questions: income tax and GST, in English or in Hinglish.
 Look at our logo. It is a speech bubble, because you chat with it. The top corner is folded like a page, because every answer comes from an official document. And there is a check mark, because the answer is checked: right law, right date, and every sentence has a source.
 Three more promises. It knows the law changed, so it checks which date you mean. If it is not sure, it says so and sends you to a Chartered Accountant. And it never lets the AI do maths; a normal calculator program does that.
 On the right is the real app, running live on our server.
@@ -449,8 +449,8 @@ Ramesh-ji is 52. He runs a small hardware shop. He asks about GST on cement, in 
 These personas are written by our team, but Arjun's question is almost word for word one that a real user typed into our app.
 """)
 
-# 5. What TaxSaathi does -------------------------------------------------------------------
-s = new_slide("What TaxSaathi does: five promises", "The product")
+# 5. What Taxot does -------------------------------------------------------------------
+s = new_slide("What Taxot does: five promises", "The product")
 feats = [
     ("Cites every sentence", "\"Standard deduction is ₹75,000\" [1]  →  the card opens the official source"),
     ("Uses the law for your date", "\"GST on AC in August 2025?\"  →  28% (the old rate), not today's 18%"),
@@ -465,7 +465,7 @@ for i, (head, ex) in enumerate(feats):
     card(s, 5.85, y, 6.85, 0.86)
     text(s, 6.1, y, 6.45, 0.86, ex, size=17, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
 notes(s, """
-TaxSaathi makes five promises.
+Taxot makes five promises.
 One: every sentence has a citation, like a footnote. You can click it and see the official source.
 Two: it uses the law for your date. Ask about August 2025, and you get the old GST rate.
 Three: it understands how people really talk: Hinglish, "1 lakh mahina", or "5k dollars per month".
@@ -490,12 +490,12 @@ for i, (head, sub, pts) in enumerate(cols):
     text(s, x + 0.25, 2.42, 2.4, 0.4, sub, size=14, color=MUTED, italic=True)
     text(s, x + 0.25, 3.0, 2.4, 3.0, [[("•  " + p, {})] for p in pts], size=16, spacing=9, color=INK2)
 box(s, 9.9, 1.75, 2.8, 4.3, fill=TEAL)
-text(s, 10.15, 1.95, 2.4, 0.45, "TaxSaathi", size=20, bold=True, color=WHITE)
+text(s, 10.15, 1.95, 2.4, 0.45, "Taxot", size=20, bold=True, color=WHITE)
 text(s, 10.15, 2.42, 2.4, 0.4, "Open research prototype", size=14, color=MINT, italic=True)
 text(s, 10.15, 3.0, 2.4, 3.0, [[("•  " + p, {})] for p in
                                 ["Every sentence cited, with dates", "Full step-by-step trace", "Published evaluation",
                                  "Free; hands hard cases to a CA"]], size=16, color=WHITE, spacing=9)
-text(s, 0.6, 6.3, 12.1, 0.45, "TaxSaathi is a student project and is not linked to the Income Tax Department.",
+text(s, 0.6, 6.3, 12.1, 0.45, "Taxot is a student project and is not linked to the Income Tax Department.",
      size=14, color=MUTED, italic=True)
 notes(s, """
 Is this already solved? Partly.
@@ -875,13 +875,13 @@ That means for about {round((R5 or 0) * 100)} out of 100 questions, the right ca
 """)
 
 # 15. Answers: same AI, with vs without retrieval -------------------------------------------
-s = new_slide("Same AI model: 10% right alone, 69% with TaxSaathi", f"Results · answer quality, {DEV_N} dev questions")
+s = new_slide("Same AI model: 10% right alone, 69% with Taxot", f"Results · answer quality, {DEV_N} dev questions")
 card(s, 0.6, 1.7, 2.75, 2.4, fill=RED_BG, line=RGBColor(0xFE, 0xCA, 0xCA))
 text(s, 0.85, 1.85, 2.3, 0.9, pct(KF_B0), size=54, bold=True, color=RED)
 text(s, 0.85, 2.85, 2.3, 1.2, "key facts right: the AI alone (B0), answering from memory", size=15, color=INK3)
 card(s, 3.6, 1.7, 2.75, 2.4, fill=TEAL_SOFT, line=MINT)
 text(s, 3.85, 1.85, 2.3, 0.9, pct(KF), size=54, bold=True, color=TEAL)
-text(s, 3.85, 2.85, 2.3, 1.2, f"key facts right: the same AI inside TaxSaathi ({FINAL})", size=15, color=INK3)
+text(s, 3.85, 2.85, 2.3, 1.2, f"key facts right: the same AI inside Taxot ({FINAL})", size=15, color=INK3)
 safety = [(fmt(CIT), "citations valid"), (fmt(FAITH), "sentences backed by a source"),
           (pct(OOS), "off-topic questions refused"), (pct(FALSE_REF, 1), "good questions wrongly refused")]
 for i, (big, small) in enumerate(safety):
@@ -930,7 +930,7 @@ notes(s, f"""
 This is the slide that matters most.
 We took the same small AI model, Qwen 2.5 with 3 billion parameters, running on our own server.
 Alone, answering from memory, it got the key facts right only {pct(KF_B0)} of the time. It states the old rules, like the old slabs and 28 percent GST on ACs, and it never cites anything.
-Put the same model inside TaxSaathi, and it gets {pct(KF)} right. That is about six to seven times better, with no change to the model. Only the search, the dates and the checks changed.
+Put the same model inside Taxot, and it gets {pct(KF)} right. That is about six to seven times better, with no change to the model. Only the search, the dates and the checks changed.
 And the answers are safe. Citation validity is {fmt(CIT)}: every citation points to a card we actually gave it. {fmt(FAITH)} of sentences are backed by a source. Every off-topic question was refused, and only {pct(FALSE_REF, 1)} of good questions were wrongly refused; that is one question out of 48.
 The honest part: one answer takes about {secs(LAT)}, because the AI runs on a normal CPU without a graphics card.
 """)
@@ -1026,17 +1026,17 @@ card(s, 7.0, 1.7, 5.7, 2.45, fill=TEAL_SOFT, line=MINT)
 text(s, 7.25, 1.8, 2.2, 1.0, f"{REAL_RULE:.0%}", size=48, bold=True, color=TEAL)
 text(s, 9.2, 1.9, 3.35, 0.9, "right rule found, on fully covered questions", size=16, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
 text(s, 7.25, 2.85, 5.25, 1.25, f"Exact passage: {REAL_EXACT:.2f}. Most of the gap is time: 2025 posts ask about last "
-     "year's law, while TaxSaathi answers with today's.", size=14, color=INK3)
+     "year's law, while Taxot answers with today's.", size=14, color=INK3)
 card(s, 7.0, 4.4, 5.7, 2.3, fill=AMBER_BG, line=RGBColor(0xFD, 0xE6, 0x8A))
 text(s, 7.25, 4.5, 2.2, 1.0, f"{REAL_OOS:.0%}", size=48, bold=True, color=AMBER_INK)
 text(s, 9.2, 4.6, 3.35, 0.9, "of real off-topic questions refused", size=16, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
 text(s, 7.25, 5.55, 5.25, 1.05, "Real off-topic questions (NRI, crypto, US stocks) are harder than ours. "
      "Our clearest next step.", size=14, color=INK3)
 notes(s, f"""
-Our answer key was written by us. So we also checked TaxSaathi on real questions that real people asked.
+Our answer key was written by us. So we also checked Taxot on real questions that real people asked.
 We collected {real_n}: {real_src.get('reddit', 36)} from Reddit, {real_src.get('official_faq', 25)} from official government FAQ pages, {real_src.get('forum', 12)} from the CAclubindia forum, and {real_src.get('quora', 7)} from Quora. We did not tune anything on them.
 First question: does our library even cover them? {rpct(real_cov.get('full', 51) / tot)} fully, {rpct(real_cov.get('partial', 18) / tot)} partly, and {rpct(real_cov.get('none', 11) / tot)} not at all. Real forum posts often mix several problems in one.
-On the fully covered ones, TaxSaathi finds the right rule {REAL_RULE:.0%} of the time. By exact passage it is {REAL_EXACT:.2f}. Most of that gap is about time: many posts are from 2025 and ask about last year's law, while TaxSaathi deliberately answers with the law in force today.
+On the fully covered ones, Taxot finds the right rule {REAL_RULE:.0%} of the time. By exact passage it is {REAL_EXACT:.2f}. Most of that gap is about time: many posts are from 2025 and ask about last year's law, while Taxot deliberately answers with the law in force today.
 The most common confusion, in 10 posts: "no tax up to 12 lakh, but 5 percent from 4 lakh?" Both are true, because of the rebate. Our library did not explain this clearly, so we added an explainer card.
 The weak spot: only {REAL_OOS:.0%} of real off-topic questions were refused. Real people ask about NRI rules, crypto and US stocks in ways our sorter had not seen. That is our clearest next step.
 """)
@@ -1071,7 +1071,7 @@ Every change was re-tested on our dev set with no drop in scores.
 
 # 20. Live demo ----------------------------------------------------------------------------
 s = new_slide("Live demo: five questions", "Demo")
-demo = [("Plain AI vs TaxSaathi", "\"What was GST on AC in August 2025?\""),
+demo = [("Plain AI vs Taxot", "\"What was GST on AC in August 2025?\""),
         ("Hinglish", "\"Naye regime mein standard deduction kitna hai?\""),
         ("Old section number", "\"Is 80C still available in the new Income-tax Act?\""),
         ("Real-user calculation", "\"how much tax do i have to pay if i am earning 5k us dollars per month remote\""),
@@ -1083,14 +1083,14 @@ for i, (h, q) in enumerate(demo):
     text(s, 1.35, y + 0.38, 4.75, 0.58, q, size=13, italic=True, color=MUTED)
 p20 = picture(s, ASSETS / "shot_live_compare.jpg", 6.35, 1.65, w=6.35, crop=(0.135, 0.355, 0.135, 0.15))
 text(s, 6.35, pic_bottom(p20) + 0.08, 6.35, 0.6, "Live Compare tab, question 1: the plain AI says the rate was \"not set\" "
-     "(wrong). TaxSaathi says 28% for August 2025, with its source.", size=12, color=MUTED, italic=True)
+     "(wrong). Taxot says 28% for August 2025, with its source.", size=12, color=MUTED, italic=True)
 card(s, 6.35, 5.75, 6.35, 0.95, fill=SUBTLE, line=None)
-text(s, 6.6, 5.75, 6.0, 0.95, [[("https://taxsaathi.taild58d86.ts.net", {"bold": True, "color": TEAL})],
+text(s, 6.6, 5.75, 6.0, 0.95, [[("https://taxot.taild58d86.ts.net", {"bold": True, "color": TEAL})],
                                [("New questions take 15–40 s on our CPU. Backup screenshots on the next slide.",
                                  {"color": MUTED, "size": 14})]], size=18, anchor=MSO_ANCHOR.MIDDLE, spacing=2)
 notes(s, """
 Now we show the live app. We have five questions.
-One, in the Compare tab: the plain AI and TaxSaathi get the same question, GST on an AC in August 2025. The plain AI says the rate was "not set", which is wrong. TaxSaathi says 28 percent and shows the source and the date. Point out "8 outdated passages dropped".
+One, in the Compare tab: the plain AI and Taxot get the same question, GST on an AC in August 2025. The plain AI says the rate was "not set", which is wrong. Taxot says 28 percent and shows the source and the date. Point out "8 outdated passages dropped".
 Two, in the Ask tab: the Hinglish question about standard deduction. Open "How this was found" to show the Hinglish fix and the date step. The answer is 75 thousand rupees, citing section 19 of the 2025 Act.
 Three: "Is 80C still available?" 80C is from the old 1961 Act. The answer explains it is now section 123, still up to 1 lakh 50 thousand, and shows the mapping card.
 Four: the real user's question about 5 thousand US dollars a month. The calculator gives both regimes; the new regime is cheaper.
@@ -1181,7 +1181,7 @@ for i, (k, h, b) in enumerate(team):
     text(s, x + 1.0, y + 0.25, 2.05, 0.6, h, size=17, bold=True, color=INK, anchor=MSO_ANCHOR.MIDDLE)
     text(s, x + 0.25, y + 0.95, 2.75, 0.8, b, size=13, color=INK3)
 pt_ = picture(s, ASSETS / "shot_how.jpg", 7.55, 2.5, w=5.15, crop=(0.125, 0.22, 0.125, 0.12))
-text(s, 7.55, pic_bottom(pt_) + 0.08, 5.15, 0.4, "Try it: https://taxsaathi.taild58d86.ts.net", size=18, bold=True, color=TEAL)
+text(s, 7.55, pic_bottom(pt_) + 0.08, 5.15, 0.4, "Try it: https://taxot.taild58d86.ts.net", size=18, bold=True, color=TEAL)
 text(s, 0.6, 6.55, 12, 0.4, "Code, data card, experiment log, report and viva notes are in our repository.",
      size=14, color=MUTED)
 text(s, 11.73, 6.97, 1.0, 0.3, str(_slide_no), size=12, color=MUTED, align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
