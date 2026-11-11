@@ -43,13 +43,51 @@ def embed_passages(texts: list[str]) -> np.ndarray:
 
 
 class DenseIndex:
-    """Embedding matrix for all chunks + cosine-similarity search."""
+    """
+    Dense search over all chunks.
 
-    def __init__(self, chunks: list[dict], cache_dir=None):
+    Embeddings are computed once and cached in the .npz file (keyed by chunk hash). Search runs
+    in ChromaDB (config.VECTOR_STORE="chroma", the default): the collection is synced to the
+    current chunks on start-up (new/changed chunks upserted, removed ones deleted) and queried
+    with cosine distance. VECTOR_STORE="numpy" keeps the original exact matrix search, used to
+    check that both give the same results.
+    """
+
+    def __init__(self, chunks: list[dict], cache_dir=None, store: str | None = None, chroma_dir=None):
         self.chunks = chunks
         slug = config.EMBED_MODEL.replace("/", "__")
         self.cache_path = (cache_dir or config.PROCESSED_DIR) / f"emb_{slug}.npz"
         self.matrix = self._load_or_build()
+        self.store = store or config.VECTOR_STORE
+        self._collection = None
+        if self.store == "chroma":
+            self._collection = self._sync_chroma(chroma_dir or config.CHROMA_DIR, slug)
+        elif self.store != "numpy":
+            raise ValueError(f"unknown vector store {self.store!r} (use 'chroma' or 'numpy')")
+
+    def _sync_chroma(self, chroma_dir, slug: str):
+        import chromadb
+        from chromadb.config import Settings
+
+        client = chromadb.PersistentClient(path=str(chroma_dir),
+                                           settings=Settings(anonymized_telemetry=False))
+        col = client.get_or_create_collection(name=f"taxot_{slug}"[:63],
+                                              metadata={"hnsw:space": "cosine"})
+        ids = [c["id"] for c in self.chunks]
+        hashes = [chunk_hash(c) for c in self.chunks]
+        existing = col.get(include=["metadatas"])
+        have = {i: (m or {}).get("hash") for i, m in zip(existing["ids"], existing["metadatas"])}
+        stale = [i for i in have if i not in set(ids)]
+        if stale:
+            col.delete(ids=stale)
+        todo = [n for n, (i, h) in enumerate(zip(ids, hashes)) if have.get(i) != h]
+        for start in range(0, len(todo), 500):
+            batch = todo[start:start + 500]
+            col.upsert(ids=[ids[n] for n in batch],
+                       embeddings=self.matrix[batch].tolist(),
+                       metadatas=[{"hash": hashes[n], "law": self.chunks[n].get("law", "")} for n in batch])
+        self._pos = {i: n for n, i in enumerate(ids)}
+        return col
 
     def _load_or_build(self) -> np.ndarray:
         hashes = [chunk_hash(c) for c in self.chunks]
@@ -74,6 +112,12 @@ class DenseIndex:
         if len(self.chunks) == 0:
             return []
         q = embed_queries([query])[0]
+        if self._collection is not None:
+            n = min(k, len(self.chunks))
+            res = self._collection.query(query_embeddings=[q.tolist()], n_results=n, include=["distances"])
+            # cosine distance = 1 - cosine similarity
+            return [(self._pos[i], 1.0 - float(d)) for i, d in zip(res["ids"][0], res["distances"][0])
+                    if i in self._pos]
         scores = self.matrix @ q
         order = np.argsort(-scores)[:k]
         return [(int(i), float(scores[i])) for i in order]

@@ -5,3 +5,4 @@ logs/
 setup.log
 *.pyc
 .env
+data/processed/chroma/

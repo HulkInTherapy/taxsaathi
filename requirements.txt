@@ -15,3 +15,9 @@ pandas
 matplotlib>=3.8
 mlflow>=2.12
 pytest>=8
+# agentic layer
+langgraph>=0.2
+langchain-core>=0.3
+langchain-openai>=0.2
+chromadb>=0.5
+python-dotenv>=1.0

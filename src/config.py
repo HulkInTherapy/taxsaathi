@@ -15,6 +15,15 @@ from pathlib import Path
 
 # ---------------------------------------------------------------- paths
 ROOT = Path(__file__).resolve().parent.parent
+
+# API keys and provider settings live in ROOT/.env (gitignored). Real environment variables
+# win over the file, so the VPS service can set them directly.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(ROOT / ".env", override=False)
+except ImportError:  # python-dotenv is optional for the plain NLP pipeline
+    pass
+
 KB_DIR = Path(os.environ.get("TAXOT_KB_DIR", ROOT / "data" / "raw" / "curated"))
 PDF_DIR = ROOT / "data" / "raw" / "pdfs"
 PROCESSED_DIR = ROOT / "data" / "processed"
@@ -39,6 +48,50 @@ LLM_MODEL = os.environ.get("TAXOT_LLM", "qwen2.5:3b")
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 LLM_TIMEOUT_S = float(os.environ.get("TAXOT_LLM_TIMEOUT", "90"))
 LLM_NUM_PREDICT = int(os.environ.get("TAXOT_NUM_PREDICT", "220"))
+
+# ---------------------------------------------------------------- vector store
+# "chroma" (default) stores and searches embeddings in ChromaDB; "numpy" is the original
+# in-memory matrix, kept for parity checks.
+VECTOR_STORE = os.environ.get("TAXOT_VECTOR_STORE", "chroma")
+CHROMA_DIR = Path(os.environ.get("TAXOT_CHROMA_DIR", PROCESSED_DIR / "chroma"))
+
+# ---------------------------------------------------------------- agent LLM providers
+# The agentic layer talks to OpenAI-compatible APIs. The first provider is tried first and
+# the others are automatic fallbacks (on rate limits, server errors or timeouts).
+LLM_PROVIDER = os.environ.get("TAXOT_LLM_PROVIDER", "nvidia")
+PROVIDERS: dict[str, dict] = {
+    "nvidia": {
+        "base_url": "https://integrate.api.nvidia.com/v1",
+        "key_env": "NVIDIA_API_KEY",
+        "requests_per_minute": 35,  # free tier is ~40/min shared across models
+        "models": {
+            "planner": os.environ.get("TAXOT_NVIDIA_PLANNER", "nvidia/nemotron-3.5-super-vl-120b-a12b"),
+            "extractor": os.environ.get("TAXOT_NVIDIA_EXTRACTOR", "nvidia/nemotron-3.5-super-vl-120b-a12b"),
+            # a different model family checks the drafts
+            "verifier": os.environ.get("TAXOT_NVIDIA_VERIFIER", "mistralai/mistral-large-4-1t-a52b"),
+        },
+    },
+    "openrouter": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "key_env": "OPENROUTER_API_KEY",
+        "requests_per_minute": 15,
+        "models": {
+            "planner": os.environ.get("TAXOT_OPENROUTER_PLANNER", "openrouter/free"),
+            "extractor": os.environ.get("TAXOT_OPENROUTER_EXTRACTOR", "openrouter/free"),
+            "verifier": os.environ.get("TAXOT_OPENROUTER_VERIFIER", "openrouter/free"),
+        },
+    },
+    "ollama": {  # offline option; small local models are weak at tool calling
+        "base_url": f"{OLLAMA_URL}/v1",
+        "key_env": None,
+        "requests_per_minute": 600,
+        "models": {"planner": LLM_MODEL, "extractor": LLM_MODEL, "verifier": LLM_MODEL},
+    },
+}
+AGENT_LLM_TIMEOUT_S = float(os.environ.get("TAXOT_AGENT_LLM_TIMEOUT", "120"))
+AGENT_MAX_TOKENS = int(os.environ.get("TAXOT_AGENT_MAX_TOKENS", "1500"))
+MAX_TOOL_CALLS = int(os.environ.get("TAXOT_MAX_TOOL_CALLS", "15"))  # per task (plan: safety boundary)
+LLM_USAGE_LOG = LOG_DIR / "llm_usage.jsonl"
 
 # ---------------------------------------------------------------- retrieval knobs
 FIRST_STAGE_K = 50   # how many hits BM25 / dense each return before fusion
