@@ -59,3 +59,11 @@ Every run is in MLflow (`experiments/mlruns`, experiment `taxot-m3`) and `experi
 - LLM-judge faithfulness.
 - Faster serving (GPU or API).
 - CA review of 30–50 gold answers.
+
+## Update for the agentic track (22 Nov 2026)
+
+Knowledge base and intent changes made for the agent workflows (see `docs/AGENTIC_PLAN.md`, Phase 3):
+- **Knowledge base:** 4 new passages in `it_salary_interest_reporting.md` (interest as income from other sources, TDS on interest u/s 194A with the 1 April 2025 thresholds, what Form 16 leaves out, two employers in one year). 107 → 111 passages.
+- **Intent classifier:** 14 training rows added on job changes, Form 16 checks and interest TDS, which were wrongly classed as out of scope (342 → 356 rows; 5-fold CV 0.89 ± 0.08, previously about 0.90).
+- **Dev metrics after both changes:** C6 unchanged (Recall@5 0.917, MRR@10 0.830, nDCG@5 0.830, refusal accuracy 0.981). C2 MRR@10 0.755 → 0.753.
+- **Vector store:** dense search now runs in ChromaDB; numpy and ChromaDB give identical metrics on all configs.
