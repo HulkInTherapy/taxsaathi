@@ -116,6 +116,7 @@ class TaxInputs:
     salaried: bool = True
     income_type: str = "salary"            # "salary" | "professional_presumptive" (gross_salary = gross receipts)
     cash_receipts_over_5pct: bool = False  # professionals only: decides the ₹75 lakh vs ₹50 lakh limit
+    other_income: int = 0                  # income from other sources (bank/FD interest...), taxed in full
 
     def validate(self) -> None:
         if self.income_type not in INCOME_TYPES:
@@ -184,7 +185,8 @@ def compute_regime(inp: TaxInputs, regime: str) -> dict:
     # Professionals on the presumptive scheme: income = 50% of gross receipts, no standard deduction.
     income = rnd(inp.gross_salary * PRESUMPTIVE_RATE / 100) if presumptive else inp.gross_salary
     std = rules["std_deduction"] if inp.salaried and not presumptive else 0
-    std = min(std, income)
+    std = min(std, income)  # standard deduction only against salary, never against other income
+    income += inp.other_income
 
     if regime == "new":
         # New regime: only standard deduction + employer NPS (80CCD(2)) are allowed.
@@ -237,7 +239,8 @@ def compute_regime(inp: TaxInputs, regime: str) -> dict:
         notes.append(f"{regime.title()} regime: surcharge {format_inr(surcharge)}" + (" (after marginal relief)." if relief else "."))
     cess = rnd((tax_after_rebate + surcharge) * CESS_RATE / 100)
     total = tax_after_rebate + surcharge + cess
-    return {"gross": inp.gross_salary, "presumptive_income": income if presumptive else None,
+    return {"gross": inp.gross_salary, "other_income": inp.other_income,
+            "presumptive_income": income - inp.other_income if presumptive else None,
             "std_deduction": std, "deductions": total_ded,
             "deduction_breakdown": deductions, "taxable": taxable, "slab_tax": tax,
             "rebate": rebate, "surcharge": surcharge, "cess": cess, "total": total,
