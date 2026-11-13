@@ -13,7 +13,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "kb"
 
 
 def box(**kw):
-    ctx = TaskContext(retrieval_config="B1")  # BM25 only: no model downloads in tests
+    ctx = TaskContext(retrieval_config="B1", extract_fields=False)  # BM25 only, no LLM in tests
     ctx._pipeline = Taxot(chunks=load_all(FIXTURES, None), use_llm=False)
     return ToolBox(ctx, **kw)
 
@@ -199,7 +199,7 @@ def test_default_budget_is_15():
 def test_schemas_are_valid_function_specs():
     b = box()
     specs = b.schemas()
-    assert {s["function"]["name"] for s in specs} == set(TOOLS)
+    assert {s["function"]["name"] for s in specs} == set(TOOLS) and "cross_check_documents" in TOOLS
     for s in specs:
         assert s["type"] == "function" and s["function"]["parameters"]["type"] == "object"
         assert s["function"]["description"]

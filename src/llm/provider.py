@@ -98,7 +98,7 @@ def get_model(provider: str, role: str):
         base_url=p["base_url"],
         api_key=os.environ.get(p["key_env"]) if p["key_env"] else "ollama",
         temperature=0,
-        max_tokens=config.AGENT_MAX_TOKENS,
+        max_tokens=config.ROLE_MAX_TOKENS.get(role, config.AGENT_MAX_TOKENS),
         timeout=config.AGENT_LLM_TIMEOUT_S,
         max_retries=1,
         rate_limiter=_limiter(provider),

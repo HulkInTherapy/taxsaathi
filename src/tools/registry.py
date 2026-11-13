@@ -20,6 +20,9 @@ from pydantic import BaseModel, ValidationError
 
 from src import config
 from src.documents.store import DocumentStore
+from src.llm.masking import Masker
+from src.llm.provider import Usage
+from src.tools.cross_check import CrossCheckArgs, cross_check_documents
 from src.tools.ask_user import AskUserArgs, ask_user
 from src.tools.calculate_tax import CalculateTaxArgs, calculate_tax
 from src.tools.itr_form_rules import ITRFormArgs, itr_form_rules
@@ -33,6 +36,10 @@ class TaskContext:
     """Per-task resources the tools share. Lives only in memory, only for the task."""
     documents: DocumentStore = field(default_factory=DocumentStore)
     document_text: dict[str, str] = field(default_factory=dict)  # never sent to the planner LLM
+    extracted: dict[str, dict] = field(default_factory=dict)      # doc id -> type, fields, warnings, injections
+    masker: Masker = field(default_factory=Masker)                 # one mask table per task
+    usage: Usage = field(default_factory=Usage)                    # LLM calls/tokens/latency for this task
+    extract_fields: bool = True                                    # False: parse_document only detects type
     outputs: dict[str, Any] = field(default_factory=dict)
     answer_provider: Optional[Callable[[dict], Any]] = None   # scripted answers outside a graph
     retrieval_config: Optional[str] = None
@@ -55,6 +62,7 @@ class TaskContext:
         """End of session: wipe uploaded documents and their text."""
         self.documents.clear()
         self.document_text.clear()
+        self.extracted.clear()
 
 
 @dataclass(frozen=True)
@@ -86,8 +94,14 @@ TOOLS: dict[str, Tool] = {t.name: t for t in [
          "Decide which ITR form (ITR-1/2/3/4) an individual must file, with reasons and the due date.",
          ITRFormArgs, itr_form_rules),
     Tool("parse_document",
-         "Read an uploaded tax document (Form 16, salary slip, interest certificate) and report its type.",
+         "Read one uploaded tax document (Form 16, salary slips, interest certificate) and return its type and "
+         "extracted fields (amounts, PAN, employer/bank). Document text itself is never returned.",
          ParseDocumentArgs, parse_document),
+    Tool("cross_check_documents",
+         "Compare all parsed documents with each other: interest missing from Form 16, salary slips vs Form 16, "
+         "Part A vs Part B TDS, deductions over their caps, PAN mismatches, multiple employers, hidden "
+         "instructions. Call after parsing every document.",
+         CrossCheckArgs, cross_check_documents),
     Tool("write_ca_summary",
          "Write a structured case summary for a Chartered Accountant when a case is too complex or risky.",
          CASummaryArgs, write_ca_summary),

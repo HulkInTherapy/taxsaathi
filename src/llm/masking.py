@@ -31,7 +31,7 @@ class Masker:
         self._by_value: dict[tuple[str, str], str] = {}
         self._by_token: dict[str, str] = {}
         self._counts: dict[str, int] = {}
-        self._names: list[str] = []
+        self._literals: list[tuple[str, str]] = []  # (value, kind) always masked, longest first
 
     # ------------------------------------------------------------ table
     def _token(self, kind: str, value: str) -> str:
@@ -44,14 +44,14 @@ class Masker:
         return self._by_value[key]
 
     def add(self, value: str, kind: str = "NAME") -> str:
-        """Register a value (e.g. a person's name) that must always be masked."""
+        """Register a value (a person's name, an account number...) that must always be masked."""
         value = (value or "").strip()
         if len(value) < 3:
             return value
         tok = self._token(kind, value)
-        if kind == "NAME" and value not in self._names:
-            self._names.append(value)
-            self._names.sort(key=len, reverse=True)  # longest first: "Asha Rao" before "Asha"
+        if (value, kind) not in self._literals:
+            self._literals.append((value, kind))
+            self._literals.sort(key=lambda vk: len(vk[0]), reverse=True)  # "Asha Rao" before "Asha"
         return tok
 
     @property
@@ -63,8 +63,9 @@ class Masker:
     def mask(self, text: str) -> str:
         if not text:
             return text
-        for name in self._names:
-            text = re.sub(re.escape(name), self._by_value[("NAME", _norm(name))], text, flags=re.I)
+        for value, kind in self._literals:
+            rx = re.escape(value) if kind == "NAME" else r"(?<![\w])" + re.escape(value) + r"(?![\w])"
+            text = re.sub(rx, self._by_value[(kind, _norm(value))], text, flags=re.I)
         text = ACCOUNT_RX.sub(lambda m: m.group(0).replace(m.group(1), self._token("ACCOUNT", m.group(1))), text)
         for kind, rx in PATTERNS:
             text = rx.sub(lambda m, k=kind: self._token(k, m.group(0)), text)
