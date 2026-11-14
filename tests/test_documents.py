@@ -152,3 +152,21 @@ def test_masker_literals_respect_word_boundaries():
     m = Masker()
     m.add("123456789", "ACCOUNT")
     assert m.mask("acct 123456789 and 1234567890") == "acct <ACCOUNT_1> and 1234567890"
+
+
+def test_invented_findings_never_reach_the_user(monkeypatch):
+    from src.agents import document_agent as da
+    from src.agents import loop
+    ctx = TaskContext(extract_fields=False)
+    doc_id = ctx.documents.add("a.pdf", b"%PDF-fake")
+    ctx.extracted[doc_id] = {"type": "form16", "filename": "a.pdf", "injections": [], "warnings": [],
+                             "fields": {"employer_name": "X", "employee_pan": "ABCPX1234Y", "gross_salary": 10,
+                                        "other_income_reported": 0, "part_a_total_tds": 9, "tds_part_b": 9}}
+    script = iter([
+        AIMessage(content="", tool_calls=[{"name": "cross_check_documents", "args": {}, "id": "1"}]),
+        AIMessage(content="", tool_calls=[{"name": "DocumentReport", "id": "2", "args": {"summary": "x", "findings": [
+            {"code": "itr1_not_eligible", "title": "t", "explanation": "e", "action": "a"}]}}]),
+    ])
+    monkeypatch.setattr(loop.prov, "chat", lambda *a, **k: next(script))
+    out = da.run_document_agent(ctx)
+    assert out["report"]["findings"] == [] and out["agent"]["invented_findings"] == ["itr1_not_eligible"]

@@ -1,0 +1,104 @@
+{
+ "summary": {
+  "tasks": 1,
+  "errors": 0,
+  "task_success": 1.0,
+  "itr_form_accuracy": 1.0,
+  "regime_accuracy": 1.0,
+  "amounts_exact": 1.0,
+  "escalation_accuracy": 1.0,
+  "gst_accuracy": null,
+  "key_tool_args_correct": 1.0,
+  "agent_answers_corrected": 0.0,
+  "budget_respected": 1.0,
+  "avg_tool_calls": 7,
+  "avg_llm_calls": 13,
+  "avg_tokens": 39271,
+  "median_seconds": 72.9
+ },
+ "rows": [
+  {
+   "persona_id": "P21",
+   "label": "ITR-1, new regime clearly better",
+   "workflow": "filing_prep",
+   "itr_ok": true,
+   "itr": "ITR-1",
+   "itr_expected": "ITR-1",
+   "escalate_ok": true,
+   "escalation_reasons": [],
+   "escalation_expected": [],
+   "regime_ok": true,
+   "amounts_ok": true,
+   "approvals": [
+    "figures",
+    "regime",
+    "checklist"
+   ],
+   "questions": 1,
+   "tool_calls": 7,
+   "budget_ok": true,
+   "agents": {
+    "itr": {
+     "stopped": "final",
+     "error": null,
+     "ms": 9511,
+     "corrected": false,
+     "tools": [
+      "itr_form_rules",
+      "search_tax_law"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    },
+    "regime": {
+     "stopped": "final",
+     "error": null,
+     "ms": 3585,
+     "corrected": false,
+     "tools": [
+      "calculate_tax"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    }
+   },
+   "cost": {
+    "llm_calls": 13,
+    "input_tokens": 33234,
+    "output_tokens": 6037,
+    "seconds": 72.9,
+    "turns": 4
+   },
+   "assumptions": [],
+   "trace": [
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents parsed; findings ['interest_not_in_form16']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "facts: all facts known",
+    "figures: income ₹16,85,400",
+    "approve_figures: approved",
+    "itr_form: ITR-1",
+    "escalation: not needed",
+    "regime: new (old ₹2,72,750, new ₹1,26,963)",
+    "approve_regime: approved new",
+    "checklist: 8 items",
+    "approve_checklist: approved",
+    "finalize: done; 7/15 tool calls"
+   ],
+   "regime": {
+    "got": [
+     "new",
+     272750,
+     126963
+    ],
+    "want": [
+     "new",
+     272750,
+     126963
+    ]
+   },
+   "success": true
+  }
+ ]
+}

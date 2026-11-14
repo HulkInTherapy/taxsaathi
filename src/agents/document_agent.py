@@ -28,8 +28,9 @@ salary slips, bank interest certificates) before they file their return for FY {
 How to work:
 1. Call parse_document once for EACH uploaded document id.
 2. Call cross_check_documents once, after all documents are parsed. Its findings are computed
-   exactly from the documents; report every one of them, using its code and figures. Never
-   invent findings or change their amounts.
+   exactly from the documents; report every one of them, using its code and figures. Report ONLY
+   those codes: never invent findings or change their amounts. Questions about ITR forms, regimes
+   or capital gains are handled by other agents later; ignore them here.
 3. For important findings, call search_tax_law (at most 3 times in total) to get the legal basis,
    and cite the passage ids you used.
 4. Finish by calling DocumentReport.
@@ -87,6 +88,8 @@ def finalize(run: AgentRun, ctx: TaskContext, toolbox: ToolBox) -> dict:
                                        "citations": [], "added_by": "cross_check"})
     det_codes = {f["code"] for f in det}
     invented = [c for c in reported_codes if c not in det_codes]
+    # nothing unverified reaches the user: findings not backed by the cross-check are dropped
+    report["findings"] = [f for f in report["findings"] if f["code"] in det_codes]
     report["all_clear"] = not report["findings"]
     return {
         "report": report,
