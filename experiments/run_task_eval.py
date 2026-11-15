@@ -78,11 +78,21 @@ def score(gt: dict, state: dict, user: SimUser, secs: float, turns: int) -> dict
         if not r["amounts_ok"]:
             r["figures_diff"] = {k: [state["figures"]["inputs"].get(k), v] for k, v in gt["true_inputs"].items()
                                  if state["figures"]["inputs"].get(k) != v}
+    if gt["workflow"] == "tax_saving" and e.get("tax_saving"):
+        sav = state.get("savings") or {}
+        r["savings"] = {"got": [sav.get("best_option"), sav.get("max_saving")],
+                        "want": [e["tax_saving"]["best_option"], e["tax_saving"]["max_saving"]]}
+        r["savings_ok"] = sav.get("max_saving") == e["tax_saving"]["max_saving"] and \
+            bool(sav.get("best_option")) == bool(e["tax_saving"]["best_option"])
+    r["verification"] = state.get("verification", {}).get("summary")
     if "gst_registration_required" in e and not e["escalate"]:
         r["gst_ok"] = (state.get("gst") or {}).get("registration_required") == e["gst_registration_required"]
-    checks = [r[k] for k in ("itr_ok", "escalate_ok", "regime_ok", "amounts_ok", "gst_ok") if r.get(k) is not None]
+    checks = [r[k] for k in ("itr_ok", "escalate_ok", "regime_ok", "amounts_ok", "gst_ok", "savings_ok")
+              if r.get(k) is not None]
     if gt["workflow"] == "filing_prep" and not e["escalate"]:
         checks.append(approvals == ["figures", "regime", "checklist"])
+    if gt["workflow"] == "tax_saving" and not e["escalate"]:
+        checks.append(approvals == ["figures", "savings_plan"])
     r["success"] = all(checks)
     return r
 
@@ -100,6 +110,10 @@ def summarise(rows: list[dict]) -> dict:
         "task_success": round(sum(r["success"] for r in ok) / max(1, len(rows)), 3),  # errors count as failures
         "itr_form_accuracy": rate("itr_ok"), "regime_accuracy": rate("regime_ok"), "amounts_exact": rate("amounts_ok"),
         "escalation_accuracy": rate("escalate_ok"), "gst_accuracy": rate("gst_ok"),
+        "savings_accuracy": rate("savings_ok"),
+        "verifier_claims_checked": sum((r.get("verification") or {}).get("claims_checked", 0) for r in ok),
+        "verifier_initially_failing": sum((r.get("verification") or {}).get("initially_failing", 0) for r in ok),
+        "verifier_unresolved": sum((r.get("verification") or {}).get("final_failing", 0) for r in ok),
         "key_tool_args_correct": round(sum(key_args) / len(key_args), 3) if key_args else None,
         "agent_answers_corrected": round(sum(corrected) / len(corrected), 3) if corrected else None,
         "budget_respected": rate("budget_ok"),
@@ -127,7 +141,8 @@ def main(argv=None) -> int:
                 continue
             print(f"  {'✓' if r['success'] else '✗'} {r['persona_id']} itr={r['itr']}/{r['itr_expected']} "
                   f"regime={r.get('regime')} esc={r['escalation_reasons']}/{r['escalation_expected']} "
-                  f"gst={r.get('gst_ok')} approvals={r['approvals']} tools={r['tool_calls']} "
+                  f"gst={r.get('gst_ok')} savings={r.get('savings')} verify={r.get('verification')} "
+                  f"approvals={r['approvals']} tools={r['tool_calls']} "
                   f"llm={r['cost']['llm_calls']} {r['cost']['seconds']}s"
                   + (f"\n     figures_diff={r['figures_diff']}" if r.get("figures_diff") else ""), flush=True)
     summary = summarise(rows)

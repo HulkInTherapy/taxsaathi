@@ -68,7 +68,38 @@ PROVIDERS: dict[str, dict] = {
             "planner": os.environ.get("TAXOT_NVIDIA_PLANNER", "nvidia/nemotron-3.5-super-vl-120b-a12b"),
             "extractor": os.environ.get("TAXOT_NVIDIA_EXTRACTOR", "nvidia/nemotron-3.5-super-vl-120b-a12b"),
             # a different model family checks the drafts
-            "verifier": os.environ.get("TAXOT_NVIDIA_VERIFIER", "mistralai/mistral-large-4-1t-a52b"),
+            "verifier": os.environ.get("TAXOT_NVIDIA_VERIFIER", "minimaxai/minimax-m3.1-flash"),
+        },
+    },
+    "regolo": {  # 30-day trial: ~1M tokens/day, no card; strong open-weight models
+        "base_url": "https://api.regolo.ai/v1",
+        "key_env": "REGOLO_API_KEY",
+        "requests_per_minute": 30,
+        "models": {
+            "planner": os.environ.get("TAXOT_REGOLO_PLANNER", "gpt-oss-120b"),
+            "extractor": os.environ.get("TAXOT_REGOLO_EXTRACTOR", "qwen3.5-122b"),
+            "verifier": os.environ.get("TAXOT_REGOLO_VERIFIER", "deepseek-v4.1-flash"),
+        },
+    },
+    "groq": {  # free: per-model limits (~1,000 requests and ~200K tokens/day, 8K tokens/min)
+        "base_url": "https://api.groq.com/openai/v1",
+        "key_env": "GROQ_API_KEY",
+        "requests_per_minute": 25,
+        "max_output_tokens": 3000,  # keeps one request under the 8K tokens/min cap
+        "models": {
+            "planner": os.environ.get("TAXOT_GROQ_PLANNER", "openai/gpt-oss-120b"),
+            "extractor": os.environ.get("TAXOT_GROQ_EXTRACTOR", "qwen/qwen3.8-27b"),
+            "verifier": os.environ.get("TAXOT_GROQ_VERIFIER", "openai/gpt-oss-120b"),
+        },
+    },
+    "gemini": {  # free tier (project without billing); small daily quota, prompts may be used by Google
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "key_env": "GEMINI_API_KEY",
+        "requests_per_minute": 10,
+        "models": {
+            "planner": os.environ.get("TAXOT_GEMINI_PLANNER", "gemini-3.5-flash-lite"),
+            "extractor": os.environ.get("TAXOT_GEMINI_EXTRACTOR", "gemini-3.5-flash-lite"),
+            "verifier": os.environ.get("TAXOT_GEMINI_VERIFIER", "gemini-3.5-flash-lite"),
         },
     },
     "openrouter": {
@@ -88,7 +119,15 @@ PROVIDERS: dict[str, dict] = {
         "models": {"planner": LLM_MODEL, "extractor": LLM_MODEL, "verifier": LLM_MODEL},
     },
 }
-AGENT_LLM_TIMEOUT_S = float(os.environ.get("TAXOT_AGENT_LLM_TIMEOUT", "120"))
+# Provider order per role (comma list in env, e.g. TAXOT_PROVIDERS_VERIFIER=gemini,groq). Roles not listed use
+# TAXOT_LLM_PROVIDER first, then the rest. The verifier runs on other model families than the agents it checks,
+# and spreading roles across providers spreads the free-tier quotas.
+ROLE_PROVIDERS = {
+    role: [x.strip() for x in os.environ[f"TAXOT_PROVIDERS_{role.upper()}"].split(",") if x.strip()]
+    for role in ("planner", "extractor", "verifier") if os.environ.get(f"TAXOT_PROVIDERS_{role.upper()}")
+}
+ROLE_PROVIDERS.setdefault("verifier", ["regolo", "gemini", "groq", "nvidia", "openrouter"])
+AGENT_LLM_TIMEOUT_S = float(os.environ.get("TAXOT_AGENT_LLM_TIMEOUT", "60"))
 AGENT_MAX_TOKENS = int(os.environ.get("TAXOT_AGENT_MAX_TOKENS", "1500"))
 # Output budget per role. Reasoning models think before answering, and a Form 16 has ~30 fields,
 # so the extractor needs room or its tool call gets cut off mid-JSON.

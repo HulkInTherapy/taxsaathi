@@ -15,7 +15,8 @@ from typing import Annotated, Literal, Optional, TypedDict
 from pydantic import BaseModel, Field
 
 Workflow = Literal["document_check", "filing_prep", "tax_saving"]
-STEPS = ("documents", "facts", "figures", "itr_form", "gst", "regime", "escalation", "checklist")
+STEPS = ("documents", "facts", "figures", "itr_form", "gst", "regime", "escalation", "savings", "verify",
+         "checklist")
 
 
 class UserFacts(BaseModel):
@@ -54,6 +55,14 @@ class UserFacts(BaseModel):
     fno_trading: Optional[bool] = None
     losses_to_carry_forward: Optional[bool] = None
     wants_gst_advice: Optional[bool] = None
+    # tax-saving workflow: how much MORE the user could still invest this year
+    extra_80c_possible: Optional[int] = Field(None, ge=0, description="Extra amount you could still put in 80C "
+                                                                       "investments (PPF, ELSS...) this year")
+    extra_nps_possible: Optional[int] = Field(None, ge=0, description="Extra own NPS contribution you could make")
+    extra_80d_possible: Optional[int] = Field(None, ge=0, description="Extra health insurance premium for self/family "
+                                                                       "you could buy")
+    extra_80d_parents_possible: Optional[int] = Field(None, ge=0, description="Health insurance premium you could pay "
+                                                                               "for your parents")
 
 
 class TaskState(TypedDict, total=False):
@@ -71,6 +80,8 @@ class TaskState(TypedDict, total=False):
     gst: dict
     regime: dict
     escalation: dict                      # {"escalate": bool, "reasons": [...], "ca_summary": md}
+    savings: dict                         # tax-saving plan (Workflow 3)
+    verification: dict                    # verifier report
     checklist: dict
     approvals: dict                       # step -> {"approved": bool, "note": str}
     final: dict

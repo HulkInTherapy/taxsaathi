@@ -259,3 +259,39 @@ def build_checklist(state: dict) -> dict:
                   "rent receipts."})
     return {"items": items, "tax_payable": tax, "tds_credited": tds,
             "balance": (tax - tds) if tax is not None else None, "regime": chosen, "itr_form": itr.get("form")}
+
+
+# ------------------------------------------------------------------ tax-saving options (Workflow 3)
+CAPS = {"deductions_80c": 150_000, "nps_80ccd1b": 50_000}
+OPTION_LABELS = {"deductions_80c": "Invest more under 80C (PPF/ELSS)", "nps_80ccd1b": "Own NPS contribution, 80CCD(1B)",
+                 "deductions_80d": "Health insurance for yourself/family, 80D",
+                 "deductions_80d_parents": "Health insurance for your parents, 80D"}
+FACT_FOR = {"deductions_80c": "extra_80c_possible", "nps_80ccd1b": "extra_nps_possible",
+            "deductions_80d": "extra_80d_possible", "deductions_80d_parents": "extra_80d_parents_possible"}
+
+
+def saving_candidates(inputs: dict, facts: UserFacts) -> list[dict]:
+    """Legal options within each cap and within what the user says they can still invest.
+    Each option is a what-if for calculate_tax: {"label", "changes", "extra_investment"}."""
+    senior = inputs.get("age") in ("60to80", "above80")
+    caps = {**CAPS, "deductions_80d": 50_000 if senior else 25_000,
+            "deductions_80d_parents": 50_000 if (facts.parents_senior or inputs.get("parents_senior")) else 25_000}
+    singles = []
+    for field, fact in FACT_FOR.items():
+        room = getattr(facts, fact) or 0
+        headroom = max(0, caps[field] - (inputs.get(field) or 0))
+        extra = min(room, headroom)
+        if extra > 0:
+            changes = {field: (inputs.get(field) or 0) + extra}
+            if field == "deductions_80d_parents" and facts.parents_senior:
+                changes["parents_senior"] = True
+            singles.append({"label": f"{OPTION_LABELS[field]}: +{format_inr(extra)}", "changes": changes,
+                            "extra_investment": extra, "field": field})
+    out = list(singles)
+    if len(singles) > 1:
+        combo = {}
+        for s in singles:
+            combo.update(s["changes"])
+        out.append({"label": "All of the above together", "changes": combo,
+                    "extra_investment": sum(s["extra_investment"] for s in singles), "field": "combined"})
+    return out

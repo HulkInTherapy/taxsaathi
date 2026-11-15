@@ -21,7 +21,8 @@ from src.guardrails.pii import PATTERNS
 
 ACCOUNT_RX = re.compile(
     r"(?i)\b(?:a/?c|acct|account)\.?\s*(?:no\.?|number|#)?\s*[:\-]?\s*(\d[\d\s-]{7,20}\d)")
-PLACEHOLDER_RX = re.compile(r"<([A-Z]+)_(\d+)>")
+# Models sometimes drop the angle brackets ("PAN_1" for "<PAN_1>"), so both forms are restored.
+PLACEHOLDER_RX = re.compile(r"<?\b([A-Z]+)_(\d+)\b>?")
 
 
 class Masker:
@@ -74,7 +75,8 @@ class Masker:
     def unmask(self, text: str) -> str:
         if not text:
             return text
-        return PLACEHOLDER_RX.sub(lambda m: self._by_token.get(m.group(0), m.group(0)), text)
+        return PLACEHOLDER_RX.sub(
+            lambda m: self._by_token.get(f"<{m.group(1)}_{m.group(2)}>", m.group(0)), text)
 
     # ------------------------------------------------------------ nested objects
     def mask_obj(self, obj: Any) -> Any:

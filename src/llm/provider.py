@@ -53,8 +53,13 @@ class Usage:
 
 
 # ------------------------------------------------------------------ provider plumbing
-def provider_order(primary: str | None = None) -> list[str]:
-    """Primary provider first, then the other API providers that have a key configured."""
+def provider_order(primary: str | None = None, role: str | None = None) -> list[str]:
+    """Providers to try, in order, that have a key configured: the role's own order if configured,
+    else the primary provider first and then the other API providers."""
+    if role and primary is None and config.ROLE_PROVIDERS.get(role):
+        listed = [p for p in config.ROLE_PROVIDERS[role] if p in config.PROVIDERS]
+        rest = [p for p in config.PROVIDERS if p not in listed and p != "ollama"]
+        return [p for p in listed + rest if _has_key(p)]
     primary = primary or config.LLM_PROVIDER
     if primary not in config.PROVIDERS:
         raise ValueError(f"unknown provider {primary!r}; choose from {list(config.PROVIDERS)}")
@@ -98,7 +103,8 @@ def get_model(provider: str, role: str):
         base_url=p["base_url"],
         api_key=os.environ.get(p["key_env"]) if p["key_env"] else "ollama",
         temperature=0,
-        max_tokens=config.ROLE_MAX_TOKENS.get(role, config.AGENT_MAX_TOKENS),
+        max_tokens=min(config.ROLE_MAX_TOKENS.get(role, config.AGENT_MAX_TOKENS),
+                       p.get("max_output_tokens", 10**6)),
         timeout=config.AGENT_LLM_TIMEOUT_S,
         max_retries=1,
         rate_limiter=_limiter(provider),
@@ -116,11 +122,25 @@ def _is_retryable(err: Exception) -> bool:
                             openai.InternalServerError, openai.NotFoundError, openai.PermissionDeniedError,
                             openai.AuthenticationError)):
             return True
+        if isinstance(err, openai.BadRequestError):
+            # providers differ in what they accept (and some models emit malformed tool calls,
+            # e.g. Groq's "Failed to call a function"), so another provider may well succeed
+            return True
         if isinstance(err, openai.APIStatusError):
-            return err.status_code >= 500 or err.status_code in (402, 408, 409, 429)
+            return err.status_code >= 500 or err.status_code in (400, 402, 408, 409, 413, 422, 429)
     except ImportError:
         pass
     return isinstance(err, (TimeoutError, ConnectionError))
+
+
+def _is_rate_limit(err: Exception) -> bool:
+    try:
+        import openai
+        if isinstance(err, openai.RateLimitError):
+            return True
+    except ImportError:
+        pass
+    return "429" in str(err) or "RateLimit" in type(err).__name__
 
 
 def _log(record: dict) -> None:
@@ -147,11 +167,32 @@ def chat(messages: Sequence, role: str = "planner", tools: Sequence | None = Non
 
     masker = masker or Masker()
     outgoing = [_mask_message(m, masker) for m in convert_to_messages(list(messages))]
-    order = list(providers) if providers else provider_order()
+    order = list(providers) if providers else provider_order(role=role)
     if not order:
         raise LLMUnavailable("no LLM provider has an API key; fill in .env (see .env.example)")
 
-    errors = []
+    for attempt in range(len(RATE_LIMIT_BACKOFF_S) + 1):
+        try:
+            return _chat_once(outgoing, role, tools, masker, usage, order, tool_choice)
+        except _AllRateLimited as e:
+            if attempt == len(RATE_LIMIT_BACKOFF_S):
+                raise LLMUnavailable(f"all providers rate-limited: {e}") from e
+            wait = RATE_LIMIT_BACKOFF_S[attempt]
+            _log({"ts": _now(), "role": role, "provider": "*", "ok": False, "ms": 0,
+                  "error": f"all providers rate-limited; waiting {wait}s"})
+            time.sleep(wait)
+
+
+class _AllRateLimited(RuntimeError):
+    pass
+
+
+# Waits before retrying when every provider says 429 (per-minute limits recover; daily caps do not).
+RATE_LIMIT_BACKOFF_S = (20, 45, 90)
+
+
+def _chat_once(outgoing, role, tools, masker, usage, order, tool_choice):
+    errors, limited = [], 0
     for i, provider in enumerate(order):
         model = get_model(provider, role)
         runnable = model.bind_tools(list(tools), tool_choice=tool_choice) if tools else model
@@ -163,10 +204,13 @@ def chat(messages: Sequence, role: str = "planner", tools: Sequence | None = Non
             _log({"ts": _now(), "role": role, "provider": provider, "model": model.model_name,
                   "ok": False, "ms": ms, "error": f"{type(e).__name__}: {str(e)[:200]}"})
             errors.append(f"{provider}: {type(e).__name__}")
+            limited += _is_rate_limit(e)
             if _is_retryable(e) and i < len(order) - 1:
                 if usage:
                     usage.fallbacks += 1
                 continue
+            if limited == len(order):
+                raise _AllRateLimited("; ".join(errors)) from e
             raise LLMUnavailable("; ".join(errors)) from e
         ms = int((time.perf_counter() - t0) * 1000)
         um = reply.usage_metadata or {}

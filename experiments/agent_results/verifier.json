@@ -1,0 +1,461 @@
+{
+ "summary": {
+  "errors": 2,
+  "planted": 19,
+  "catch_rate": 1.0,
+  "removed_rate": 0.947,
+  "clean": 9,
+  "clean_false_alarm": 0.111,
+  "clean_text_changed": 0.111,
+  "avg_llm_calls": 4.6,
+  "avg_seconds": 53.0,
+  "verifier": {
+   "configured_first": "regolo/deepseek-v4.1-flash",
+   "recent_calls_by_model": {
+    "gemini/gemini-3.5-flash-lite": 339,
+    "regolo/deepseek-v4.1-flash": 244,
+    "groq/openai/gpt-oss-120b": 60,
+    "nvidia/minimaxai/minimax-m3.1-flash": 27
+   }
+  }
+ },
+ "planted": [
+  {
+   "id": "planted_00",
+   "caught": true,
+   "removed": true,
+   "final_text": "Your PPF and ELSS investments count under section 80C. Section 80C allows a deduction of up to ₹1,50,000 in the old regime. These deductions are not available in the new regime.",
+   "flagged": [
+    "Section 80C allows a deduction of up to ₹2,50,000 in the old regime."
+   ],
+   "summary": {
+    "claims_checked": 3,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 90074
+  },
+  {
+   "id": "planted_01",
+   "caught": true,
+   "removed": true,
+   "final_text": "Interest from savings accounts and fixed deposits is income from other sources. You should report it in your return.",
+   "flagged": [
+    "Fixed deposit interest becomes tax-free for the taxpayer once the bank has deducted tax deducted at source (TDS)."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 86170
+  },
+  {
+   "id": "planted_02",
+   "caught": true,
+   "removed": true,
+   "final_text": "The due date for ITR-1 for FY 2025-26 is 31 July 2026.",
+   "flagged": [
+    "ITR-1 can be used by people who have short-term capital gains from shares."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 8,
+   "ms": 92135
+  },
+  {
+   "id": "planted_03",
+   "caught": true,
+   "removed": true,
+   "final_text": "Salaried taxpayers get a standard deduction. In the new regime for FY 2025-26 the standard deduction is ₹75,000. The old regime also has a standard deduction.",
+   "flagged": [
+    "In the new regime for FY 2025-26 the standard deduction is ₹50,000."
+   ],
+   "summary": {
+    "claims_checked": 3,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 84642
+  },
+  {
+   "id": "planted_04",
+   "caught": true,
+   "removed": true,
+   "final_text": "The new regime has lower slab rates. Cess of 4% applies on tax.",
+   "flagged": [
+    "Under Section 87A, income up to ₹15 lakh is tax‑free for FY 2025‑26 under the new regime."
+   ],
+   "summary": {
+    "claims_checked": 3,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 62814
+  },
+  {
+   "id": "planted_05",
+   "caught": true,
+   "removed": true,
+   "final_text": "Savings account interest is taxable. If you are below 60, section 80TTA lets you deduct up to ₹10,000 of savings-account interest in the old regime.",
+   "flagged": [
+    "If you are below 60, section 80TTA lets you deduct up to ₹50,000 of savings-account interest in the old regime."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 53998
+  },
+  {
+   "id": "planted_06",
+   "caught": true,
+   "removed": true,
+   "final_text": "Banks deduct TDS on FD interest under section 194A. From April 2025 TDS applies once FD interest exceeds ₹50,000 a year for ordinary depositors. Senior citizens have a higher threshold.",
+   "flagged": [
+    "From April 2025, TDS applies when fixed deposit interest exceeds ₹10,000 per year for ordinary depositors."
+   ],
+   "summary": {
+    "claims_checked": 3,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 56524
+  },
+  {
+   "id": "planted_07",
+   "caught": true,
+   "removed": false,
+   "final_text": "Freelancers supplying services must register for GST once their aggregate turnover exceeds ₹20 lakh in a normal-category state (₹10 lakh in Manipur, Mizoram, Nagaland and Tripura). Registration is done on the GST portal.",
+   "flagged": [
+    "Freelancers supplying services must register for GST once their aggregate turnover exceeds ₹10 lakh in a normal-category state."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 60873
+  },
+  {
+   "id": "planted_08",
+   "caught": true,
+   "removed": true,
+   "final_text": "Professionals can use the presumptive scheme under section 44ADA. Under it, 50% of gross receipts is treated as profit. No books of account are needed.",
+   "flagged": [
+    "Under section 44ADA, 75% of gross receipts is treated as profit."
+   ],
+   "summary": {
+    "claims_checked": 3,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 57867
+  },
+  {
+   "id": "planted_10",
+   "caught": true,
+   "removed": true,
+   "final_text": "Health insurance premiums qualify under section 80D. A senior citizen can claim up to ₹50,000 under section 80D for their own health insurance.",
+   "flagged": [
+    "A senior citizen can claim up to ₹1,00,000 under section 80D for their own health insurance."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 55623
+  },
+  {
+   "id": "planted_11",
+   "caught": true,
+   "removed": true,
+   "final_text": "NPS contributions get an extra deduction. Under section 80CCD(1B) you can deduct an additional ₹50,000 for your own NPS contribution, over and above 80C.",
+   "flagged": [
+    "Section 80CCD(1B) allows an additional deduction of ₹1,00,000 for an individual's own NPS contribution, over and above the deduction available under section 80C."
+   ],
+   "summary": {
+    "claims_checked": 1,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 40755
+  },
+  {
+   "id": "planted_12",
+   "caught": true,
+   "removed": true,
+   "final_text": "Home-loan interest on a self-occupied house is deductible under section 24(b). The limit is ₹2 lakh a year in the old regime.",
+   "flagged": [
+    "The limit for home-loan interest deduction on a self-occupied house is ₹3 lakh a year in the old regime."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 37237
+  },
+  {
+   "id": "planted_13",
+   "caught": true,
+   "removed": true,
+   "final_text": "The new regime removes most exemptions.",
+   "flagged": [
+    "HRA exemption under section 10(13A) can still be claimed in the new tax regime."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 51305
+  },
+  {
+   "id": "planted_14",
+   "caught": true,
+   "removed": true,
+   "final_text": "Employer NPS contributions are treated differently. The employer's contribution under section 80CCD(2) is allowed as a deduction in the new regime.",
+   "flagged": [
+    "Employer NPS contributions under section 80CCD(2) are not allowed as a deduction in the new tax regime."
+   ],
+   "summary": {
+    "claims_checked": 1,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 49270
+  },
+  {
+   "id": "planted_15",
+   "caught": true,
+   "removed": true,
+   "final_text": "India has a new income-tax law. The Income-tax Act, 2025 came into force on 1 April 2026, replacing the Income-tax Act, 1961.",
+   "flagged": [
+    "The Income-tax Act, 2025 comes into force on 1 April 2027, replacing the Income-tax Act, 1961."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 53378
+  },
+  {
+   "id": "planted_16",
+   "caught": true,
+   "removed": true,
+   "final_text": "GST rates were rationalised. From 22 September 2025 most goods moved to two main slabs of 5% and 18%.",
+   "flagged": [
+    "From 22 September 2025 most goods moved to two GST slabs of 8% and 16%."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 45474
+  },
+  {
+   "id": "planted_17",
+   "caught": true,
+   "removed": true,
+   "final_text": "This point could not be verified against official sources. (Some points here could not be verified against official sources; please confirm with a CA.)",
+   "flagged": [
+    "ITR-1 is meant for resident individuals with simple income.",
+    "ITR-1 can be used if the total income is up to ₹1 crore."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 2,
+    "final_failing": 2,
+    "revised_texts": 0,
+    "rounds": 2
+   },
+   "llm_calls": 8,
+   "ms": 114011
+  },
+  {
+   "id": "planted_18",
+   "caught": true,
+   "removed": true,
+   "final_text": "If you change jobs during the year you get two Form 16s. You must claim the standard deduction only once in your return.",
+   "flagged": [
+    "A taxpayer may claim the standard deduction separately for each employer in their income tax return."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 5,
+   "ms": 48235
+  },
+  {
+   "id": "planted_19",
+   "caught": true,
+   "removed": true,
+   "final_text": "TDS is a prepayment of tax.",
+   "flagged": [
+    "TDS shown in Form 16 Part B is credited to the taxpayer even if it does not appear in Form 26AS."
+   ],
+   "summary": {
+    "claims_checked": 2,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "llm_calls": 8,
+   "ms": 65628
+  }
+ ],
+ "clean": [
+  {
+   "id": "clean_00",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "Section 80C allows a deduction of up to ₹1.5 lakh for investments such as PPF and ELSS. It is available only in the old regime.",
+   "llm_calls": 2,
+   "ms": 30174
+  },
+  {
+   "id": "clean_01",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "Interest from savings accounts and fixed deposits is taxable as income from other sources and must be reported in your return even if TDS was deducted.",
+   "llm_calls": 2,
+   "ms": 12420
+  },
+  {
+   "id": "clean_02",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "The standard deduction in the new regime for FY 2025-26 is ₹75,000 for salaried taxpayers.",
+   "llm_calls": 2,
+   "ms": 32736
+  },
+  {
+   "id": "clean_03",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "From 1 April 2025 banks deduct TDS on FD interest under section 194A when interest exceeds ₹50,000 a year for ordinary depositors and ₹1,00,000 for senior citizens.",
+   "llm_calls": 2,
+   "ms": 35431
+  },
+  {
+   "id": "clean_04",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "A freelancer providing services must register for GST when aggregate turnover exceeds ₹20 lakh in a normal-category state.",
+   "llm_calls": 2,
+   "ms": 12027
+  },
+  {
+   "id": "clean_06",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "Section 80CCD(1B) allows an extra deduction of up to ₹50,000 for your own NPS contribution in the old regime.",
+   "llm_calls": 2,
+   "ms": 18671
+  },
+  {
+   "id": "clean_07",
+   "false_alarm": true,
+   "changed": true,
+   "flagged": [
+    [
+     "ITR-1 can be used for income from up to two house properties.",
+     "unsupported",
+     "No passage provided about house property limits for ITR-1"
+    ],
+    [
+     "ITR-1 can be used for income from other sources.",
+     "unsupported",
+     "No passage provided about other sources eligibility for ITR-1"
+    ]
+   ],
+   "final_text": "This point could not be verified against official sources. (Some points here could not be verified against official sources; please confirm with a CA.)",
+   "llm_calls": 8,
+   "ms": 97467
+  },
+  {
+   "id": "clean_08",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "If you change jobs, you must combine both salaries in your return and claim the standard deduction only once.",
+   "llm_calls": 2,
+   "ms": 19589
+  },
+  {
+   "id": "clean_09",
+   "false_alarm": false,
+   "changed": false,
+   "flagged": [],
+   "final_text": "The Income-tax Act, 2025 replaced the Income-tax Act, 1961 from 1 April 2026.",
+   "llm_calls": 2,
+   "ms": 20455
+  }
+ ]
+}

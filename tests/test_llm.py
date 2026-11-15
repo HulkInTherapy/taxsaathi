@@ -69,6 +69,8 @@ def _rate_limit_error():
 
 @pytest.fixture
 def keys(monkeypatch, tmp_path):
+    for k in ("GROQ_API_KEY", "GEMINI_API_KEY", "REGOLO_API_KEY"):   # tests control exactly which providers have keys
+        monkeypatch.delenv(k, raising=False)
     monkeypatch.setenv("NVIDIA_API_KEY", "x")
     monkeypatch.setenv("OPENROUTER_API_KEY", "y")
     monkeypatch.setattr(config, "LLM_USAGE_LOG", tmp_path / "usage.jsonl")
@@ -116,7 +118,41 @@ def test_chat_does_not_swallow_programming_errors(keys, monkeypatch):
 
 
 def test_chat_without_keys_raises(monkeypatch):
+    for k in ("GROQ_API_KEY", "GEMINI_API_KEY", "REGOLO_API_KEY"):
+        monkeypatch.delenv(k, raising=False)
     monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     with pytest.raises(prov.LLMUnavailable):
         prov.chat([{"role": "user", "content": "hi"}])
+
+
+def test_waits_and_retries_when_every_provider_is_rate_limited(keys, monkeypatch):
+    calls = {"n": 0}
+
+    class Flaky(FakeModel):
+        def invoke(self, messages):
+            calls["n"] += 1
+            if calls["n"] <= 2:           # first round: both providers 429
+                raise _rate_limit_error()
+            return AIMessage(content="ok")
+    models = {"nvidia": Flaky("a"), "openrouter": Flaky("b")}
+    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    slept = []
+    monkeypatch.setattr(prov.time, "sleep", lambda s: slept.append(s))
+    out = prov.chat([{"role": "user", "content": "hi"}], providers=["nvidia", "openrouter"])
+    assert out.content == "ok" and slept == [prov.RATE_LIMIT_BACKOFF_S[0]]
+
+
+def test_gives_up_after_backoff(keys, monkeypatch):
+    models = {"nvidia": FakeModel("a", error=_rate_limit_error()), "openrouter": FakeModel("b", error=_rate_limit_error())}
+    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    monkeypatch.setattr(prov.time, "sleep", lambda s: None)
+    with pytest.raises(prov.LLMUnavailable, match="rate-limited"):
+        prov.chat([{"role": "user", "content": "hi"}], providers=["nvidia", "openrouter"])
+
+
+def test_unmask_accepts_placeholders_without_brackets():
+    m = Masker()
+    m.mask("PAN ABCDE1234F")
+    assert m.unmask("pan: PAN_1") == "pan: ABCDE1234F" and m.unmask("<PAN_1>") == "ABCDE1234F"
+    assert m.unmask("SECTION_80 and PAN_7") == "SECTION_80 and PAN_7"   # unknown tokens untouched

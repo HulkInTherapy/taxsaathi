@@ -51,6 +51,8 @@ class SimUser:
             lines.append(f"I am {p['age']} years old.")
         if "residential_status" in asked:
             lines.append("I live in India and am a resident.")
+        if "salary_without_form16" in asked:
+            lines.append("I have no salary income." if p.get("freelance") else "All my salary is in the Form 16 I uploaded.")
         if p.get("freelance") and asked & {"freelance_receipts", "business_presumptive", "cash_receipts_over_5pct"}:
             fl = p["freelance"]
             lines.append(f"My freelance receipts were {format_inr(fl['receipts'])}. I use the presumptive scheme, no "
@@ -102,6 +104,8 @@ class SimUser:
             rent = p.get("rent_monthly", 0)
             lines.append(f"I pay rent of {format_inr(rent)} a month in {'a metro city (Mumbai)' if p['metro'] else 'Pune'}."
                          if rent else "I don't pay rent.")
+        if asked & {"basic_monthly", "hra_monthly", "metro_city"} and not p.get("rent_monthly"):
+            lines.append("Since I don't pay rent, HRA doesn't apply to me.")
         if asked & {"basic_monthly", "hra_monthly", "metro_city"} and p.get("rent_monthly") and emps:
             if len(emps) == 1:
                 e = emps[0]
@@ -110,6 +114,17 @@ class SimUser:
             else:
                 lines.append(f"My HRA exemption for the year, worked out with my employers, is "
                              f"{format_inr(sum(e['hra_exempt'] for e in emps))}.")
+        room = p.get("room") or {}
+        extra = [("extra_80c_possible", "other_80c", "more in 80C investments like PPF or ELSS"),
+                 ("extra_nps_possible", "nps_80ccd1b", "more in NPS"),
+                 ("extra_80d_possible", "health_80d", "more on health insurance for myself"),
+                 ("extra_80d_parents_possible", "health_80d_parents", "on health insurance for my parents")]
+        could = [f"{format_inr(room[r])} {t}" for k, r, t in extra if k in asked and room.get(r)]
+        if asked & {k for k, _, _ in extra}:
+            lines.append(("This year I could still put " + ", and ".join(could) + ". Nothing more beyond that.")
+                         if could else "I can't invest anything more this year.")
+        if "parents_senior" in asked and not any("parents are" in x for x in lines):
+            lines.append("My parents are senior citizens." if p.get("parents_senior") else "My parents are below 60.")
         return " ".join(lines) or "Nothing else to add."
 
 

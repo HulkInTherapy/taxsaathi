@@ -13,10 +13,10 @@ from src.agents.state import UserFacts
 # ------------------------------------------------------------------ deterministic pieces
 def test_validate_steps_adds_required_and_orders():
     steps, fixes = G.validate_steps("filing_prep", ["regime", "itr_form", "bogus"], has_docs=True, facts=UserFacts())
-    assert steps == ["documents", "facts", "figures", "itr_form", "escalation", "regime", "checklist"]
+    assert steps == ["documents", "facts", "figures", "itr_form", "escalation", "regime", "verify", "checklist"]
     assert any("added" in f for f in fixes) and any("unknown" in f for f in fixes)
     steps, _ = G.validate_steps("document_check", ["documents", "regime"], has_docs=True, facts=UserFacts())
-    assert steps == ["documents"]
+    assert steps == ["documents", "verify"]
     steps, _ = G.validate_steps("filing_prep", ["documents", "facts"], has_docs=False, facts=UserFacts())
     assert "documents" not in steps
 
@@ -76,10 +76,18 @@ class FakeLLM:
         names = [t["function"]["name"] if isinstance(t, dict) else t.__name__ for t in (tools or [])]
         last = messages[-1]
         tool_msgs = [m for m in messages if getattr(m, "type", "") == "tool"]
+        if "CASummaryDone" in names:
+            if not tool_msgs:
+                return _call("write_ca_summary", {"reason_for_escalation": "Foreign assets need Schedule FA reporting",
+                                                  "taxpayer_profile": "resident, 30", "open_questions": ["Schedule FA"]})
+            return _call("CASummaryDone", {"note": "A CA must handle foreign assets."})
+        if "ClaimList" in names:      # verifier: nothing to check in these tests
+            return _call("ClaimList", {"claims": []})
         if "TaskPlan" in names:
             return _call("TaskPlan", {"workflow": "filing_prep", "steps": ["facts", "figures", "regime"]})
         if "FactsAnswer" in names:
-            return _call("FactsAnswer", ALL_NO)
+            schema = next(t for t in tools if not isinstance(t, dict))
+            return _call("FactsAnswer", {k: v for k, v in ALL_NO.items() if k in schema.model_fields})
         if "ITRDecision" in names:
             if not tool_msgs:
                 import json
@@ -159,3 +167,126 @@ def test_lenient_validate_drops_bad_fields_only():
     from src.agents.state import lenient_validate
     out = lenient_validate(UserFacts, {"age": 40, "fno_trading": "None", "company_director": "maybe", "other_80c": "null"})
     assert out.model_dump(exclude_none=True) == {"age": 40}
+
+
+def test_saving_candidates_respect_caps_and_capacity():
+    inputs = {"deductions_80c": 130_000, "nps_80ccd1b": 0, "deductions_80d": 12_000, "deductions_80d_parents": 0,
+              "age": "below60", "parents_senior": False}
+    facts = UserFacts(extra_80c_possible=110_000, extra_nps_possible=50_000, extra_80d_possible=13_000,
+                      extra_80d_parents_possible=60_000, parents_senior=True)
+    c = {x["field"]: x for x in F.saving_candidates(inputs, facts)}
+    assert c["deductions_80c"]["extra_investment"] == 20_000          # only up to the ₹1.5 lakh cap
+    assert c["nps_80ccd1b"]["extra_investment"] == 50_000
+    assert c["deductions_80d"]["extra_investment"] == 13_000          # 25k cap for below 60
+    assert c["deductions_80d_parents"]["extra_investment"] == 50_000  # senior parents: 50k cap, not 60k
+    assert c["combined"]["extra_investment"] == 133_000
+    assert F.saving_candidates(inputs, UserFacts()) == []              # no capacity, no options
+
+
+def test_verified_texts_written_back():
+    state = {"documents_report": {"report": {"summary": "s", "findings": [{"code": "x", "explanation": "e", "action": "a"}]}},
+             "regime": {"explanation": "old"}, "savings": {"summary": "S", "recommendations": [{"explanation": "r"}]},
+             "itr": {"reasons": ["a", "b"]}}
+    texts = G.collect_texts(state)
+    assert set(texts) == {"documents.summary", "documents.findings.0.explanation", "documents.findings.0.action",
+                          "regime.text", "savings.summary", "savings.recommendations.0.explanation", "itr.reasons"}
+    upd = G.apply_texts(state, {"regime.text": "new", "documents.findings.0.explanation": "E2", "itr.reasons": "fixed"})
+    assert upd["regime"]["explanation"] == "new" and upd["documents_report"]["report"]["findings"][0]["explanation"] == "E2"
+    assert upd["itr"]["reasons"] == ["fixed"] and state["regime"]["explanation"] == "old"   # original untouched
+
+
+def test_verifier_revises_then_drops_unsupported(monkeypatch):
+    from src.agents import verifier as V
+    from src.tools.registry import TaskContext
+    ctx = TaskContext(retrieval_config="B1")
+    from pathlib import Path
+    from src.ingest.ingest import load_all
+    from src.pipeline import Taxot
+    ctx._pipeline = Taxot(chunks=load_all(Path(__file__).parent / "fixtures" / "kb", None), use_llm=False)
+    text = "Your tax is ₹97,500. Section 80C allows up to ₹2,50,000."
+    script = iter([
+        _call("ClaimList", {"claims": [{"key": "d", "text": "Your tax is ₹97,500.", "kind": "user_figure"},
+                                       {"key": "d", "text": "Section 80C allows up to ₹2,50,000.", "kind": "law"}]}),
+        _call("Verdicts", {"verdicts": [{"claim_id": 1, "verdict": "supported"}, {"claim_id": 2, "verdict": "contradicted"}]}),
+        _call("Revisions", {"texts": [{"key": "d", "text": "Your tax is ₹97,500. Section 80C allows up to ₹1,50,000."}]}),
+        _call("ClaimList", {"claims": [{"key": "d", "text": "Section 80C allows up to ₹1,50,000.", "kind": "law"}]}),
+        # judge wrongly says supported, but ₹1,50,000 is not in the (fixture) evidence -> deterministic check fails it
+        _call("Verdicts", {"verdicts": [{"claim_id": 1, "verdict": "supported"}]}),
+        _call("Revisions", {"texts": [{"key": "d", "text": "Your tax is ₹97,500. Section 80C allows up to ₹1,50,000."}]}),
+        _call("ClaimList", {"claims": [{"key": "d", "text": "Section 80C allows up to ₹1,50,000.", "kind": "law"}]}),
+        _call("Verdicts", {"verdicts": [{"claim_id": 1, "verdict": "unsupported"}]}),
+    ])
+    monkeypatch.setattr(V.prov, "chat", lambda *a, **k: next(script))
+    monkeypatch.setattr(V, "_evidence", lambda claims, ctx, rc: {"P1": {"id": "P1", "title": "t", "text": "80C limit", "effective": ""}})
+    out = V.verify({"d": text}, {"tax": 97_500}, ctx)
+    assert out["report"]["summary"]["initially_failing"] == 1 and out["report"]["rounds"] == 2
+    assert "2,50,000" not in out["texts"]["d"] and "1,50,000" not in out["texts"]["d"]   # unresolved sentence dropped
+    assert out["texts"]["d"].startswith("Your tax is ₹97,500.") and V.UNVERIFIED_NOTE.strip() in out["texts"]["d"]
+
+
+def test_sections_in_claims():
+    from src.agents.verifier import sections_in
+    assert sections_in("80C ₹1.5 lakh; 80CCD(1B); u/s 194A; 10(13A); 44ADA; FY 2025-26; 12 lakh") == \
+        {"80C", "80CCD(1B)", "194A", "10(13A)", "44ADA"}
+
+
+def test_numbers_in_structures_keep_rupee_amounts():
+    from src.agents.verifier import numbers_in
+    got = numbers_in(["Section 80C allows ₹1.5 lakh; standard deduction ₹75,000"])
+    assert {150000, 75000} <= got and 975000 not in got
+
+
+def test_verifier_rechecks_only_revised_texts_and_replaces_single_sentence(monkeypatch):
+    from src.agents import verifier as V
+    from src.tools.registry import TaskContext
+    ctx = TaskContext()
+    seen_bodies = []
+
+    def chat(messages, **k):
+        tool = k["tool_choice"]
+        body = messages[-1]["content"] if isinstance(messages[-1], dict) else messages[-1].content
+        if tool == "ClaimList":
+            seen_bodies.append(body)
+            if "[good]" in body:
+                return _call("ClaimList", {"claims": [{"key": "good", "text": "Tax is ₹97,500.", "kind": "user figure"},
+                                                      {"key": "bad", "text": "FD interest is tax-free.", "kind": "LAW"}]})
+            return _call("ClaimList", {"claims": [{"key": "bad", "text": "FD interest is tax-free.", "kind": "law"}]})
+        if tool == "Verdicts":
+            ids = [int(line.split(".")[0]) for line in body.split("PASSAGES")[0].splitlines()[1:] if line[:1].isdigit()]
+            return _call("Verdicts", {"verdicts": [{"claim_id": i, "verdict": "supported" if i == 1 and len(ids) == 2
+                                                    else "contradicted"} for i in ids]})
+        return _call("Revisions", {"texts": [{"key": "bad", "text": "FD interest is tax-free."}]})  # reviser fails
+    monkeypatch.setattr(V.prov, "chat", chat)
+    monkeypatch.setattr(V, "_evidence", lambda c, ctx, rc: {})
+    out = V.verify({"good": "Tax is ₹97,500.", "bad": "FD interest is tax-free."}, {"tax": 97_500}, ctx)
+    assert "[good]" in seen_bodies[0] and all("[good]" not in b for b in seen_bodies[1:])   # good text not re-checked
+    assert out["texts"]["good"] == "Tax is ₹97,500."                                          # and left untouched
+    assert "tax-free" not in out["texts"]["bad"] and V.REPLACEMENT in out["texts"]["bad"]
+
+
+def test_facts_parser_uses_schema_of_asked_fields_only(monkeypatch):
+    seen = {}
+
+    def chat(messages, tools=None, **k):
+        seen["fields"] = set(tools[0].model_fields)
+        return _call("FactsAnswer", {"rent_monthly": 35000, "extra_nps_possible": "50000", "age": "None"})
+    monkeypatch.setattr(G.prov, "chat", chat)
+    out = G.parse_facts_answer({"text": "rent 35k, can add 50k NPS"}, ["rent_monthly", "extra_nps_possible", "age"],
+                               G.register_task("y")[0])
+    assert seen["fields"] == {"rent_monthly", "extra_nps_possible", "age"}
+    assert out == {"rent_monthly": 35000, "extra_nps_possible": 50000}
+
+
+def test_percentages_checked_against_evidence():
+    from src.agents.verifier import percents_in
+    assert percents_in("50% of gross receipts; 4 per cent cess; 12.5 percent") == {50.0, 4.0, 12.5}
+
+
+def test_dependent_questions_asked_up_front():
+    ctx = G.register_task("deps")[0]
+    need = G.missing_facts({"facts": {}, "workflow": "tax_saving"}, ctx)
+    assert {"rent_monthly", "basic_monthly", "hra_monthly", "metro_city", "parents_senior",
+            "extra_80d_parents_possible"} <= set(need)
+    need = G.missing_facts({"facts": {"rent_monthly": 0, "extra_80d_parents_possible": 0, "health_80d": 0},
+                            "workflow": "tax_saving"}, ctx)
+    assert not {"basic_monthly", "hra_monthly", "metro_city", "parents_senior"} & set(need)

@@ -118,7 +118,10 @@ def calculator_agent(toolbox: ToolBox, inputs: dict, tax_year: str) -> dict:
         out["explanation"] = res["headline"] + " " + " ".join(res["notes"][:2])
     out.update({"old_total": res["old"]["total"], "new_total": res["new"]["total"], "saving": res["saving"],
                 "headline": res["headline"], "law": res["law"], "notes": res["notes"],
-                "old_taxable": res["old"]["taxable"], "new_taxable": res["new"]["taxable"]})
+                "old_taxable": res["old"]["taxable"], "new_taxable": res["new"]["taxable"],
+                "breakdown": {r: {k: res[r][k] for k in ("gross", "other_income", "std_deduction", "deductions",
+                                                          "deduction_breakdown", "taxable", "slab_tax", "rebate",
+                                                          "surcharge", "cess", "total")} for r in ("old", "new")}})
     out["agent"] = _agent_meta(run, toolbox, "calculate_tax", inputs, corrected)
     return out
 
@@ -146,3 +149,71 @@ def _args_match(got, want) -> bool:
         except (TypeError, ValueError):
             return False
     return got == want
+
+
+# ------------------------------------------------------------------ savings agent (Workflow 3)
+class Recommendation(BaseModel):
+    label: str = Field(..., description="The option label exactly as given")
+    explanation: str = Field(..., description="1-2 sentences: what to do and why it saves tax, citing the section")
+
+
+class SavingsPlan(BaseModel):
+    """Submit the ranked tax-saving plan."""
+    summary: str = Field(..., description="2-3 sentences: the best option, the saving, and the regime to choose")
+    recommendations: list[Recommendation] = Field(default_factory=list,
+                                                  description="Options that save tax, best first")
+
+
+def savings_agent(toolbox: ToolBox, inputs: dict, candidates: list[dict], tax_year: str) -> dict:
+    """Runs the what-ifs through calculate_tax and explains them. Savings numbers always come from the calculator."""
+    from src.tools.calculate_tax import CalculateTaxArgs, calculate_tax
+    what_if = [{"label": c["label"], "changes": c["changes"]} for c in candidates]
+    system = f"""You are Taxot's tax-saving agent for FY {tax_year}. Find the legal options that reduce this person's tax.
+1. Call calculate_tax ONCE with the prepared inputs and the prepared what_if list.
+2. Finish with SavingsPlan: rank options by rupee saving (best first), only options that actually save tax,
+   using the calculator's numbers. If nothing saves tax, say so honestly and return no recommendations.
+Remember the new regime allows none of these deductions, so an option only helps if it makes the old regime
+cheaper than the new one.
+{COMMON_RULES}"""
+    user = ("Prepared calculate_tax inputs:\n" + json.dumps(inputs, indent=1)
+            + "\n\nPrepared what_if list:\n" + json.dumps(what_if, indent=1))
+    run = run_agent("savings_agent", system, user, toolbox, ["calculate_tax"], SavingsPlan, max_steps=5)
+    truth = calculate_tax(CalculateTaxArgs(**inputs, what_if=what_if)) if what_if else calculate_tax(CalculateTaxArgs(**inputs))
+    base_best = min(truth["old_regime"]["total_tax"], truth["new_regime"]["total_tax"])
+    rows = [r for r in truth.get("what_if", []) if "error" not in r]
+    by_label = {c["label"]: c for c in candidates}
+    options = [{"label": r["label"], "extra_investment": by_label[r["label"]]["extra_investment"],
+                "changes": r["changes"], "saving": r["saving_vs_base"], "tax_after": r["best_total"],
+                "regime_after": r["best_regime"]} for r in rows]
+    options.sort(key=lambda o: (-o["saving"], o["extra_investment"]))
+    helpful = [o for o in options if o["saving"] > 0]
+    plan = dict(run.final or {"summary": "", "recommendations": []})
+    texts = {r["label"]: r["explanation"] for r in plan.get("recommendations", []) if r.get("label") in by_label}
+    agent_labels = [r["label"] for r in plan.get("recommendations", [])]
+    best_agent = agent_labels[0] if agent_labels else None
+    corrected = (best_agent != (helpful[0]["label"] if helpful else None)) or any(l not in by_label for l in agent_labels)
+    recs = [{**o, "explanation": texts.get(o["label"], "")} for o in helpful]
+    return {"base_tax": base_best, "base_regime": truth["better_regime"], "options": options,
+            "recommendations": recs, "best_option": helpful[0]["label"] if helpful else None,
+            "max_saving": helpful[0]["saving"] if helpful else 0, "summary": plan.get("summary", ""),
+            "agent": _agent_meta(run, toolbox, "calculate_tax", inputs, corrected)}
+
+
+# ------------------------------------------------------------------ escalation agent
+class CASummaryDone(BaseModel):
+    """Finish after write_ca_summary succeeded."""
+    note: str = Field("", description="One sentence for the user on why a CA is needed")
+
+
+def escalation_agent(toolbox: ToolBox, case: dict, tax_year: str) -> dict:
+    system = f"""You are Taxot's escalation agent. This case is too complex for Taxot to finish (reasons given).
+Write a clear case summary for a Chartered Accountant so the CA visit is short and cheap.
+1. Call write_ca_summary once, using the case data: reason, a profile WITHOUT names/PAN/Aadhaar, key
+   figures, the document findings, what Taxot already checked (with passage ids), and specific open
+   questions the CA must answer.
+2. Finish with CASummaryDone.
+{COMMON_RULES}"""
+    run = run_agent("escalation_agent", system, "Case data:\n" + json.dumps(case, indent=1, default=str), toolbox,
+                    ["write_ca_summary"], CASummaryDone, max_steps=4)
+    return {"note": (run.final or {}).get("note", ""),
+            "agent": _agent_meta(run, toolbox, "write_ca_summary", None, False)}
