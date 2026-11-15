@@ -32,6 +32,16 @@ class CASummaryArgs(BaseModel):
     documents_reviewed: list[str] = Field(default_factory=list)
 
 
+ACRONYMS = {"tds": "TDS", "hra": "HRA", "nps": "NPS", "gst": "GST", "pf": "PF", "epf": "EPF", "fd": "FD", "ltcg": "LTCG",
+            "stcg": "STCG", "80c": "80C", "80d": "80D", "itr": "ITR", "ais": "AIS"}
+
+
+def _label(key: str) -> str:
+    words = key.replace("_", " ").split()
+    text = " ".join(ACRONYMS.get(w.lower(), w) for w in words)
+    return (text[:1].upper() + text[1:]) if text else key
+
+
 def write_ca_summary(args: CASummaryArgs, ctx=None) -> dict:
     a = args
     lines = [f"# Case summary for your Chartered Accountant — FY {a.tax_year}", "",
@@ -41,7 +51,7 @@ def write_ca_summary(args: CASummaryArgs, ctx=None) -> dict:
         lines += ["## Documents reviewed", *[f"- {d}" for d in a.documents_reviewed], ""]
     if a.figures:
         lines += ["## Key figures", "| Item | Amount |", "|---|---|",
-                  *[f"| {k.replace('_', ' ').capitalize()} | {format_inr(v)} |" for k, v in a.figures.items()], ""]
+                  *[f"| {_label(k)} | {format_inr(v)} |" for k, v in a.figures.items()], ""]
     if a.findings:
         lines += ["## Findings", *[f"- {f}" for f in a.findings], ""]
     if a.already_checked:

@@ -1275,7 +1275,7 @@ button.cite-calc:hover { background: var(--ink); color: #fff; }
   .nav-tools { margin-left: 2px; padding-left: 6px; border-left: 1px solid var(--line-2); }
   .tabs {
     position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); height: var(--tabbar-h);
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; padding: 6px; border-radius: 24px; pointer-events: auto;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; padding: 6px; border-radius: 24px; pointer-events: auto;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07), 0 16px 40px -12px rgba(15, 40, 38, 0.3);
   }
   .tabs::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: rgba(255, 255, 255, 0.82); -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px); }
@@ -1286,6 +1286,8 @@ button.cite-calc:hover { background: var(--ink); color: #fff; }
   .tab-label { max-width: none !important; opacity: 1 !important; }
   .tab:last-of-type .tab-label { font-size: 0; }
   .tab:last-of-type .tab-label::after { content: "How"; font-size: 11px; }
+  .tab[data-view="calculator"] .tab-label { font-size: 0; }
+  .tab[data-view="calculator"] .tab-label::after { content: "Calc"; font-size: 11px; }
   .mode-banner { padding-top: 6px; }
   .mb-long { display: none; }
   .toast { bottom: calc(var(--tabbar-h) + 22px + env(safe-area-inset-bottom)); }

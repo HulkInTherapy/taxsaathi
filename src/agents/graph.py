@@ -182,7 +182,8 @@ def documents_node(state: TaskState, config: RunnableConfig) -> dict:
     slim = {"report": rep, "totals": (out["cross_check"] or {}).get("totals"),
             "agent": {k: out["agent"][k] for k in ("stopped", "missed_findings", "invented_findings", "ms")}}
     return {"documents_report": slim, "plan": _done(state, "documents"),
-            "trace": [_tr("documents", f"{len(ctx.extracted)} documents parsed; findings {codes or 'none'}", t0)]}
+            "trace": [_tr("documents", f"{len(ctx.extracted)} document{'s' if len(ctx.extracted) != 1 else ''} read; "
+                                       f"findings {codes or 'none'}", t0)]}
 
 
 # ------------------------------------------------------------------ facts
@@ -249,9 +250,9 @@ def facts_question(need: list[str]) -> dict:
         f = UserFacts.model_fields[k]
         fields.append({"name": k, "type": str(f.annotation).replace("typing.", "").replace("Optional", ""),
                        "description": f.description or k.replace("_", " ")})
-    return {"type": "ask_user", "kind": "missing_info", "question":
-            "A few details I need that are not in your documents. Answer in your own words, or fill in the fields "
-            "(say 0 or 'no' where something does not apply).", "fields": fields}
+    return {"type": "ask_user", "kind": "missing_info", "question": "A few details that aren't in your documents",
+            "hint": "Answer in your own words, or fill in the fields. Say 0 or no where something doesn't apply.",
+            "fields": fields}
 
 
 def ask_facts_node(state: TaskState, config: RunnableConfig) -> dict:

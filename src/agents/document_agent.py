@@ -71,6 +71,27 @@ def run_document_agent(ctx: TaskContext, tax_year: str = "2025-26", user_note: s
     return finalize(run, ctx, toolbox)
 
 
+# Titles and default actions for findings the deterministic cross-check delivers itself (when the
+# agent leaves one out, or could not finish because the LLM providers were unavailable).
+FINDING_TEXT = {
+    "interest_not_in_form16": ("Interest missing from Form 16",
+                               "Add this interest to your return under 'Income from other sources' and claim the TDS "
+                               "shown on the certificate."),
+    "slips_total_mismatch": ("Salary slips don't add up to Form 16",
+                             "Check for a bonus, arrears or a missing slip, and ask HR which figure is right before filing."),
+    "form16_tds_inconsistent": ("TDS deducted but not all deposited",
+                                "Compare Part A with your Form 26AS and ask your employer to deposit or correct the difference."),
+    "deduction_over_cap": ("Deduction above the legal limit",
+                           "Claim only up to the limit in your return; expect some extra tax to pay."),
+    "pan_mismatch": ("PAN differs between documents",
+                     "Ask the issuer to correct the PAN so the TDS is credited to you."),
+    "multiple_employers": ("Two employers in one year",
+                           "Combine both salaries in your return, claim the standard deduction once and pay any shortfall."),
+    "injection_detected": ("A document tried to give the AI instructions",
+                           "The text was ignored. Make sure the document really comes from its issuer."),
+}
+
+
 def finalize(run: AgentRun, ctx: TaskContext, toolbox: ToolBox) -> dict:
     """Merge the agent's report with the deterministic findings (safety net) and package the result."""
     report = dict(run.final or {"summary": "", "documents_checked": [], "findings": [], "all_clear": False})
@@ -83,14 +104,19 @@ def finalize(run: AgentRun, ctx: TaskContext, toolbox: ToolBox) -> dict:
     for f in det:
         if f["code"] not in reported_codes:
             missed.append(f["code"])
-            report["findings"].append({"code": f["code"], "title": f["code"].replace("_", " ").capitalize(),
-                                       "explanation": f["message"], "action": "", "amount": f.get("amount"),
+            title, action = FINDING_TEXT.get(f["code"], (f["code"].replace("_", " ").capitalize(), ""))
+            report["findings"].append({"code": f["code"], "title": title, "explanation": f["message"],
+                                       "action": action, "amount": f.get("amount"),
                                        "citations": [], "added_by": "cross_check"})
     det_codes = {f["code"] for f in det}
     invented = [c for c in reported_codes if c not in det_codes]
     # nothing unverified reaches the user: findings not backed by the cross-check are dropped
     report["findings"] = [f for f in report["findings"] if f["code"] in det_codes]
     report["all_clear"] = not report["findings"]
+    if not report.get("summary") and run.stopped == "error":
+        report["summary"] = ("The AI models were busy, so these findings come straight from Taxot's exact document "
+                             "checks without the extra explanation.") if report["findings"] else \
+            "Your documents are consistent with each other: no mismatches were found."
     return {
         "report": report,
         "cross_check": cc,

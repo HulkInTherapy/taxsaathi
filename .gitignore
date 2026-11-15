@@ -6,3 +6,4 @@ setup.log
 *.pyc
 .env
 data/processed/chroma/
+.playwright-mcp/

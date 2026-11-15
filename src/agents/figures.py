@@ -238,11 +238,20 @@ def build_checklist(state: dict) -> dict:
         items.append({"item": f"Report interest under income from other sources: {format_inr(inp['other_income'])}",
                       "detail": "Include every bank's savings and FD interest, even if TDS was deducted."})
     if chosen == "old":
-        for key, label in [("deductions_80c", "80C"), ("deductions_80d", "80D"), ("deductions_80d_parents", "80D (parents)"),
-                           ("nps_80ccd1b", "80CCD(1B)"), ("home_loan_interest", "24(b) home-loan interest"),
-                           ("hra_exemption", "HRA exemption 10(13A)"), ("other_deductions", "80TTA/80TTB")]:
-            if inp.get(key):
-                items.append({"item": f"Claim {label}: {format_inr(inp[key])}", "detail": "Keep the proofs."})
+        # Claim what the calculator allowed (each deduction capped at its legal limit), not what was invested.
+        allowed = ((reg.get("breakdown") or {}).get("old") or {}).get("deduction_breakdown") or {}
+        for key, calc_key, label in [("deductions_80c", "80c", "80C"), ("deductions_80d", "80d", "80D"),
+                                     ("deductions_80d_parents", "80d_parents", "80D (parents)"),
+                                     ("nps_80ccd1b", "80ccd1b", "80CCD(1B)"),
+                                     ("home_loan_interest", "home_loan_interest", "24(b) home-loan interest"),
+                                     ("hra_exemption", "hra_exemption", "HRA exemption 10(13A)"),
+                                     ("other_deductions", "other", "80TTA/80TTB")]:
+            claim = allowed.get(calc_key, inp.get(key) or 0)
+            if claim:
+                capped = inp.get(key) and claim < inp[key]
+                items.append({"item": f"Claim {label}: {format_inr(claim)}",
+                              "detail": (f"You invested {format_inr(inp[key])}; the law allows {format_inr(claim)}. "
+                                         if capped else "") + "Keep the proofs."})
     if tds:
         items.append({"item": f"Check TDS credit of {format_inr(tds)} in Form 26AS/AIS", "detail":
                       "Salary TDS (Part A) and TDS on interest must appear against your PAN."})

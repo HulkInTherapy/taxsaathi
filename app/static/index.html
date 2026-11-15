@@ -9,7 +9,8 @@
   <meta name="color-scheme" content="light" />
   <link rel="preload" href="fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=7c" />
+  <link rel="stylesheet" href="agent.css?v=7c" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -24,6 +25,7 @@
       <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
         <span class="tab-ind" aria-hidden="true"></span>
         <button class="tab" role="tab" data-view="ask" id="tab-ask" aria-controls="view-ask"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8 8 0 0 1-11.9 7L4 19.8l1.3-4.3A8 8 0 1 1 20.5 11.5Z"/></svg><span class="tab-label">Ask</span></button>
+        <button class="tab" role="tab" data-view="tasks" id="tab-tasks" aria-controls="view-tasks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><path d="m3.5 6.5 1.2 1.2 2.3-2.4M3.5 12l1.2 1.2 2.3-2.4M3.5 17.5l1.2 1.2 2.3-2.4"/></svg><span class="tab-label">Tasks</span></button>
         <button class="tab" role="tab" data-view="compare" id="tab-compare" aria-controls="view-compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.5 20.5h9M5 7.5h14M5 7.5l-2.6 6.2a3 3 0 0 0 5.2 0zM19 7.5l-2.6 6.2a3 3 0 0 0 5.2 0z"/></svg><span class="tab-label">Compare</span></button>
         <button class="tab" role="tab" data-view="calculator" id="tab-calculator" aria-controls="view-calculator"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="2.5" width="15" height="19" rx="3"/><path d="M8.5 7h7M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15v2.5M8.5 18h.01M12 18h.01"/></svg><span class="tab-label">Calculator</span></button>
         <button class="tab" role="tab" data-view="experiments" id="tab-experiments" aria-controls="view-experiments"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5h16M7 16.5v-4M12 16.5v-9M17 16.5V10"/></svg><span class="tab-label">Results</span></button>
@@ -108,6 +110,15 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- ============================= TASKS ============================= -->
+    <section class="view page tk-page" id="view-tasks" role="tabpanel" aria-labelledby="tab-tasks" hidden>
+      <header class="page-head center" id="tkHead">
+        <h1 class="page-title">Let Taxot do the work</h1>
+        <p class="page-sub">Upload your documents. Agents check them, prepare your return or find savings, and every claim is checked against the law. You approve each key step.</p>
+      </header>
+      <div id="tasksBody"></div>
     </section>
 
     <!-- ============================ COMPARE ============================ -->
@@ -233,5 +244,6 @@
   <script src="mock.js" defer></script>
   <script src="app.js" defer></script>
   <script src="views.js" defer></script>
+  <script src="agent.js?v=7c" defer></script>
 </body>
 </html>

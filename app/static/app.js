@@ -346,7 +346,7 @@
   /* ================================================================== */
   /* Router                                                              */
   /* ================================================================== */
-  var VIEWS = ["ask", "compare", "calculator", "experiments", "how"];
+  var VIEWS = ["ask", "tasks", "compare", "calculator", "experiments", "how"];
   var viewHooks = {};
   TS.onView = function (name, fn) { viewHooks[name] = fn; };
   function showView(name) {

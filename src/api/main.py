@@ -107,7 +107,9 @@ def _warm() -> None:
 # ---------------------------------------------------------------- endpoints
 @app.get("/health")
 def health():
+    from src.llm.provider import provider_order
     return {"status": "ok", "llm": config.LLM_MODEL, "llm_available": is_available(),
+            "agent_providers": provider_order(role="planner"),
             "chunks": len(get_pipeline().chunks), "today": config.TODAY.isoformat(),
             "rerank_threshold": config.rerank_threshold()}
 
@@ -178,6 +180,12 @@ def feedback(req: FeedbackRequest):
 @app.get("/configs")
 def configs():
     return {k: v["description"] for k, v in CONFIGS.items()}
+
+
+# Agentic tasks (Workflows 1-3): see src/api/agent_routes.py
+from src.api.agent_routes import router as agent_router  # noqa: E402
+
+app.include_router(agent_router)
 
 
 @app.exception_handler(Exception)

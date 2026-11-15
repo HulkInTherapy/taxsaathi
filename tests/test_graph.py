@@ -290,3 +290,15 @@ def test_dependent_questions_asked_up_front():
     need = G.missing_facts({"facts": {"rent_monthly": 0, "extra_80d_parents_possible": 0, "health_80d": 0},
                             "workflow": "tax_saving"}, ctx)
     assert not {"basic_monthly", "hra_monthly", "metro_city", "parents_senior"} & set(need)
+
+
+def test_checklist_claims_capped_deductions():
+    from src.calculator.tax import calculate
+    inputs = {"gross_salary": 1_380_000, "deductions_80c": 232_800, "deductions_80d": 25_000, "hra_exemption": 345_000,
+              "age": "below60", "tax_year": "2025-26"}
+    res = calculate(inputs)
+    state = {"tax_year": "2025-26", "figures": {"inputs": inputs, "tds": {"credited": 0}}, "itr": {"form": "ITR-1"},
+             "regime": {"recommended_regime": "old", "old_total": res["old"]["total"], "new_total": res["new"]["total"],
+                        "breakdown": {"old": {"deduction_breakdown": res["old"]["deduction_breakdown"]}}}}
+    items = [i["item"] for i in F.build_checklist(state)["items"]]
+    assert "Claim 80C: ₹1,50,000" in items and not any("2,32,800" in i for i in items)
