@@ -64,4 +64,5 @@ def write_ca_summary(args: CASummaryArgs, ctx=None) -> dict:
     markdown = "\n".join(lines)
     if ctx is not None:
         ctx.outputs["ca_summary"] = markdown
+        ctx.outputs["ca_summary_args"] = a.model_dump()
     return {"markdown": markdown, "summary": a.model_dump(), "sections": sum(1 for x in lines if x.startswith("## "))}

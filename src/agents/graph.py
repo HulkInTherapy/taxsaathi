@@ -355,15 +355,28 @@ def escalation_node(state: TaskState, config: RunnableConfig) -> dict:
             "suggested_open_questions": _open_questions(reasons),
             "documents": [d["filename"] for d in ctx.documents.list()], "user_facts": state.get("facts")}
     ctx.outputs.pop("ca_summary", None)
+    ctx.outputs.pop("ca_summary_args", None)
     agent = escalation_agent(tb, case, state.get("tax_year", "2025-26"))
-    if ctx.outputs.get("ca_summary"):
+    note = "Taxot can't safely finish this case: " + "; ".join(F.REASON_TEXT.get(r, r) for r in reasons) + "."
+    drafted = ctx.outputs.get("ca_summary_args")
+    if drafted:
+        # The agent drafts findings and open questions; the facts that must be exact are set deterministically:
+        # why a CA is needed (escalation rules), the profile (collected facts) and the figures (calculator inputs).
+        drafted.update(reason_for_escalation="; ".join(F.REASON_TEXT.get(r, r) for r in reasons).capitalize() + ".",
+                       taxpayer_profile=_profile(facts, inp, reasons),
+                       figures={k: v for k, v in {"gross_salary_or_receipts": inp["gross_salary"],
+                                                  "interest": inp["other_income"],
+                                                  "tds_credited": state["figures"]["tds"]["credited"],
+                                                  "deductions_80c": inp["deductions_80c"]}.items() if v},
+                       open_questions=list(dict.fromkeys(_open_questions(reasons) + (drafted.get("open_questions") or []))))
+        md = write_ca_summary(CASummaryArgs(**drafted), ctx)["markdown"]
         plan = _skip(_done(state, "escalation"), {"gst", "regime", "checklist", "savings"}, "escalated to a CA")
-        return {"escalation": {"escalate": True, "reasons": reasons, "ca_summary": ctx.outputs["ca_summary"],
-                               "note": agent["note"], "agent": agent["agent"]}, "plan": plan,
-                "trace": [_tr("escalation", f"escalate: {reasons} (CA summary by agent)", t0)]}
+        return {"escalation": {"escalate": True, "reasons": reasons, "ca_summary": md, "note": note,
+                               "agent": agent["agent"]}, "plan": plan,
+                "trace": [_tr("escalation", f"escalate: {reasons} (CA summary drafted by agent)", t0)]}
     summary = write_ca_summary(CASummaryArgs(
         reason_for_escalation="; ".join(F.REASON_TEXT.get(r, r) for r in reasons).capitalize() + ".",
-        taxpayer_profile=_profile(facts, inp), tax_year=state.get("tax_year", "2025-26"),
+        taxpayer_profile=_profile(facts, inp, reasons), tax_year=state.get("tax_year", "2025-26"),
         figures={k: v for k, v in {"gross_salary_or_receipts": inp["gross_salary"], "interest": inp["other_income"],
                                    "tds_credited": state["figures"]["tds"]["credited"],
                                    "deductions_80c": inp["deductions_80c"]}.items() if v},
@@ -373,14 +386,24 @@ def escalation_node(state: TaskState, config: RunnableConfig) -> dict:
         open_questions=_open_questions(reasons),
         documents_reviewed=[d["filename"] for d in ctx.documents.list()]), ctx)
     plan = _skip(_done(state, "escalation"), {"gst", "regime", "checklist", "savings"}, "escalated to a CA")
-    return {"escalation": {"escalate": True, "reasons": reasons, "ca_summary": summary["markdown"],
+    return {"escalation": {"escalate": True, "reasons": reasons, "ca_summary": summary["markdown"], "note": note,
                            "agent": agent["agent"]}, "plan": plan,
             "trace": [_tr("escalation", f"escalate: {reasons} (agent failed; deterministic summary)", t0)]}
 
 
-def _profile(f: UserFacts, inp: dict) -> str:
+PROFILE_FACTS = [("short_term_capital_gains", "short-term capital gains"), ("other_capital_gains",
+                 "capital gains on property or other assets"), ("foreign_assets_or_income", "foreign assets or income"),
+                 ("company_director", "company director"), ("unlisted_shares", "holds unlisted shares"),
+                 ("fno_trading", "F&O trading"), ("losses_to_carry_forward", "losses to carry forward")]
+
+
+def _profile(f: UserFacts, inp: dict, reasons: list[str] | None = None) -> str:
+    """Built only from collected facts, so it can't claim anything the user didn't say."""
     bits = [f"age {f.age}" if f.age else "age not given", f.residential_status or "resident",
             "salaried" if inp.get("salaried") else "self-employed / freelancer"]
+    bits += [label for key, label in PROFILE_FACTS if getattr(f, key)]
+    if (f.ltcg_112a or 0) > 0:
+        bits.append(f"LTCG u/s 112A of {F.format_inr(f.ltcg_112a)}")
     return ", ".join(bits)
 
 
@@ -467,8 +490,8 @@ def collect_texts(state: TaskState) -> dict[str, str]:
             t[f"documents.findings.{i}.action"] = f.get("action", "")
     if (state.get("itr") or {}).get("reasons"):
         t["itr.reasons"] = " ".join(state["itr"]["reasons"])
-    for k in ("gst", "regime", "escalation"):
-        v = (state.get(k) or {}).get("note" if k == "escalation" else "explanation")
+    for k in ("gst", "regime"):   # the escalation note is deterministic, nothing to verify
+        v = (state.get(k) or {}).get("explanation")
         if v:
             t[f"{k}.text"] = v
     sav = state.get("savings") or {}
