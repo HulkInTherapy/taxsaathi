@@ -7,3 +7,4 @@ setup.log
 .env
 data/processed/chroma/
 .playwright-mcp/
+app/static/_blog_*

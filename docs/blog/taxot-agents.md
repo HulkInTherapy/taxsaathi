@@ -112,7 +112,7 @@ The verifier is the most satisfying part of the system. Before anything reaches 
 
 To test it, I wrote 20 drafts, each with one false claim slipped in among true ones — an 80C limit of ₹2.5 lakh, GST slabs of 8% and 16%, a TDS threshold of ₹10,000, the new Act starting in 2027. Across four runs it caught **90–100%** of them (the target was 90%), and usually didn't just delete them — it *corrected* them: ₹2.5 lakh became ₹1.5 lakh, 8% and 16% became 5% and 18%.
 
-But the first runs had an embarrassing problem: it also flagged **half of the perfectly true drafts**. The model wasn't the culprit. My deterministic amount check was. I serialised the evidence to JSON with Python's default ASCII escaping, so `₹75,000` became `₹75,000` — and my number extractor read that as **975,000**. Every correct amount looked unsupported. One flag (`ensure_ascii=False`) later, false alarms dropped from 50% to 10%.
+But the first runs had an embarrassing problem: it also flagged **half of the perfectly true drafts**. The model wasn't the culprit. My deterministic amount check was. I serialised the evidence to JSON with Python's default ASCII escaping, so `₹75,000` became `\u20b975,000` — and my number extractor read that as **975,000**. Every correct amount looked unsupported. One flag (`ensure_ascii=False`) later, false alarms dropped from 50% to 10%.
 
 The lesson: when an LLM system misbehaves, check your own plumbing before blaming the model.
 
