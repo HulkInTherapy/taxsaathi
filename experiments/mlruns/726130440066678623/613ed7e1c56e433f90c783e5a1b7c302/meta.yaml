@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/ritesh/Dev/taxsaathi/experiments/mlruns/726130440066678623/613ed7e1c56e433f90c783e5a1b7c302/artifacts
+end_time: 1795642937789
+entry_point_name: ''
+experiment_id: '726130440066678623'
+lifecycle_stage: active
+run_id: 613ed7e1c56e433f90c783e5a1b7c302
+run_name: NLP pipeline, one question per sub-task
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795642937777
+status: 3
+tags: []
+user_id: ritesh

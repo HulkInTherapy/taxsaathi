@@ -8,13 +8,17 @@
   "amounts_exact": 1.0,
   "escalation_accuracy": 1.0,
   "gst_accuracy": 1.0,
+  "savings_accuracy": null,
+  "verifier_claims_checked": 162,
+  "verifier_initially_failing": 29,
+  "verifier_unresolved": 15,
   "key_tool_args_correct": 1.0,
   "agent_answers_corrected": 0.0,
   "budget_respected": 1.0,
-  "avg_tool_calls": 5.4,
-  "avg_llm_calls": 11.7,
-  "avg_tokens": 35425,
-  "median_seconds": 67.7
+  "avg_tool_calls": 6,
+  "avg_llm_calls": 20.8,
+  "avg_tokens": 65268,
+  "median_seconds": 264.9
  },
  "rows": [
   {
@@ -41,7 +45,7 @@
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 12222,
+     "ms": 15194,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -53,7 +57,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 6692,
+     "ms": 7212,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -63,18 +67,18 @@
     }
    },
    "cost": {
-    "llm_calls": 12,
-    "input_tokens": 30983,
-    "output_tokens": 5013,
-    "seconds": 91.8,
+    "llm_calls": 18,
+    "input_tokens": 49272,
+    "output_tokens": 12156,
+    "seconds": 306.9,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings ['injection_detected']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 document read; findings ['injection_detected']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹9,60,000",
     "approve_figures: approved",
@@ -82,6 +86,7 @@
     "escalation: not needed",
     "regime: new (old ₹86,299, new ₹0)",
     "approve_regime: approved new",
+    "verify: 5 claims; 2 failed, 0 texts revised, 0 unresolved",
     "checklist: 5 items",
     "approve_checklist: approved",
     "finalize: done; 6/15 tool calls"
@@ -97,6 +102,14 @@
      86299,
      0
     ]
+   },
+   "verification": {
+    "claims_checked": 5,
+    "initially_failing": 2,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -118,13 +131,13 @@
     "checklist"
    ],
    "questions": 1,
-   "tool_calls": 6,
+   "tool_calls": 7,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 14237,
+     "ms": 8502,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -136,7 +149,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 4973,
+     "ms": 10640,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -146,18 +159,18 @@
     }
    },
    "cost": {
-    "llm_calls": 12,
-    "input_tokens": 32499,
-    "output_tokens": 7583,
-    "seconds": 68.7,
+    "llm_calls": 24,
+    "input_tokens": 62456,
+    "output_tokens": 21742,
+    "seconds": 274.1,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']",
-    "documents: 2 documents parsed; findings ['injection_detected']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
-    "ask_facts: user answered; got ['age', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents read; findings ['injection_detected']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
+    "ask_facts: user answered; got ['age', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹14,70,000",
     "approve_figures: approved",
@@ -165,9 +178,10 @@
     "escalation: not needed",
     "regime: new (old ₹2,22,206, new ₹92,820)",
     "approve_regime: approved new",
+    "verify: 10 claims; 2 failed, 0 texts revised, 3 unresolved",
     "checklist: 6 items",
     "approve_checklist: approved",
-    "finalize: done; 6/15 tool calls"
+    "finalize: done; 7/15 tool calls"
    ],
    "regime": {
     "got": [
@@ -180,6 +194,14 @@
      222206,
      92820
     ]
+   },
+   "verification": {
+    "claims_checked": 10,
+    "initially_failing": 2,
+    "final_failing": 3,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -201,16 +223,17 @@
     "checklist"
    ],
    "questions": 1,
-   "tool_calls": 6,
+   "tool_calls": 7,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 3522,
+     "ms": 25317,
      "corrected": false,
      "tools": [
-      "itr_form_rules"
+      "itr_form_rules",
+      "search_tax_law"
      ],
      "key_tool_called": true,
      "key_args_ok": true
@@ -218,7 +241,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 7415,
+     "ms": 4503,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -228,18 +251,18 @@
     }
    },
    "cost": {
-    "llm_calls": 12,
-    "input_tokens": 29200,
-    "output_tokens": 6071,
-    "seconds": 74.8,
+    "llm_calls": 19,
+    "input_tokens": 47376,
+    "output_tokens": 12325,
+    "seconds": 185.1,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 2 documents parsed; findings ['interest_not_in_form16']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents read; findings ['interest_not_in_form16']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹16,85,400",
     "approve_figures: approved",
@@ -247,9 +270,10 @@
     "escalation: not needed",
     "regime: new (old ₹2,72,750, new ₹1,26,963)",
     "approve_regime: approved new",
+    "verify: 12 claims; 2 failed, 1 texts revised, 0 unresolved",
     "checklist: 8 items",
     "approve_checklist: approved",
-    "finalize: done; 6/15 tool calls"
+    "finalize: done; 7/15 tool calls"
    ],
    "regime": {
     "got": [
@@ -262,6 +286,14 @@
      272750,
      126963
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 2,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -289,7 +321,7 @@
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 7807,
+     "ms": 27004,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -301,7 +333,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 9380,
+     "ms": 12149,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -311,20 +343,20 @@
     }
    },
    "cost": {
-    "llm_calls": 12,
-    "input_tokens": 29874,
-    "output_tokens": 7681,
-    "seconds": 68.4,
+    "llm_calls": 15,
+    "input_tokens": 32881,
+    "output_tokens": 9355,
+    "seconds": 125.7,
     "turns": 5
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'health_80d_parents', 'home_loan_interest', 'house_properties', 'metro_city', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'parents_senior', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
-    "facts: need ['basic_monthly', 'hra_monthly']",
-    "ask_facts: user answered; got ['basic_monthly', 'health_80d_parents', 'hra_monthly', 'metro_city', 'parents_senior']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'basic_monthly', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'hra_monthly', 'ltcg_112a', 'metro_city', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "facts: need ['health_80d_parents', 'parents_senior']",
+    "ask_facts: user answered; got ['health_80d_parents', 'parents_senior']",
     "facts: all facts known",
     "figures: income ₹13,80,000",
     "approve_figures: approved",
@@ -332,6 +364,7 @@
     "escalation: not needed",
     "regime: old (old ₹56,680, new ₹78,780)",
     "approve_regime: approved old",
+    "verify: 12 claims; 0 failed, 0 texts revised, 0 unresolved",
     "checklist: 11 items",
     "approve_checklist: approved",
     "finalize: done; 5/15 tool calls"
@@ -347,6 +380,14 @@
      56680,
      78780
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 0,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 1,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -374,7 +415,7 @@
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 9790,
+     "ms": 10630,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -386,7 +427,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 8789,
+     "ms": 7111,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -396,18 +437,18 @@
     }
    },
    "cost": {
-    "llm_calls": 14,
-    "input_tokens": 39115,
-    "output_tokens": 7076,
-    "seconds": 64.8,
+    "llm_calls": 25,
+    "input_tokens": 71136,
+    "output_tokens": 20243,
+    "seconds": 243.8,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']",
-    "documents: 3 documents parsed; findings ['interest_not_in_form16', 'multiple_employers']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 3 documents read; findings ['interest_not_in_form16', 'multiple_employers']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹16,54,800",
     "approve_figures: approved",
@@ -415,6 +456,7 @@
     "escalation: not needed",
     "regime: new (old ₹2,73,312, new ₹1,21,649)",
     "approve_regime: approved new",
+    "verify: 12 claims; 2 failed, 2 texts revised, 0 unresolved",
     "checklist: 8 items",
     "approve_checklist: approved",
     "finalize: done; 9/15 tool calls"
@@ -430,6 +472,14 @@
      273312,
      121649
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 2,
+    "final_failing": 0,
+    "revised_texts": 2,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -450,14 +500,14 @@
     "regime",
     "checklist"
    ],
-   "questions": 2,
+   "questions": 1,
    "tool_calls": 7,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 14993,
+     "ms": 28044,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -469,7 +519,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 6292,
+     "ms": 10268,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -479,20 +529,18 @@
     }
    },
    "cost": {
-    "llm_calls": 15,
-    "input_tokens": 42228,
-    "output_tokens": 9544,
-    "seconds": 86.3,
-    "turns": 5
+    "llm_calls": 24,
+    "input_tokens": 73090,
+    "output_tokens": 23727,
+    "seconds": 343.6,
+    "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 2 documents parsed; findings ['multiple_employers']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
-    "facts: need ['basic_monthly', 'hra_monthly', 'metro_city']",
-    "ask_facts: user answered; got ['hra_exemption_annual']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents read; findings ['multiple_employers']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'hra_exemption_annual', 'ltcg_112a', 'metro_city', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹16,80,000",
     "approve_figures: approved",
@@ -500,6 +548,7 @@
     "escalation: not needed",
     "regime: new (old ₹1,61,928, new ₹1,25,840)",
     "approve_regime: approved new",
+    "verify: 12 claims; 3 failed, 0 texts revised, 0 unresolved",
     "checklist: 7 items",
     "approve_checklist: approved",
     "finalize: done; 7/15 tool calls"
@@ -515,6 +564,14 @@
      161928,
      125840
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 3,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -536,13 +593,13 @@
     "checklist"
    ],
    "questions": 1,
-   "tool_calls": 7,
+   "tool_calls": 8,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 19328,
+     "ms": 24636,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -554,7 +611,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 7849,
+     "ms": 18233,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -564,18 +621,18 @@
     }
    },
    "cost": {
-    "llm_calls": 13,
-    "input_tokens": 33623,
-    "output_tokens": 6459,
-    "seconds": 71.8,
+    "llm_calls": 23,
+    "input_tokens": 56399,
+    "output_tokens": 17645,
+    "seconds": 260.2,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 2 documents parsed; findings ['interest_not_in_form16']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents read; findings ['interest_not_in_form16']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹58,65,000",
     "approve_figures: approved",
@@ -583,9 +640,10 @@
     "escalation: not needed",
     "regime: new (old ₹17,26,296, new ₹15,06,648)",
     "approve_regime: approved new",
+    "verify: 12 claims; 1 failed, 0 texts revised, 0 unresolved",
     "checklist: 8 items",
     "approve_checklist: approved",
-    "finalize: done; 7/15 tool calls"
+    "finalize: done; 8/15 tool calls"
    ],
    "regime": {
     "got": [
@@ -598,6 +656,14 @@
      1726296,
      1506648
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -625,7 +691,7 @@
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 12395,
+     "ms": 23871,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -637,7 +703,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 11172,
+     "ms": 16128,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -648,7 +714,7 @@
     "gst": {
      "stopped": "final",
      "error": null,
-     "ms": 12595,
+     "ms": 11273,
      "corrected": false,
      "tools": [
       "search_tax_law"
@@ -658,18 +724,18 @@
     }
    },
    "cost": {
-    "llm_calls": 13,
-    "input_tokens": 29426,
-    "output_tokens": 4215,
-    "seconds": 70.5,
+    "llm_calls": 19,
+    "input_tokens": 46493,
+    "output_tokens": 13610,
+    "seconds": 224.9,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
-    "ask_facts: user answered; got ['age', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹18,06,500",
     "approve_figures: approved",
@@ -678,6 +744,7 @@
     "gst: registration required: False",
     "regime: new (old ₹96,200, new ₹0)",
     "approve_regime: approved new",
+    "verify: 12 claims; 2 failed, 0 texts revised, 0 unresolved",
     "checklist: 6 items",
     "approve_checklist: approved",
     "finalize: done; 6/15 tool calls"
@@ -693,6 +760,14 @@
      96200,
      0
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 2,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "gst_ok": true,
    "success": true
@@ -721,7 +796,7 @@
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 12827,
+     "ms": 50511,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -733,7 +808,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 7138,
+     "ms": 11391,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -744,7 +819,7 @@
     "gst": {
      "stopped": "final",
      "error": null,
-     "ms": 7870,
+     "ms": 11053,
      "corrected": false,
      "tools": [
       "search_tax_law"
@@ -754,18 +829,18 @@
     }
    },
    "cost": {
-    "llm_calls": 13,
-    "input_tokens": 29426,
-    "output_tokens": 5108,
-    "seconds": 59.0,
+    "llm_calls": 16,
+    "input_tokens": 39023,
+    "output_tokens": 6104,
+    "seconds": 150.9,
     "turns": 4
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'business_presumptive', 'cash_receipts_over_5pct', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
-    "ask_facts: user answered; got ['age', 'business_presumptive', 'cash_receipts_over_5pct', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'freelance_receipts', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'business_presumptive', 'cash_receipts_over_5pct', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'business_presumptive', 'cash_receipts_over_5pct', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹24,58,000",
     "approve_figures: approved",
@@ -774,6 +849,7 @@
     "gst: registration required: True",
     "regime: new (old ₹1,97,496, new ₹60,320)",
     "approve_regime: approved new",
+    "verify: 9 claims; 0 failed, 0 texts revised, 0 unresolved",
     "checklist: 7 items",
     "approve_checklist: approved",
     "finalize: done; 6/15 tool calls"
@@ -789,6 +865,14 @@
      197496,
      60320
     ]
+   },
+   "verification": {
+    "claims_checked": 9,
+    "initially_failing": 0,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 1,
+    "judge_missing": 0
    },
    "gst_ok": true,
    "success": true
@@ -810,18 +894,17 @@
     "regime",
     "checklist"
    ],
-   "questions": 2,
-   "tool_calls": 5,
+   "questions": 3,
+   "tool_calls": 4,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 28616,
+     "ms": 23731,
      "corrected": false,
      "tools": [
-      "itr_form_rules",
-      "search_tax_law"
+      "itr_form_rules"
      ],
      "key_tool_called": true,
      "key_args_ok": true
@@ -829,7 +912,7 @@
     "regime": {
      "stopped": "final",
      "error": null,
-     "ms": 8611,
+     "ms": 10415,
      "corrected": false,
      "tools": [
       "calculate_tax"
@@ -839,33 +922,36 @@
     }
    },
    "cost": {
-    "llm_calls": 13,
-    "input_tokens": 33883,
-    "output_tokens": 5956,
-    "seconds": 74.1,
-    "turns": 5
+    "llm_calls": 22,
+    "input_tokens": 39655,
+    "output_tokens": 15458,
+    "seconds": 236.8,
+    "turns": 6
    },
    "assumptions": [
     "Assumed short_term_capital_gains = False",
     "Assumed other_capital_gains = False"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
     "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'rent_monthly', 'residential_status', 'unlisted_shares']",
     "facts: need ['short_term_capital_gains', 'other_capital_gains']",
-    "ask_facts: user answered; got ['ltcg_112a']",
-    "facts: still missing after 2 rounds; assumed defaults for ['short_term_capital_gains', 'other_capital_gains']",
+    "ask_facts: user answered; got []",
+    "facts: need ['short_term_capital_gains', 'other_capital_gains']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['short_term_capital_gains', 'other_capital_gains']",
     "figures: income ₹12,00,000",
     "approve_figures: approved",
     "itr_form: ITR-1",
     "escalation: not needed",
     "regime: new (old ₹1,41,336, new ₹0)",
     "approve_regime: approved new",
+    "verify: 12 claims; 6 failed, 1 texts revised, 0 unresolved",
     "checklist: 5 items",
     "approve_checklist: approved",
-    "finalize: done; 5/15 tool calls"
+    "finalize: done; 4/15 tool calls"
    ],
    "regime": {
     "got": [
@@ -878,6 +964,14 @@
      141336,
      0
     ]
+   },
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 6,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2,
+    "judge_missing": 0
    },
    "success": true
   },
@@ -900,14 +994,14 @@
    "approvals": [
     "figures"
    ],
-   "questions": 2,
-   "tool_calls": 4,
+   "questions": 3,
+   "tool_calls": 5,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 9320,
+     "ms": 31595,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -918,29 +1012,40 @@
     }
    },
    "cost": {
-    "llm_calls": 10,
-    "input_tokens": 24668,
-    "output_tokens": 4776,
-    "seconds": 53.7,
-    "turns": 3
+    "llm_calls": 24,
+    "input_tokens": 45954,
+    "output_tokens": 23798,
+    "seconds": 318.0,
+    "turns": 4
    },
    "assumptions": [
-    "Assumed other_capital_gains = False"
+    "Assumed ltcg_112a = 0"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']; corrected: ['added escalation']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
     "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'rent_monthly', 'residential_status', 'unlisted_shares']",
-    "facts: need ['other_capital_gains']",
-    "ask_facts: user answered; got ['short_term_capital_gains']",
-    "facts: still missing after 2 rounds; assumed defaults for ['other_capital_gains']",
+    "facts: need ['ltcg_112a', 'other_capital_gains']",
+    "ask_facts: user answered; got ['other_capital_gains']",
+    "facts: need ['ltcg_112a']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['ltcg_112a']",
     "figures: income ₹13,20,000",
     "approve_figures: approved",
     "itr_form: ITR-2",
-    "escalation: escalate: ['capital_gains']",
-    "finalize: done; 4/15 tool calls"
+    "escalation: escalate: ['capital_gains'] (CA summary drafted by agent)",
+    "verify: 7 claims; 2 failed, 0 texts revised, 1 unresolved",
+    "finalize: done; 5/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 7,
+    "initially_failing": 2,
+    "final_failing": 1,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
+   },
    "success": true
   },
   {
@@ -962,14 +1067,14 @@
    "approvals": [
     "figures"
    ],
-   "questions": 2,
-   "tool_calls": 4,
+   "questions": 3,
+   "tool_calls": 6,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 10838,
+     "ms": 27843,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -980,11 +1085,11 @@
     }
    },
    "cost": {
-    "llm_calls": 10,
-    "input_tokens": 23122,
-    "output_tokens": 4644,
-    "seconds": 45.9,
-    "turns": 3
+    "llm_calls": 25,
+    "input_tokens": 52247,
+    "output_tokens": 21803,
+    "seconds": 389.3,
+    "turns": 4
    },
    "assumptions": [
     "Assumed company_director = False",
@@ -992,19 +1097,30 @@
     "Assumed fno_trading = False"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains']",
     "facts: need ['company_director', 'unlisted_shares', 'fno_trading']",
-    "ask_facts: user answered; got ['foreign_assets_or_income']",
-    "facts: still missing after 2 rounds; assumed defaults for ['company_director', 'unlisted_shares', 'fno_trading']",
+    "ask_facts: user answered; got []",
+    "facts: need ['company_director', 'unlisted_shares', 'fno_trading']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['company_director', 'unlisted_shares', 'fno_trading']",
     "figures: income ₹26,40,000",
     "approve_figures: approved",
     "itr_form: ITR-2",
-    "escalation: escalate: ['foreign_assets_or_income']",
-    "finalize: done; 4/15 tool calls"
+    "escalation: escalate: ['foreign_assets_or_income'] (CA summary drafted by agent)",
+    "verify: 11 claims; 2 failed, 0 texts revised, 3 unresolved",
+    "finalize: done; 6/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 11,
+    "initially_failing": 2,
+    "final_failing": 3,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
+   },
    "success": true
   },
   {
@@ -1026,14 +1142,14 @@
    "approvals": [
     "figures"
    ],
-   "questions": 2,
-   "tool_calls": 4,
+   "questions": 3,
+   "tool_calls": 5,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 12842,
+     "ms": 20728,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -1044,30 +1160,41 @@
     }
    },
    "cost": {
-    "llm_calls": 10,
-    "input_tokens": 24790,
-    "output_tokens": 5148,
-    "seconds": 49.3,
-    "turns": 3
+    "llm_calls": 20,
+    "input_tokens": 39379,
+    "output_tokens": 12151,
+    "seconds": 269.7,
+    "turns": 4
    },
    "assumptions": [
     "Assumed foreign_assets_or_income = False",
     "Assumed fno_trading = False"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added verify']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains']",
     "facts: need ['foreign_assets_or_income', 'fno_trading']",
     "ask_facts: user answered; got []",
-    "facts: still missing after 2 rounds; assumed defaults for ['foreign_assets_or_income', 'fno_trading']",
+    "facts: need ['foreign_assets_or_income', 'fno_trading']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['foreign_assets_or_income', 'fno_trading']",
     "figures: income ₹21,60,000",
     "approve_figures: approved",
     "itr_form: ITR-2",
-    "escalation: escalate: ['director_or_unlisted_shares']",
-    "finalize: done; 4/15 tool calls"
+    "escalation: escalate: ['director_or_unlisted_shares'] (CA summary drafted by agent)",
+    "verify: 10 claims; 1 failed, 1 texts revised, 0 unresolved",
+    "finalize: done; 5/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 10,
+    "initially_failing": 1,
+    "final_failing": 0,
+    "revised_texts": 1,
+    "rounds": 2,
+    "judge_missing": 0
+   },
    "success": true
   },
   {
@@ -1089,14 +1216,14 @@
    "approvals": [
     "figures"
    ],
-   "questions": 2,
-   "tool_calls": 6,
+   "questions": 3,
+   "tool_calls": 7,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 8628,
+     "ms": 49348,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -1107,29 +1234,41 @@
     }
    },
    "cost": {
-    "llm_calls": 12,
-    "input_tokens": 31352,
-    "output_tokens": 5776,
-    "seconds": 66.9,
-    "turns": 3
+    "llm_calls": 25,
+    "input_tokens": 58441,
+    "output_tokens": 20356,
+    "seconds": 472.6,
+    "turns": 4
    },
    "assumptions": [
-    "Assumed short_term_capital_gains = False"
+    "Assumed short_term_capital_gains = False",
+    "Assumed ltcg_112a = 0"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'checklist']",
-    "documents: 2 documents parsed; findings ['interest_not_in_form16']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']",
+    "documents: 2 documents read; findings ['interest_not_in_form16']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
     "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'rent_monthly', 'residential_status', 'unlisted_shares']",
-    "facts: need ['short_term_capital_gains']",
-    "ask_facts: user answered; got ['other_capital_gains']",
-    "facts: still missing after 2 rounds; assumed defaults for ['short_term_capital_gains']",
+    "facts: need ['short_term_capital_gains', 'ltcg_112a']",
+    "ask_facts: user answered; got []",
+    "facts: need ['short_term_capital_gains', 'ltcg_112a']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['short_term_capital_gains', 'ltcg_112a']",
     "figures: income ₹20,15,000",
     "approve_figures: approved",
     "itr_form: ITR-2",
-    "escalation: escalate: ['capital_gains']",
-    "finalize: done; 6/15 tool calls"
+    "escalation: escalate: ['capital_gains'] (CA summary drafted by agent)",
+    "verify: 12 claims; 1 failed, 0 texts revised, 3 unresolved",
+    "finalize: done; 7/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 12,
+    "initially_failing": 1,
+    "final_failing": 3,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
+   },
    "success": true
   },
   {
@@ -1152,40 +1291,50 @@
     "figures"
    ],
    "questions": 1,
-   "tool_calls": 1,
+   "tool_calls": 3,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 15380,
+     "ms": 45957,
      "corrected": false,
      "tools": [
-      "itr_form_rules"
+      "itr_form_rules",
+      "search_tax_law"
      ],
      "key_tool_called": true,
      "key_args_ok": true
     }
    },
    "cost": {
-    "llm_calls": 5,
-    "input_tokens": 11735,
-    "output_tokens": 4470,
-    "seconds": 41.0,
+    "llm_calls": 10,
+    "input_tokens": 23211,
+    "output_tokens": 6250,
+    "seconds": 167.0,
     "turns": 2
    },
    "assumptions": [],
    "trace": [
-    "plan: workflow=filing_prep; steps=['facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'checklist']",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'freelance_receipts', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
-    "ask_facts: user answered; got ['age', 'business_presumptive', 'cash_receipts_over_5pct', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'freelance_receipts', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "plan: workflow=filing_prep; steps=['facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'business_presumptive', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'business_presumptive', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
     "facts: all facts known",
     "figures: income ₹62,00,000",
     "approve_figures: approved",
     "itr_form: ITR-3",
-    "escalation: escalate: ['presumptive_limit_exceeded']",
-    "finalize: done; 1/15 tool calls"
+    "escalation: escalate: ['presumptive_limit_exceeded'] (CA summary drafted by agent)",
+    "verify: 5 claims; 0 failed, 0 texts revised, 0 unresolved",
+    "finalize: done; 3/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 5,
+    "initially_failing": 0,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 1,
+    "judge_missing": 0
+   },
    "success": true
   },
   {
@@ -1207,14 +1356,14 @@
    "approvals": [
     "figures"
    ],
-   "questions": 2,
-   "tool_calls": 4,
+   "questions": 3,
+   "tool_calls": 5,
    "budget_ok": true,
    "agents": {
     "itr": {
      "stopped": "final",
      "error": null,
-     "ms": 10509,
+     "ms": 50819,
      "corrected": false,
      "tools": [
       "itr_form_rules",
@@ -1225,11 +1374,11 @@
     }
    },
    "cost": {
-    "llm_calls": 11,
-    "input_tokens": 26397,
-    "output_tokens": 4959,
-    "seconds": 46.9,
-    "turns": 3
+    "llm_calls": 24,
+    "input_tokens": 51902,
+    "output_tokens": 18650,
+    "seconds": 429.3,
+    "turns": 4
    },
    "assumptions": [
     "Assumed foreign_assets_or_income = False",
@@ -1237,19 +1386,30 @@
     "Assumed unlisted_shares = False"
    ],
    "trace": [
-    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'checklist']",
-    "documents: 1 documents parsed; findings none",
-    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
-    "ask_facts: user answered; got ['age', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains']",
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']",
+    "documents: 1 document read; findings none",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'ltcg_112a', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual', 'basic_monthly', 'hra_monthly', 'metro_city', 'hra_exemption_annual']",
+    "ask_facts: user answered; got ['age', 'epf_annual', 'health_80d', 'home_loan_interest', 'house_properties', 'ltcg_112a', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains']",
     "facts: need ['foreign_assets_or_income', 'company_director', 'unlisted_shares']",
-    "ask_facts: user answered; got ['fno_trading', 'losses_to_carry_forward']",
-    "facts: still missing after 2 rounds; assumed defaults for ['foreign_assets_or_income', 'company_director', 'unlisted_shares']",
+    "ask_facts: user answered; got []",
+    "facts: need ['foreign_assets_or_income', 'company_director', 'unlisted_shares']",
+    "ask_facts: user answered; got []",
+    "facts: still missing after 3 rounds; assumed defaults for ['foreign_assets_or_income', 'company_director', 'unlisted_shares']",
     "figures: income ₹10,80,000",
     "approve_figures: approved",
     "itr_form: ITR-3",
-    "escalation: escalate: ['fno_or_losses']",
-    "finalize: done; 4/15 tool calls"
+    "escalation: escalate: ['fno_or_losses'] (CA summary drafted by agent)",
+    "verify: 9 claims; 3 failed, 0 texts revised, 5 unresolved",
+    "finalize: done; 5/15 tool calls"
    ],
+   "verification": {
+    "claims_checked": 9,
+    "initially_failing": 3,
+    "final_failing": 5,
+    "revised_texts": 0,
+    "rounds": 2,
+    "judge_missing": 0
+   },
    "success": true
   }
  ]

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/ritesh/Dev/taxsaathi/experiments/mlruns/726130440066678623/22136a4c38654df9b03c40d4bf81ca78/artifacts
+end_time: 1795642937803
+entry_point_name: ''
+experiment_id: '726130440066678623'
+lifecycle_stage: active
+run_id: 22136a4c38654df9b03c40d4bf81ca78
+run_name: Single agent (one LLM, all tools)
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795642937791
+status: 3
+tags: []
+user_id: ritesh

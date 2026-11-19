@@ -1,0 +1,9 @@
+artifact_location: file:///Users/ritesh/Dev/taxsaathi/experiments/mlruns/726130440066678623
+creation_time: 1795642937574
+effective_trace_archival_retention: null
+experiment_id: '726130440066678623'
+last_update_time: 1795642937574
+lifecycle_stage: active
+name: taxot-m4-agents
+trace_location: null
+workspace: default

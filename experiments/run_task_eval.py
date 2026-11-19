@@ -4,6 +4,9 @@ Run full agentic tasks end to end with a simulated user and score them against g
     python -m experiments.run_task_eval P21 P22 P23          # specific personas
     python -m experiments.run_task_eval --workflow filing_prep
     python -m experiments.run_task_eval --workers 3
+    python -m experiments.run_task_eval --workflow filing_prep --resume   # skip tasks already saved
+
+Results are saved after every task, so a killed run keeps what it finished.
 
 Per task: correct ITR form, correct regime (the cheaper one per the true facts), tax amounts
 within ₹1 of ground truth, escalation decided correctly, GST answer, the three approval pauses
@@ -124,18 +127,38 @@ def summarise(rows: list[dict]) -> dict:
     }
 
 
+def load_done(out: Path, ids: list[str]) -> list[dict]:
+    """Rows saved by an earlier run of the same tasks, minus errors (those are run again)."""
+    if not out.exists():
+        return []
+    return [r for r in json.loads(out.read_text()).get("rows", []) if r["persona_id"] in ids and "error" not in r]
+
+
+def save(out: Path, rows: list[dict]) -> dict:
+    summary = summarise(rows)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"summary": summary, "rows": rows}, indent=1, ensure_ascii=False, default=str))
+    return summary
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("personas", nargs="*")
     ap.add_argument("--workflow", default=None)
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--resume", action="store_true", help="keep saved rows that did not error; run only the rest")
     a = ap.parse_args(argv)
     ids = a.personas or [g["persona_id"] for g in _truth() if not a.workflow or g["workflow"] == a.workflow]
-    rows = []
+    out = a.out or OUT_DIR / f"tasks_{a.workflow or 'custom'}.json"
+    rows = load_done(out, ids) if a.resume else []
+    done = {r["persona_id"] for r in rows}
+    if done:
+        print(f"resuming: {len(done)} saved, {len(ids) - len(done)} to run", flush=True)
     with ThreadPoolExecutor(max_workers=a.workers) as pool:
-        for r in pool.map(run_one, ids):
+        for r in pool.map(run_one, [i for i in ids if i not in done]):
             rows.append(r)
+            save(out, rows)
             if "error" in r:
                 print(f"  ! {r['persona_id']} ERROR {r['error'][:300]}\n     " + " | ".join(r.get("trace", [])[-4:]), flush=True)
                 continue
@@ -145,10 +168,7 @@ def main(argv=None) -> int:
                   f"approvals={r['approvals']} tools={r['tool_calls']} "
                   f"llm={r['cost']['llm_calls']} {r['cost']['seconds']}s"
                   + (f"\n     figures_diff={r['figures_diff']}" if r.get("figures_diff") else ""), flush=True)
-    summary = summarise(rows)
-    out = a.out or OUT_DIR / f"tasks_{a.workflow or 'custom'}.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps({"summary": summary, "rows": rows}, indent=1, ensure_ascii=False, default=str))
+    summary = save(out, rows)
     print("\nSUMMARY"); print(json.dumps(summary, indent=1))
     return 0
 

@@ -1,0 +1,339 @@
+{
+ "summary": {
+  "tasks": 6,
+  "errors": 3,
+  "task_success": 0.5,
+  "itr_form_accuracy": 1.0,
+  "regime_accuracy": 1.0,
+  "amounts_exact": 1.0,
+  "escalation_accuracy": 1.0,
+  "gst_accuracy": 1.0,
+  "savings_accuracy": null,
+  "verifier_claims_checked": 21,
+  "verifier_initially_failing": 4,
+  "verifier_unresolved": 5,
+  "key_tool_args_correct": 0.8,
+  "agent_answers_corrected": 0.833,
+  "budget_respected": 1.0,
+  "avg_tool_calls": 5.3,
+  "avg_llm_calls": 15,
+  "avg_tokens": 28635,
+  "median_seconds": 194.0
+ },
+ "rows": [
+  {
+   "persona_id": "P21",
+   "label": "ITR-1, new regime clearly better",
+   "workflow": "filing_prep",
+   "itr_ok": true,
+   "itr": "ITR-1",
+   "itr_expected": "ITR-1",
+   "escalate_ok": true,
+   "escalation_reasons": [],
+   "escalation_expected": [],
+   "regime_ok": true,
+   "amounts_ok": true,
+   "approvals": [
+    "figures",
+    "regime",
+    "checklist"
+   ],
+   "questions": 1,
+   "tool_calls": 7,
+   "budget_ok": true,
+   "agents": {
+    "itr": {
+     "stopped": "error",
+     "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIInvalidRequestError; openrouter: OpenAIRateLimitError",
+     "ms": 39007,
+     "corrected": true,
+     "tools": [
+      "itr_form_rules",
+      "search_tax_law"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    },
+    "regime": {
+     "stopped": "final",
+     "error": null,
+     "ms": 9486,
+     "corrected": false,
+     "tools": [
+      "calculate_tax"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    }
+   },
+   "cost": {
+    "llm_calls": 19,
+    "input_tokens": 27701,
+    "output_tokens": 5967,
+    "seconds": 239.7,
+    "turns": 4
+   },
+   "assumptions": [],
+   "trace": [
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 2 documents parsed; findings ['interest_not_in_form16']",
+    "facts: need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "facts: all facts known",
+    "figures: income ₹16,85,400",
+    "approve_figures: approved",
+    "itr_form: ITR-1 (corrected)",
+    "escalation: not needed",
+    "regime: new (old ₹2,72,750, new ₹1,26,963)",
+    "approve_regime: approved new",
+    "verify: 7 claims; 1 failed, 1 texts revised, 3 unresolved",
+    "checklist: 8 items",
+    "approve_checklist: approved",
+    "finalize: done; 7/15 tool calls"
+   ],
+   "regime": {
+    "got": [
+     "new",
+     272750,
+     126963
+    ],
+    "want": [
+     "new",
+     272750,
+     126963
+    ]
+   },
+   "verification": {
+    "claims_checked": 7,
+    "initially_failing": 1,
+    "final_failing": 3,
+    "revised_texts": 1,
+    "rounds": 2
+   },
+   "success": true
+  },
+  {
+   "persona_id": "P22",
+   "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIRateLimitError; openrouter: OpenAIRateLimitError",
+   "trace": [
+    "workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']",
+    "1 documents parsed; findings none",
+    "need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "need ['basic_monthly', 'hra_monthly', 'metro_city', 'health_80d_parents']",
+    "user answered; got ['basic_monthly', 'health_80d_parents', 'hra_monthly', 'metro_city']",
+    "all facts known",
+    "income ₹13,80,000",
+    "approved",
+    "ITR-1 (corrected)",
+    "not needed",
+    "old (old ₹61,880, new ₹78,780)",
+    "approved old"
+   ]
+  },
+  {
+   "persona_id": "P23",
+   "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIAPIError; openrouter: OpenAIRateLimitError",
+   "trace": [
+    "workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "2 documents parsed; findings ['interest_not_in_form16']",
+    "need ['age', 'residential_status', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "user answered; got ['age', 'residential_status', 'short_term_capital_gains', 'unlisted_shares']",
+    "need ['other_capital_gains', 'foreign_assets_or_income', 'company_director', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "user answered; got ['company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly']",
+    "all facts known",
+    "income ₹6,04,800",
+    "approved",
+    "ITR-1 (corrected)",
+    "not needed",
+    "new (old ₹0, new ₹0)",
+    "approved new"
+   ]
+  },
+  {
+   "persona_id": "P26",
+   "label": "Freelance designer, presumptive 44ADA (ITR-4)",
+   "workflow": "filing_prep",
+   "itr_ok": true,
+   "itr": "ITR-4",
+   "itr_expected": "ITR-4",
+   "escalate_ok": true,
+   "escalation_reasons": [],
+   "escalation_expected": [],
+   "regime_ok": true,
+   "amounts_ok": true,
+   "approvals": [
+    "figures",
+    "regime",
+    "checklist"
+   ],
+   "questions": 1,
+   "tool_calls": 4,
+   "budget_ok": true,
+   "agents": {
+    "itr": {
+     "stopped": "error",
+     "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIRateLimitError; openrouter: OpenAIRateLimitError",
+     "ms": 13392,
+     "corrected": true,
+     "tools": [],
+     "key_tool_called": false,
+     "key_args_ok": false
+    },
+    "regime": {
+     "stopped": "error",
+     "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIRateLimitError; openrouter: OpenAIRateLimitError",
+     "ms": 18215,
+     "corrected": true,
+     "tools": [
+      "calculate_tax"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    },
+    "gst": {
+     "stopped": "error",
+     "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIInvalidRequestError; openrouter: OpenAIRateLimitError",
+     "ms": 31902,
+     "corrected": true,
+     "tools": [
+      "search_tax_law"
+     ],
+     "key_tool_called": false,
+     "key_args_ok": null
+    }
+   },
+   "cost": {
+    "llm_calls": 9,
+    "input_tokens": 14367,
+    "output_tokens": 1460,
+    "seconds": 148.9,
+    "turns": 4
+   },
+   "assumptions": [],
+   "trace": [
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']",
+    "documents: 1 documents parsed; findings none",
+    "facts: need ['age', 'short_term_capital_gains', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
+    "ask_facts: user answered; got ['age', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'rent_monthly', 'short_term_capital_gains']",
+    "facts: all facts known",
+    "figures: income ₹18,06,500",
+    "approve_figures: approved",
+    "itr_form: ITR-4 (corrected)",
+    "escalation: not needed",
+    "gst: registration required: False",
+    "regime: new (old ₹96,200, new ₹0)",
+    "approve_regime: approved new",
+    "verify: 8 claims; 0 failed, 0 texts revised, 0 unresolved",
+    "checklist: 6 items",
+    "approve_checklist: approved",
+    "finalize: done; 4/15 tool calls"
+   ],
+   "regime": {
+    "got": [
+     "new",
+     96200,
+     0
+    ],
+    "want": [
+     "new",
+     96200,
+     0
+    ]
+   },
+   "verification": {
+    "claims_checked": 8,
+    "initially_failing": 0,
+    "final_failing": 0,
+    "revised_texts": 0,
+    "rounds": 1
+   },
+   "gst_ok": true,
+   "success": true
+  },
+  {
+   "persona_id": "P27",
+   "error": "LLMUnavailable: regolo: APIStatusError; gemini: OpenAIRateLimitError; groq: OpenAIRateLimitError; nvidia: OpenAIRateLimitError; openrouter: OpenAIRateLimitError",
+   "trace": [
+    "workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'gst', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "1 documents parsed; findings none",
+    "need ['age', 'short_term_capital_gains', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'business_presumptive', 'cash_receipts_over_5pct', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly']",
+    "user answered; got ['age', 'business_presumptive', 'cash_receipts_over_5pct', 'company_director', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'short_term_capital_gains', 'unlisted_shares']",
+    "all facts known",
+    "income ₹24,58,000",
+    "approved",
+    "ITR-4 (corrected)",
+    "not needed",
+    "registration required: True",
+    "new (old ₹1,97,496, new ₹60,320)",
+    "approved new"
+   ]
+  },
+  {
+   "persona_id": "P35",
+   "label": "Short-term gains on shares (capital-gains tax not computed by Taxot)",
+   "workflow": "filing_prep",
+   "itr_ok": true,
+   "itr": "ITR-2",
+   "itr_expected": "ITR-2",
+   "escalate_ok": true,
+   "escalation_reasons": [
+    "capital_gains"
+   ],
+   "escalation_expected": [
+    "capital_gains"
+   ],
+   "regime_ok": null,
+   "amounts_ok": null,
+   "approvals": [
+    "figures"
+   ],
+   "questions": 1,
+   "tool_calls": 5,
+   "budget_ok": true,
+   "agents": {
+    "itr": {
+     "stopped": "error",
+     "error": "LLMUnavailable: nvidia: OpenAIRateLimitError; regolo: APIStatusError; groq: OpenAIRateLimitError; gemini: OpenAIRateLimitError; openrouter: OpenAIRateLimitError",
+     "ms": 50215,
+     "corrected": true,
+     "tools": [
+      "itr_form_rules",
+      "search_tax_law"
+     ],
+     "key_tool_called": true,
+     "key_args_ok": true
+    }
+   },
+   "cost": {
+    "llm_calls": 17,
+    "input_tokens": 27201,
+    "output_tokens": 9209,
+    "seconds": 194.0,
+    "turns": 2
+   },
+   "assumptions": [],
+   "trace": [
+    "plan: workflow=filing_prep; steps=['documents', 'facts', 'figures', 'itr_form', 'escalation', 'regime', 'verify', 'checklist']; corrected: ['added escalation']",
+    "documents: 1 documents parsed; findings none",
+    "facts: need ['age', 'residential_status', 'other_capital_gains', 'foreign_assets_or_income', 'company_director', 'unlisted_shares', 'fno_trading', 'house_properties', 'other_80c', 'health_80d', 'nps_80ccd1b', 'home_loan_interest', 'rent_monthly', 'epf_annual']",
+    "ask_facts: user answered; got ['age', 'company_director', 'epf_annual', 'fno_trading', 'foreign_assets_or_income', 'health_80d', 'home_loan_interest', 'house_properties', 'nps_80ccd1b', 'other_80c', 'other_capital_gains', 'rent_monthly', 'residential_status', 'unlisted_shares']",
+    "facts: all facts known",
+    "figures: income ₹13,20,000",
+    "approve_figures: approved",
+    "itr_form: ITR-2 (corrected)",
+    "escalation: escalate: ['capital_gains'] (CA summary by agent)",
+    "verify: 6 claims; 3 failed, 0 texts revised, 2 unresolved",
+    "finalize: done; 5/15 tool calls"
+   ],
+   "verification": {
+    "claims_checked": 6,
+    "initially_failing": 3,
+    "final_failing": 2,
+    "revised_texts": 0,
+    "rounds": 2
+   },
+   "success": true
+  }
+ ]
+}
