@@ -188,7 +188,8 @@ def documents_node(state: TaskState, config: RunnableConfig) -> dict:
 
 # ------------------------------------------------------------------ facts
 MAX_FACT_ROUNDS = 3
-SCREEN = ["age", "residential_status", "short_term_capital_gains", "other_capital_gains", "foreign_assets_or_income",
+SCREEN = ["age", "residential_status", "short_term_capital_gains", "ltcg_112a", "other_capital_gains",
+          "foreign_assets_or_income",
           "company_director", "unlisted_shares", "fno_trading", "house_properties"]
 
 
@@ -213,7 +214,9 @@ def missing_facts(state: TaskState, ctx: TaskContext) -> list[str]:
     # HRA needs basic + HRA + metro whenever rent is unknown or positive (unless slips give basic/HRA).
     rent_unknown_or_paid = f.rent_monthly is None or f.rent_monthly > 0
     if rent_unknown_or_paid and f.hra_exemption_annual is None and not have_slips:
-        need += [k for k in ("basic_monthly", "hra_monthly", "metro_city") if getattr(f, k) is None]
+        hra_need = [k for k in ("basic_monthly", "hra_monthly", "metro_city") if getattr(f, k) is None]
+        if hra_need:   # offer the annual figure too: users with several employers often know only that
+            need += hra_need + ["hra_exemption_annual"]
     if f.health_80d_parents is None and (f.health_80d or 0) > 0:
         need.append("health_80d_parents")
     if f.parents_senior is None and (f.health_80d_parents is None or f.health_80d_parents > 0) and \

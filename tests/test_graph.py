@@ -58,7 +58,7 @@ def test_escalation_rules():
 
 
 # ------------------------------------------------------------------ graph with a scripted LLM
-ALL_NO = {k: v for k, v in dict(age=30, residential_status="resident", short_term_capital_gains=False,
+ALL_NO = {k: v for k, v in dict(age=30, residential_status="resident", short_term_capital_gains=False, ltcg_112a=0,
                                 other_capital_gains=False, foreign_assets_or_income=False, company_director=False,
                                 unlisted_shares=False, fno_trading=False, house_properties=0, other_80c=0, health_80d=0,
                                 nps_80ccd1b=0, home_loan_interest=0, rent_monthly=0, salary_without_form16=1_500_000,

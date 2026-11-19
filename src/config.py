@@ -131,7 +131,10 @@ AGENT_LLM_TIMEOUT_S = float(os.environ.get("TAXOT_AGENT_LLM_TIMEOUT", "60"))
 AGENT_MAX_TOKENS = int(os.environ.get("TAXOT_AGENT_MAX_TOKENS", "1500"))
 # Output budget per role. Reasoning models think before answering, and a Form 16 has ~30 fields,
 # so the extractor needs room or its tool call gets cut off mid-JSON.
-ROLE_MAX_TOKENS = {"planner": AGENT_MAX_TOKENS, "verifier": AGENT_MAX_TOKENS,
+# The verifier returns a verdict for up to 12 claims in one tool call; at 1500 tokens a reasoning model's reply
+# was cut off (no verdicts -> every claim counted as unsupported), so it gets its own, larger budget.
+ROLE_MAX_TOKENS = {"planner": AGENT_MAX_TOKENS,
+                   "verifier": int(os.environ.get("TAXOT_VERIFIER_MAX_TOKENS", "4000")),
                    "extractor": int(os.environ.get("TAXOT_EXTRACTOR_MAX_TOKENS", "6000"))}
 MAX_TOOL_CALLS = int(os.environ.get("TAXOT_MAX_TOOL_CALLS", "15"))  # per task (plan: safety boundary)
 LLM_USAGE_LOG = LOG_DIR / "llm_usage.jsonl"

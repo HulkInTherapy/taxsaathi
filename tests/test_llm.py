@@ -89,7 +89,7 @@ def test_chat_masks_outgoing_and_unmasks_reply(keys, monkeypatch):
                       tool_calls=[{"name": "flag", "args": {"pan": "<PAN_1>"}, "id": "1"}],
                       usage_metadata={"input_tokens": 10, "output_tokens": 5, "total_tokens": 15})
     fake = FakeModel("m", reply=reply)
-    monkeypatch.setattr(prov, "get_model", lambda p, r: fake)
+    monkeypatch.setattr(prov, "get_model", lambda p, r, mt=None: fake)
     usage = prov.Usage()
     out = prov.chat([{"role": "user", "content": "My PAN is ABCDE1234F"}], usage=usage, providers=["nvidia"])
     assert "ABCDE1234F" not in fake.sent[0].content and "<PAN_1>" in fake.sent[0].content
@@ -102,7 +102,7 @@ def test_chat_masks_outgoing_and_unmasks_reply(keys, monkeypatch):
 def test_chat_falls_back_on_rate_limit(keys, monkeypatch):
     models = {"nvidia": FakeModel("a", error=_rate_limit_error()),
               "openrouter": FakeModel("b", reply=AIMessage(content="ok"))}
-    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    monkeypatch.setattr(prov, "get_model", lambda p, r, mt=None: models[p])
     usage = prov.Usage()
     out = prov.chat([{"role": "user", "content": "hi"}], usage=usage, providers=["nvidia", "openrouter"])
     assert out.content == "ok" and out.response_metadata["taxot_provider"] == "openrouter"
@@ -112,7 +112,7 @@ def test_chat_falls_back_on_rate_limit(keys, monkeypatch):
 def test_chat_does_not_swallow_programming_errors(keys, monkeypatch):
     models = {"nvidia": FakeModel("a", error=ValueError("bad request shape")),
               "openrouter": FakeModel("b", reply=AIMessage(content="ok"))}
-    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    monkeypatch.setattr(prov, "get_model", lambda p, r, mt=None: models[p])
     with pytest.raises(prov.LLMUnavailable):
         prov.chat([{"role": "user", "content": "hi"}], providers=["nvidia", "openrouter"])
 
@@ -136,7 +136,7 @@ def test_waits_and_retries_when_every_provider_is_rate_limited(keys, monkeypatch
                 raise _rate_limit_error()
             return AIMessage(content="ok")
     models = {"nvidia": Flaky("a"), "openrouter": Flaky("b")}
-    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    monkeypatch.setattr(prov, "get_model", lambda p, r, mt=None: models[p])
     slept = []
     monkeypatch.setattr(prov.time, "sleep", lambda s: slept.append(s))
     out = prov.chat([{"role": "user", "content": "hi"}], providers=["nvidia", "openrouter"])
@@ -145,7 +145,7 @@ def test_waits_and_retries_when_every_provider_is_rate_limited(keys, monkeypatch
 
 def test_gives_up_after_backoff(keys, monkeypatch):
     models = {"nvidia": FakeModel("a", error=_rate_limit_error()), "openrouter": FakeModel("b", error=_rate_limit_error())}
-    monkeypatch.setattr(prov, "get_model", lambda p, r: models[p])
+    monkeypatch.setattr(prov, "get_model", lambda p, r, mt=None: models[p])
     monkeypatch.setattr(prov.time, "sleep", lambda s: None)
     with pytest.raises(prov.LLMUnavailable, match="rate-limited"):
         prov.chat([{"role": "user", "content": "hi"}], providers=["nvidia", "openrouter"])

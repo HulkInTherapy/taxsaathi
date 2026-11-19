@@ -34,6 +34,8 @@ from src.llm import provider as prov
 ENABLED = os.environ.get("TAXOT_VERIFIER", "1") != "0"
 MAX_ROUNDS = 2
 MAX_CLAIMS = 12
+JUDGE_BATCH = 6        # claims per judge call: keeps each structured reply well inside the output budget
+REVISE_MAX_TOKENS = 4000   # the reviser rewrites whole texts; a reasoning model ran out at 1500 and returned nothing
 PASSAGES_PER_CLAIM = 3
 SECTION_PASSAGES = 2   # extra passages for each section a claim names (80C, 194A, 80CCD(1B)...)
 REPLACEMENT = "This point could not be verified against official sources."
@@ -58,7 +60,7 @@ class Verdict(BaseModel):
     claim_id: int
     verdict: Literal["supported", "unsupported", "contradicted"]
     evidence: list[str] = Field(default_factory=list, description="Passage ids, or 'computed' for computed facts")
-    reason: str = Field("", description="Short reason, especially when not supported")
+    reason: str = Field("", description="Short reason (at most 20 words), especially when not supported")
 
 
 class Verdicts(BaseModel):
@@ -156,6 +158,7 @@ def verify(texts: dict[str, str], computed: dict, ctx, usage=None, retrieval_con
             break
         evidence = _evidence(claims, ctx, retrieval_config)
         verdicts = _judge(claims, evidence, computed, ctx, usage)
+        report["judge_missing"] = report.get("judge_missing", 0) + sum(c.id not in verdicts for c in claims)
         # deterministic amount check overrides "supported"
         pool = computed_nums | numbers_in([p["text"] for p in evidence.values()])
         pct_pool = percents_in(json.dumps(computed, default=str, ensure_ascii=False) + " " +
@@ -183,6 +186,7 @@ def verify(texts: dict[str, str], computed: dict, ctx, usage=None, retrieval_con
             if final_claims:
                 ev2 = _evidence(final_claims, ctx, retrieval_config)
                 v2 = _judge(final_claims, ev2, computed, ctx, usage)
+                report["judge_missing"] = report.get("judge_missing", 0) + sum(c.id not in v2 for c in final_claims)
                 still = [c for c in final_claims if v2.get(c.id, {}).get("verdict") != "supported"]
                 for c in still:
                     report["unresolved"].append({"key": c.key, "claim": c.text})
@@ -202,7 +206,7 @@ def _summary(report: dict) -> dict:
     return {"claims_checked": len(first),
             "initially_failing": sum(1 for r in first if r["verdict"] != "supported"),
             "final_failing": len(report["unresolved"]), "revised_texts": len(report["revised_keys"]),
-            "rounds": report["rounds"]}
+            "rounds": report["rounds"], "judge_missing": report.get("judge_missing", 0)}
 
 
 # ------------------------------------------------------------------ text helpers
@@ -306,6 +310,18 @@ def _evidence(claims: list[Claim], ctx, retrieval_config: str | None) -> dict[st
 
 
 def _judge(claims: list[Claim], evidence: dict, computed: dict, ctx, usage) -> dict[int, dict]:
+    """Verdicts by claim id, judged JUDGE_BATCH claims per call; a claim whose reply was cut off or malformed is
+    judged once more on its own batch before it is left without a verdict."""
+    out: dict[int, dict] = {}
+    for i in range(0, len(claims), JUDGE_BATCH):
+        out.update(_judge_batch(claims[i:i + JUDGE_BATCH], evidence, computed, ctx, usage))
+    missing = [c for c in claims if c.id not in out]
+    for i in range(0, len(missing), JUDGE_BATCH):
+        out.update(_judge_batch(missing[i:i + JUDGE_BATCH], evidence, computed, ctx, usage))
+    return out
+
+
+def _judge_batch(claims: list[Claim], evidence: dict, computed: dict, ctx, usage) -> dict[int, dict]:
     body = ("CLAIMS:\n" + "\n".join(f"{c.id}. ({c.kind}) {c.text}" for c in claims)
             + "\n\nPASSAGES:\n" + ("\n".join(f"[{p['id']}] {p['title']} (effective {p['effective']}): {p['text']}"
                                              for p in evidence.values()) or "(none)")
@@ -330,7 +346,8 @@ def _revise(texts: dict[str, str], failing: list[Claim], evidence: dict, compute
             + "\n\nEVIDENCE PASSAGES:\n" + ("\n".join(f"[{p['id']}] {p['text']}" for p in evidence.values()) or "(none)")
             + "\n\nCOMPUTED FACTS:\n" + json.dumps(computed, default=str, ensure_ascii=False)[:4000])
     reply = prov.chat([{"role": "system", "content": REVISE_SYSTEM}, {"role": "user", "content": body}],
-                      role="planner", tools=[Revisions], tool_choice="Revisions", masker=ctx.masker, usage=usage)
+                      role="planner", tools=[Revisions], tool_choice="Revisions", masker=ctx.masker, usage=usage,
+                      max_tokens=REVISE_MAX_TOKENS)
     call = next((c for c in reply.tool_calls if c["name"] == "Revisions"), None)
     out = {}
     for raw in (call["args"].get("texts") if call else None) or []:

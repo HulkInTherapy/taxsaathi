@@ -45,9 +45,13 @@ class UserFacts(BaseModel):
     hra_exemption_annual: Optional[int] = Field(None, ge=0, description="HRA exemption already worked out for the "
                                                                          "year (e.g. by employer or CA), if known")
     # facts that decide the ITR form / escalation
-    short_term_capital_gains: Optional[bool] = None
-    ltcg_112a: Optional[int] = Field(None, ge=0, description="Long-term gains on listed equity / equity funds")
-    other_capital_gains: Optional[bool] = Field(None, description="Sold property, gold, debt funds etc.")
+    short_term_capital_gains: Optional[bool] = Field(None, description="Short-term gains: shares or funds held 12 "
+                                                                        "months or less")
+    ltcg_112a: Optional[int] = Field(None, ge=0, description="Long-term gains (rupees) on listed shares or equity "
+                                                              "mutual funds held over 12 months; 0 if none")
+    other_capital_gains: Optional[bool] = Field(None, description="Gains on property, gold, debt funds or unlisted "
+                                                                   "assets. NOT listed shares or equity mutual funds "
+                                                                   "held over 12 months (those are ltcg_112a)")
     house_properties: Optional[int] = Field(None, ge=0)
     foreign_assets_or_income: Optional[bool] = None
     company_director: Optional[bool] = None

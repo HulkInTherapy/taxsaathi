@@ -87,11 +87,11 @@ def _limiter(provider: str):
     return _LIMITERS[provider]
 
 
-def get_model(provider: str, role: str):
-    """A ChatOpenAI client for this provider/role (cached)."""
+def get_model(provider: str, role: str, max_tokens: int | None = None):
+    """A ChatOpenAI client for this provider/role (cached). `max_tokens` overrides the role's output budget."""
     if role not in ROLES:
         raise ValueError(f"role must be one of {ROLES}")
-    key = (provider, role)
+    key = (provider, role, max_tokens)
     with _LOCK:
         cached = _MODELS.get(key)
     if cached is not None:
@@ -103,7 +103,7 @@ def get_model(provider: str, role: str):
         base_url=p["base_url"],
         api_key=os.environ.get(p["key_env"]) if p["key_env"] else "ollama",
         temperature=0,
-        max_tokens=min(config.ROLE_MAX_TOKENS.get(role, config.AGENT_MAX_TOKENS),
+        max_tokens=min(max_tokens or config.ROLE_MAX_TOKENS.get(role, config.AGENT_MAX_TOKENS),
                        p.get("max_output_tokens", 10**6)),
         timeout=config.AGENT_LLM_TIMEOUT_S,
         max_retries=1,
@@ -155,13 +155,14 @@ def _log(record: dict) -> None:
 # ------------------------------------------------------------------ public API
 def chat(messages: Sequence, role: str = "planner", tools: Sequence | None = None,
          masker: Masker | None = None, usage: Usage | None = None,
-         providers: Sequence[str] | None = None, tool_choice: str | None = None):
+         providers: Sequence[str] | None = None, tool_choice: str | None = None, max_tokens: int | None = None):
     """
     Send `messages` (LangChain messages or {"role","content"} dicts) and return an AIMessage
     whose text and tool-call arguments have real values restored.
 
     `tools`: LangChain tools / pydantic models / OpenAI tool dicts the model may call.
     `masker`: share one Masker per task so placeholders stay stable across calls.
+    `max_tokens`: output budget for this call (reasoning models need room for long structured replies).
     """
     from langchain_core.messages import AIMessage, convert_to_messages
 
@@ -173,7 +174,7 @@ def chat(messages: Sequence, role: str = "planner", tools: Sequence | None = Non
 
     for attempt in range(len(RATE_LIMIT_BACKOFF_S) + 1):
         try:
-            return _chat_once(outgoing, role, tools, masker, usage, order, tool_choice)
+            return _chat_once(outgoing, role, tools, masker, usage, order, tool_choice, max_tokens)
         except _AllRateLimited as e:
             if attempt == len(RATE_LIMIT_BACKOFF_S):
                 raise LLMUnavailable(f"all providers rate-limited: {e}") from e
@@ -191,10 +192,10 @@ class _AllRateLimited(RuntimeError):
 RATE_LIMIT_BACKOFF_S = (20, 45, 90)
 
 
-def _chat_once(outgoing, role, tools, masker, usage, order, tool_choice):
+def _chat_once(outgoing, role, tools, masker, usage, order, tool_choice, max_tokens=None):
     errors, limited = [], 0
     for i, provider in enumerate(order):
-        model = get_model(provider, role)
+        model = get_model(provider, role, max_tokens)
         runnable = model.bind_tools(list(tools), tool_choice=tool_choice) if tools else model
         t0 = time.perf_counter()
         try:
