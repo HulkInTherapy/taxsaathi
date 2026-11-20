@@ -1,13 +1,18 @@
 # systemd unit for Taxot. Install manually:
 #   sudo cp deploy/taxot.service /etc/systemd/system/ && sudo systemctl daemon-reload
 #   sudo systemctl enable --now taxot
+# API keys (NVIDIA_API_KEY, REGOLO_API_KEY, ...) go in /opt/taxot/.env, copied from .env.example:
+#   sudo chmod 600 /opt/taxot/.env
+# Check:  curl -s localhost:8000/health   ("status": "ok" once at least one provider accepts its key)
 [Unit]
-Description=Taxot RAG tax assistant (FastAPI)
+Description=Taxot tax assistant: RAG pipeline + agents (FastAPI)
 After=network.target ollama.service
 
 [Service]
 Type=simple
 WorkingDirectory=/opt/taxot
+# '-' = start even if the file is missing (the NLP pipeline runs without keys; the agents do not)
+EnvironmentFile=-/opt/taxot/.env
 Environment=TAXOT_LLM=qwen2.5:3b
 Environment=OMP_NUM_THREADS=4
 ExecStart=/opt/taxot/.venv/bin/uvicorn src.api.main:app --host 0.0.0.0 --port 8000

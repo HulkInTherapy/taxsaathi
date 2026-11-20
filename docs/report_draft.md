@@ -1,6 +1,6 @@
 # Taxot: Period-Aware, Citation-Grounded Retrieval-Augmented QA for Indian Income Tax and GST in English and Hinglish
 
-*Technical report, milestones M1–M3 · 2026-10-29 · Taxot team (4th-year NLP course project)*
+*Technical report, milestones M1–M4 · updated 2026-11-26 · Taxot team (4th-year NLP course project)*
 
 ---
 
@@ -17,7 +17,7 @@ period, (iv) abstains and escalates to a CA when the question is out of scope or
 low, and (v) delegates all tax computation to a deterministic, unit-tested calculator. Everything runs
 on a 4-vCPU CPU-only server: hybrid BM25 + multilingual-E5 retrieval fused with Reciprocal Rank Fusion,
 a rule-based period filter, a cross-encoder used as a confidence gate, and a small local LLM
-(Qwen2.5-3B) that only phrases grounded explanations. On a 53-question development set, the final configuration (C6) reaches Recall@5 0.917 and MRR 0.830, answers every time-sensitive question with the law in force for the asked period, refuses 100% of out-of-scope questions with 2% false refusals, computes tax with 100% exact match, and raises key-fact accuracy from 10.4% (the same LLM without retrieval) to 68.8% with every citation valid. On 80 real questions collected from public forums and official FAQs, it retrieves the right rule for 78% of covered questions.
+(Qwen2.5-3B) that only phrases grounded explanations. On a 53-question development set, the final configuration (C6) reaches Recall@5 0.917 and MRR 0.830, answers every time-sensitive question with the law in force for the asked period, refuses 100% of out-of-scope questions with 2% false refusals, computes tax with 100% exact match, and raises key-fact accuracy from 10.4% (the same LLM without retrieval) to 68.8% with every citation valid. On 80 real questions collected from public forums and official FAQs, it retrieves the right rule for 78% of covered questions. We then extend Taxot from answering questions to doing tasks (M4): a LangGraph orchestrator with specialist agents reads the user's tax documents, asks only for missing facts, and prepares the return, a tax-saving plan or a CA hand-off, with every figure computed by code and every claim checked by a verifier from a different model family. On 59 synthetic tasks it meets all five agent targets (100% task success); on the same 22 filing and tax-saving tasks a single agent with the same tools succeeds on 45% and the NLP pipeline on 4.5%.
 
 ---
 
@@ -93,7 +93,7 @@ records `source_url`, `publisher`, `law ∈ {new_act, old_act, gst, mapping, gen
 2025 Act is long and heavily cross-referenced, so raw-PDF chunks would mix ideas and dilute retrieval and
 citation; and a compact, clean index keeps CPU latency manageable. The ingestion code also supports raw
 PDFs (PyMuPDF, section-heading splitting) for future full-text ingestion. The risk that summaries drift
-from the statute is listed in §8.
+from the statute is listed in §9.
 
 ### 4.2 Chunking by legal section
 Each chunk is one provision, 64–164 words (median 125), with a stable ID (e.g. `IT-NEW-REBATE-FY2526`).
@@ -210,7 +210,7 @@ Let G_q be the gold chunks of q and R_q^k the top-k retrieved list (answerable q
 
 ### 7.3 Discussion
 
-**Targets fixed in M1 (dev set, final config C6).** Recall@5 0.917 (target ≥ 0.85 ✅); faithfulness proxy 1.00 (≥ 0.90 ✅); out-of-scope refusal 100% with 2.1% false refusals (≥ 90% ✅); calculator exact match 100% on all 16 hand-worked gold calculations and 99 unit tests (100% ✅); median latency 16.8 s on a 4-vCPU CPU server (≤ 5 s ❌ — dominated by the 3B LLM on CPU; GPU/API serving is M5 work).
+**Targets fixed in M1 (dev set, final config C6).** Recall@5 0.917 (target ≥ 0.85 ✅); faithfulness proxy 1.00 (≥ 0.90 ✅); out-of-scope refusal 100% with 2.1% false refusals (≥ 90% ✅); calculator exact match 100% on all 16 hand-worked gold calculations and 99 unit tests (100% ✅); median latency 16.8 s on a 4-vCPU CPU server (≤ 5 s ❌ — dominated by the 3B LLM on CPU; with a hosted writer it is 8.1 s, see point 7, still above target).
 
 1. **Retrieval is what makes the LLM useful.** The same Qwen2.5-3B answering from memory (B0) gets only **10.4%** of key facts right — it states pre-2025 rules (old slabs, ₹7 lakh rebate, 28% GST on ACs) and never cites. Grounded generation lifts this to **64.6%** with BM25 alone (B1) and **68.8%** in C6, with 100% citation validity.
 2. **Hybrid beats either retriever alone, but not on every metric.** Dense alone (C1) has higher Recall@5 than BM25 (0.875 vs 0.812) but the worst period accuracy (0.75) — embeddings see "GST on AC in Aug 2025" and "GST on AC now" as the same meaning. BM25 catches exact tokens (section numbers, "August 2025"). RRF fusion (C2) gives the best MRR among single-stage systems (0.755).
@@ -218,9 +218,96 @@ Let G_q be the gold chunks of q and R_q^k the top-k retrieved list (answerable q
 4. **The date filter fixes time traps.** Period accuracy goes 0.875 (C2) → 1.000 (C4). We further improved it with *period substitution*: when a passage is from the wrong period, the same rule's in-period version takes its place (matched by ID stem or topic), and questions about years before our sources keep the closest version instead of returning nothing.
 5. **Hinglish.** On the 4 Hinglish dev questions Recall@5 is already 1.0 from C4; normalisation (C5) mostly improves the reranker/LLM input. Key-fact accuracy on Hinglish (0.50) and long-form income-tax answers (0.50) is the main weakness: the 3B model paraphrases numbers or omits one of several required facts.
 6. **Real-world check (80 real questions from Reddit, Quora, CAclubindia and official FAQs).** Our knowledge base fully covers 64%, partly 23%, not at all 14% (8% of in-scope questions). On the 51 fully covered ones, C6 Recall@5 is 0.62 by exact passage and **0.78 at rule level** (any period version of the gold rule), vs 0.86 for C2. Most of the gap is temporal: posts written in 2025 were labelled with FY 2025-26 passages, while C6 deliberately answers with the law in force today (Tax Year 2026-27). Real out-of-scope questions are harder than our synthetic ones: only 57% (4/7) were refused. The most common real confusion ("no tax up to ₹12 lakh but 5% from ₹4 lakh?", 10 posts) exposed a knowledge gap that we closed with an explainer passage.
-7. **Error analysis preview (M4).** Remaining misses: (a) the LLM paraphrasing away a required number; (b) calculation questions retrieving old-regime rather than rebate passages (the calculator answer is still exact); (c) regime-switching and filing-procedure questions phrased very differently from our passages.
+7. **Hosted answer writer (re-scored 26 Nov 2026).** The live system now writes answers with a hosted model through the agents' gateway (Groq `gpt-oss-20b`, falling back to Regolo and Gemini) instead of the local Qwen2.5-3B. On the same 53 dev questions, C6 key-fact accuracy rises from **68.8% to 79.2%** with citation validity and faithfulness still 1.00, and median latency falls from 16.8 s to **8.1 s** (measured on a laptop, so retrieval was also faster than on the VPS). The plain-LLM baseline B0 rises from 10.4% to 31.2%, because a larger model remembers more rules, but still without citations; retrieval adds 48 points. In 15% of C6 answers the writer was unavailable (free-tier limits) and the extractive fallback was used; those still count in the score. All retrieval, refusal and calculator metrics are unchanged, since only the writer changed (`experiments/results_api_writer.json`). The tables above keep the Qwen numbers.
+8. **Error analysis preview (M4).** Remaining misses: (a) the LLM paraphrasing away a required number; (b) calculation questions retrieving old-regime rather than rebate passages (the calculator answer is still exact); (c) regime-switching and filing-procedure questions phrased very differently from our passages.
 
-## 8 Limitations and Ethics
+## 8 From answers to tasks: the agentic layer (M4)
+
+The pipeline of Sections 5–7 answers one question with fixed steps. Users' real jobs are longer: *check my
+Form 16 against my AIS*, *which ITR form and regime, and what do I do next*, *how can I save tax this year*.
+These need document reading, follow-up questions, several tools in an order that depends on the case, and
+the user's approval before anything is decided. M4 adds a multi-agent layer for three such workflows. Full
+plan: `AGENTIC_PLAN.md`; every number below: `M4_agent_experiment_log.md`.
+
+### 8.1 Architecture
+
+A LangGraph orchestrator (planner LLM) decides the next step from the task state. Specialists act through
+a tool registry; each has a narrow tool set:
+
+| Component | Role | Tools / mechanism |
+|---|---|---|
+| Orchestrator | plans steps, asks the user only for facts that are missing, routes to specialists | LangGraph state graph with SQLite checkpoints; interrupts for questions and approvals |
+| Document agent | extracts every figure from Form 16, AIS/26AS, interest certificates | `parse_document` (PDF text + LLM extraction to a schema, arithmetic consistency checks) |
+| Cross-check | interest missing from Form 16, slip vs Form 16, Part A/B TDS, 80C over cap, PAN mismatch, two employers | `cross_check_documents` (deterministic Python) |
+| Figures step | builds the calculator inputs from documents and facts, each with provenance | deterministic code; the user approves the figures card |
+| Income-tax, calculator, GST agents | ITR form, both regimes, what-if savings, GST registration for freelancers | `itr_form_rules`, `calculate_tax`, `search_tax_law` (the M3 retriever) |
+| Escalation check | capital gains, foreign assets, directors/unlisted shares, F&O, business above presumptive limits | rules on the facts; `write_ca_summary` |
+| Verifier | splits drafts into claims, judges each against tool outputs and retrieved law, revises or flags | a different model family from the writers; at most 2 rounds |
+
+**Safety constraints.** The LLM never does arithmetic or eligibility logic: the calculator, ITR rules and
+cross-checks are the unit-tested M3 code, and specialists' answers are reconciled with them (code wins).
+Personal data is masked before any LLM call and restored afterwards. Document text is data, never
+instructions; injected instructions are detected and reported. A task gets at most 15 tool calls.
+Free-tier cloud LLMs are used behind one gateway with per-provider rate limits and fallback
+(NVIDIA NIM, Regolo, Groq, Gemini, OpenRouter).
+
+### 8.2 Evaluation setup
+
+40 fictitious taxpayers with generated documents (Form 16, AIS, interest certificates) and ground truth: 18
+document checks, 16 filing preparations (6 must escalate) and 6 tax-saving plans; 21 contain planted
+document problems and 4 contain prompt injections (visible and hidden text). Each scenario fixes the
+expected ITR form, regime and both tax totals (₹1 tolerance), finding codes, escalation and reasons, GST
+decision, best saving and amount, and the required tools. A simulated user answers the agents' questions
+from the persona's facts, in prose, only when asked. Runs are sequential.
+
+**Baselines on the same 22 filing and tax-saving scenarios.** (i) The M3 pipeline, given the true document
+figures and all facts in the question, as one request or decomposed into one question per sub-task; it ran
+extractively (no LLM generation on the evaluation machine). (ii) A single agent: one LLM with all six tools,
+the documents and all facts up front, no orchestrator, figures step, reconciliation or verifier.
+
+### 8.3 Results
+
+| Target (set in the plan) | Goal | Result |
+|---|---|---|
+| Task success | ≥ 80% | **100%** (59/59) |
+| Tool-call accuracy | ≥ 85% | **100%** |
+| Verifier catch rate, planted unsupported claims | ≥ 90% | **100%** (19/19; 95% removed) |
+| Correct escalation | ≥ 90% | **100%** |
+| Injection resistance | 100% | **100%** (4/4, also with redaction off) |
+
+| System (22 tasks) | Success | ITR | Exact tax | Escalation | Savings | LLM calls | Median s |
+|---|---|---|---|---|---|---|---|
+| NLP pipeline, whole request | 0% | 0% | 0% | 73% | 0% | 0 | 3 |
+| NLP pipeline, decomposed | 4.5% | 20% | 56% | 73% | 0% | 0 | 12 |
+| Single agent, all tools | 45% | 100% | 58% | 89% | 33% | 7.1 | 66 |
+| **Multi-agent (Taxot)** | **100%** | 100% | 100% | 100% | 100% | 19.8 | 244 |
+
+1. **The pipeline cannot do tasks.** A multi-part request is classified as general Q&A and never reaches the
+   calculator; its question parser drops stated inputs (interest, 80TTA); extractive ITR answers list every
+   form; it cannot read documents or run what-if scenarios.
+2. **The single agent chooses well but computes badly.** It picked the right form and regime whenever it
+   answered and reported every finding, but filled the calculator itself and dropped deductions (5 of 12 tax
+   figures wrong), answered two must-escalate cases itself, and ran out of steps on 4 tasks. Each failure is
+   a decision the multi-agent design moves from the model to code.
+3. **Cost.** Taxot uses about 2.8× the LLM calls and 3.7× the time of the single agent; the verifier adds
+   about 9 calls per filing task.
+4. **Verifier.** On real task outputs, 33 of 229 claims in the first drafts were unsupported; 17 were fixed
+   by revision and 16 removed or marked "confirm with a CA", so none reached the user unmarked. False
+   alarms on clean drafts: 11%.
+
+### 8.4 Error analysis and lessons
+
+A full re-run after unrelated changes dropped filing preparation from 100% to 87.5% and exposed four bugs.
+Two came from reasoning models spending the whole output budget thinking: the verifier's judge returned no
+verdicts in 25 of 53 calls (and missing verdicts defaulted to "unsupported", deleting correct sentences), and
+the reviser returned no revision. No provider errors were logged; the signal was `output_tokens` equal to the
+cap. Two came from how the LLM maps free-text answers to fields: small equity LTCG filed as "other capital
+gains" (wrong escalation) and an annual HRA exemption with no field to land in (wrong tax). Fixes: per-call
+output budgets, batched judging with retries, and changes to the question schema. After them all targets were
+met. The lesson is that agent accuracy on free-tier models depends on output budgets and schema wording as
+much as on prompts, and that a single run is weak evidence: the final configuration should be repeated.
+
+## 9 Limitations and Ethics
 
 - **Curated summaries, not full Acts.** 35 of 107 chunks are checked only against secondary sources; a summary can omit a proviso that matters to a user.
 - **Gold set authored by the team, not CA-reviewed;** the same people wrote corpus and questions, which may inflate retrieval scores. The dev set is small (53), so differences of a few points are within noise.
@@ -228,14 +315,16 @@ Let G_q be the gold chunks of q and R_q^k the top-k retrieved list (answerable q
 - **English-centric reranker.** `bge-reranker-base` lists only Chinese and English; the multilingual `bge-reranker-v2-m3` took ~25 s per query on our CPU and was not usable.
 - **Rule-based period extraction** covers common patterns; anything else falls back to "assumed current law", which is shown to the user.
 - **Calculator scope:** salaried individuals, both regimes, FY 2024-25 to Tax Year 2026-27; no capital gains or business income computation.
+- **Agent evaluation is synthetic.** 40 generated personas with one Form 16 layout; one run per configuration on free-tier models, whose behaviour varies by day. The reconciliation safeguard was not exercised in the final run (no specialist answer needed correcting).
+- **Free-tier LLMs** see masked task data; providers may log requests. Synthetic data only was used in evaluation.
 - **Legal liability.** Informational only; not affiliated with the Income Tax Department (whose own assistant is "Kar Saathi"); every answer carries a disclaimer; notices, disputes and evasion requests are refused with a CA referral.
 
-## 9 Future Work
+## 10 Future Work
 
 - **M4:** run the untouched test split once; error analysis by category; LLM-judge faithfulness; GPU or quantised multilingual reranker; CA review of 30–50 gold answers; full-text Act ingestion.
 - **M5:** GPU/API generation to meet the 5 s target; Docker deployment; monitoring dashboard from `logs/queries.jsonl` and feedback.
 - **M6:** user study with the three personas.
-- **Agentic layer:** planner that chooses tools (retriever, calculator, document parser, CA-summary writer) with a verifier agent, keeping the calculator and citation check as hard constraints.
+- **Agents (done in M4, Section 8); next:** repeat the final runs on other days; real Form 16 layouts from other employers; capital-gains computation so fewer cases need a CA; route the Ask tab's answer writer through the same gateway to cut latency.
 
 ## References
 
@@ -261,5 +350,6 @@ Let G_q be the gold chunks of q and R_q^k the top-k retrieved list (answerable q
 - Schick, T., et al. (2023). Toolformer. *NeurIPS 2023*. https://arxiv.org/abs/2302.04761
 - Wang, L., et al. (2022). Text Embeddings by Weakly-Supervised Contrastive Pre-training. https://arxiv.org/abs/2212.03533
 - Wang, L., et al. (2024). Multilingual E5 Text Embeddings: A Technical Report. https://arxiv.org/abs/2402.05672
+- Yao, S., et al. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. *ICLR 2023*. https://arxiv.org/abs/2210.03629
 - Zhang, M. J. Q., Choi, E. (2021). SituatedQA. *EMNLP 2021*. https://aclanthology.org/2021.emnlp-main.586
 - Zheng, L., Guha, N., Anderson, B. R., Henderson, P., Ho, D. E. (2021). When Does Pretraining Help? (CaseHOLD). *ICAIL 2021*. https://arxiv.org/abs/2104.08671

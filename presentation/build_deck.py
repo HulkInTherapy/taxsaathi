@@ -961,7 +961,7 @@ Finding the right card: target 0.85, we got {fmt(R5)}. Met.
 Answers backed by sources: target 0.90, we got {fmt(FAITH)}. Met. This is a simple automatic check; a stricter AI-judge version is planned.
 Refusing off-topic questions: target 90 percent, we got {pct(OOS)}, with only {pct(FALSE_REF, 1)} false refusals. Met.
 Calculator: target 100 percent exact, we got 100 percent, all {N_GOLD_CALCS} calculations. Met.
-Speed: target 5 seconds. We got {secs(LAT)}. Not met. The time is almost all the AI model writing on a CPU. With a graphics card, or a hosted model, this should drop a lot. That is planned for milestone 5.
+Speed: target 5 seconds. We got {secs(LAT)}. Not met. The time is almost all the AI model writing on a CPU. With a hosted model it drops: we re-measured 8.1 seconds, and key facts went up from 69 to 79 percent. Still above 5 seconds, so still not met.
 So: 4 of 5 targets met, and we know exactly why the fifth is not.
 """)
 
@@ -1119,6 +1119,160 @@ Bottom right: the crypto question is refused with a link to find a Chartered Acc
 Question one, the AC comparison, is on the previous slide.
 """)
 
+# 22a–d. Agents (M4) --------------------------------------------------------------------------
+AG = load_json(ROOT / "experiments" / "agent_results" / "summary.json")
+AGH = AG.get("headline", {})
+AGA = {a["system"]: a for a in AG.get("architectures", [])}
+AGV = AG.get("verifier", {})
+A_PIPE = AGA.get("NLP pipeline, one question per sub-task", {})
+A_SINGLE = AGA.get("Single agent (one LLM, all tools)", {})
+A_MULTI = AGA.get("Multi-agent orchestrator (Taxot)", {})
+
+s = new_slide("From answers to tasks: a team of AI agents", "Milestone 4 · agents")
+flows = [("Check my documents", "Reads Form 16, AIS, interest certificates; finds mismatches; ignores instructions hidden in documents"),
+         ("Prepare my return", "ITR form, both regimes computed, GST check, filing checklist; complex cases go to a CA"),
+         ("Save tax legally", "Tries each investment you still have room for; best option and exact rupee saving")]
+for i, (h, b) in enumerate(flows):
+    y = 1.7 + i * 1.6
+    card(s, 0.6, y, 5.3, 1.42)
+    badge(s, 0.85, y + 0.25, 0.56, str(i + 1), fill=TEAL, size=16)
+    text(s, 1.6, y + 0.15, 4.2, 0.45, h, size=19, bold=True, color=INK)
+    text(s, 1.6, y + 0.6, 4.2, 0.8, b, size=13, color=INK3)
+steps = [("Orchestrator plans the steps; asks you only what is missing", TEAL_SOFT, TEAL_INK),
+         ("Document agent reads every figure", WHITE, INK2),
+         ("Figures built by code, each with its source  →  you approve", AMBER_BG, AMBER_INK),
+         ("Income-tax · Calculator · GST agents · Escalation check", WHITE, INK2),
+         ("Verifier (a different AI family) checks every claim", TEAL_SOFT, TEAL_INK),
+         ("Answer + checklist, or a summary for your CA", WHITE, INK2)]
+for i, (lbl, fill, col) in enumerate(steps):
+    y = 1.7 + i * 0.8
+    b = box(s, 6.5, y, 6.2, 0.6, fill=fill, line=LINE)
+    shape_text(b, lbl, size=14, color=col, bold=True)
+    if i < len(steps) - 1:
+        arrow(s, 9.6, y + 0.6, 9.6, y + 0.8)
+text(s, 0.6, 6.4, 12.1, 0.55, "The AI never does the maths or the eligibility rules: the calculator, ITR rules and cross-checks "
+     "are the same tested code as before. Personal data is hidden before any AI call. At most 15 tool calls per task.",
+     size=12, color=MUTED, italic=True)
+notes(s, """
+In milestone 4 we moved from answering one question to doing a whole task.
+There are three workflows. One: check my documents. Two: prepare my return. Three: save tax legally.
+On the right is how a task runs. An orchestrator plans the steps and asks the user only for facts it cannot find in the documents. A document agent reads every figure.
+Then the important part: the figures that go into the tax calculation are built by code, not by the AI, and each figure shows where it came from. The user approves them.
+Specialist agents then pick the ITR form, compare the regimes, check GST and decide whether the case is too complex and needs a CA.
+Before anything reaches the user, a verifier agent from a different AI family checks every claim.
+The safety rules from before still hold: the calculator and the rules are plain tested code, and personal data is hidden before any AI call.
+""")
+
+s = new_slide("Agents: all five targets met", f"Scorecard · {AGH.get('tasks', 59)} synthetic tasks")
+rows = [("Task done right (form, regime, exact tax, findings)", "≥ 80%", pct(AGH.get("task_success"))),
+        ("Right tool with the right inputs", "≥ 85%", pct(AGH.get("tool_call_accuracy"))),
+        ("Planted false claims caught by the verifier", "≥ 90%", pct(AGH.get("verifier_catch_rate"))),
+        ("Complex cases sent to a CA", "≥ 90%", pct(AGH.get("escalation_accuracy"))),
+        ("Instructions hidden in documents ignored", "100%", pct(AGH.get("injection_resistance")))]
+text(s, 0.6, 1.6, 5.6, 0.4, "Target (fixed in the agent plan)", size=14, bold=True, color=MUTED)
+text(s, 7.2, 1.6, 1.6, 0.4, "Goal", size=14, bold=True, color=MUTED)
+text(s, 8.9, 1.6, 2.0, 0.4, "Result", size=14, bold=True, color=MUTED)
+for i, (name, goal, res) in enumerate(rows):
+    y = 2.05 + i * 0.86
+    card(s, 0.6, y, 12.1, 0.72)
+    text(s, 0.85, y, 6.3, 0.72, name, size=18, bold=True, color=INK, anchor=MSO_ANCHOR.MIDDLE)
+    text(s, 7.2, y, 1.6, 0.72, goal, size=18, color=INK3, anchor=MSO_ANCHOR.MIDDLE)
+    text(s, 8.9, y, 2.0, 0.72, res, size=18, bold=True, color=TEAL, anchor=MSO_ANCHOR.MIDDLE)
+    pill(s, 11.15, y + 0.15, 1.35, 0.42, "MET", fill=TEAL, color=WHITE, size=13)
+uw, cl = AGV.get("unsupported_without_verifier", 33), AGV.get("claims_checked", 229)
+text(s, 0.6, 6.4, 12.1, 0.5, f"On real task answers, {uw} of {cl} claims in the first drafts were unsupported. With the verifier, "
+     "none reached the user unmarked: fixed, removed, or flagged \"confirm with a CA\".", size=13, color=MUTED, italic=True)
+notes(s, f"""
+Before building the agents we set five targets. All five are met on {AGH.get('tasks', 59)} synthetic tasks: fictitious taxpayers with generated Form 16s and other documents, and known right answers.
+Tasks done right: {pct(AGH.get('task_success'))}, against a target of 80. That means the right ITR form, the right regime, the tax exact to the rupee, the document problems found, and the right escalation decision.
+The verifier caught every false claim we planted. Every complex case went to a CA. Every hidden instruction in a document was ignored.
+And on real answers: {uw} of {cl} claims in the first drafts were not supported. Without the verifier, the user would have seen them. With it, none got through unmarked.
+Honest note: each number comes from one run on free AI services, and the taxpayers are synthetic.
+""")
+
+s = new_slide("One AI with all tools: 45%. Taxot's team: 100%", "Comparison · same 22 tasks")
+names = ["NLP pipeline\n(M3)", "Single agent\n(all tools)", "Taxot agents"]
+vals = [A_PIPE.get("task_success", 0.045), A_SINGLE.get("task_success", 0.455), A_MULTI.get("task_success", 1.0)]
+cd = CategoryChartData()
+cd.categories = names
+cd.add_series("Tasks done right", vals)
+gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(0.6), Inches(2.05), Inches(5.6), Inches(4.1), cd)
+ch = gf.chart
+style_chart(ch, 13)
+ch.has_legend = False
+ch.has_title = False
+pl = ch.plots[0]
+pl.gap_width = 70
+pl.has_data_labels = True
+pl.data_labels.number_format = "0%"
+pl.data_labels.number_format_is_linked = False
+pl.data_labels.font.size = Pt(16)
+pl.data_labels.font.bold = True
+pl.data_labels.font.color.rgb = INK2
+pl.data_labels.position = XL_LABEL_POSITION.OUTSIDE_END
+ser = pl.series[0]
+ser.format.fill.solid()
+ser.format.fill.fore_color.rgb = BAR_GREY
+pt = ser.points[2]
+pt.format.fill.solid()
+pt.format.fill.fore_color.rgb = TEAL
+va = ch.value_axis
+va.minimum_scale, va.maximum_scale = 0.0, 1.1
+va.visible = False
+va.has_major_gridlines = False
+ch.category_axis.tick_labels.font.size = Pt(13)
+ch.category_axis.tick_labels.font.bold = True
+ch.category_axis.format.line.color.rgb = LINE
+text(s, 0.7, 1.65, 5.5, 0.4, "Tasks done right (filing + tax-saving)", size=16, bold=True, color=INK)
+why = [("Typed the calculator inputs itself", f"and dropped deductions: exact tax only {pct(A_SINGLE.get('amounts_exact'))}. "
+        "Taxot builds them by code."),
+       ("Answered cases it should hand to a CA", f"escalation {pct(A_SINGLE.get('escalation_accuracy'))}. Taxot's check is a rule."),
+       ("Ran out of steps on long tasks", f"best saving found {pct(A_SINGLE.get('savings_accuracy'))}. Taxot gives it to a specialist.")]
+text(s, 6.75, 1.65, 6.0, 0.4, "Why the single agent fails", size=16, bold=True, color=INK)
+for i, (h, b) in enumerate(why):
+    y = 2.15 + i * 1.2
+    card(s, 6.75, y, 5.95, 1.05, fill=RED_BG, line=RGBColor(0xFE, 0xCA, 0xCA))
+    text(s, 7.0, y + 0.1, 5.5, 0.4, h, size=16, bold=True, color=RED)
+    text(s, 7.0, y + 0.5, 5.5, 0.55, b, size=13, color=INK3)
+m_calls, s_calls = A_MULTI.get("avg_llm_calls", 19.8), A_SINGLE.get("avg_llm_calls", 7.1)
+card(s, 6.75, 5.8, 5.95, 0.75, fill=SUBTLE, line=None)
+text(s, 7.0, 5.8, 5.5, 0.75, f"The price: {m_calls:.0f} AI calls per task vs {s_calls:.0f}, median "
+     f"{A_MULTI.get('median_seconds', 244) / 60:.0f} min vs {A_SINGLE.get('median_seconds', 66) / 60:.0f} min.",
+     size=14, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
+notes(s, f"""
+To check that the team of agents is worth it, we ran the same 22 filing and tax-saving tasks on two simpler systems.
+Our milestone 3 pipeline, even with all the figures typed into the question, gets {pct(A_PIPE.get('task_success'), 1)}. It was built to answer one question, not to do a task.
+A single AI with all the same tools gets {pct(A_SINGLE.get('task_success'))}. It picks the right form and regime every time, but it types the calculator inputs itself and forgets deductions, it answers cases it should send to a CA, and on long tasks it runs out of steps.
+Taxot gets {pct(A_MULTI.get('task_success'))}. Each of those three failures is a decision we took away from the AI and gave to code.
+The price is cost: about {m_calls:.0f} AI calls per task instead of {s_calls:.0f}, and about four minutes instead of one.
+""")
+
+s = new_slide("Live demo 2: the Tasks tab", "Demo")
+demo2 = [("Hidden instruction in a document", "Sample: \"Salaried with FD interest\". Flags the line aimed at AI, ignores it (≈30 s)"),
+         ("Two Form 16s", "ITR-1, new regime ₹1,21,649 vs old ₹2,73,312; finds both employers (≈4 min)"),
+         ("Could investing more save tax?", "Only the combination helps: switch to old, save ₹19,500 (≈4 min)"),
+         ("Short-term gains on shares", "Stops and writes a summary for a CA (≈5 min)")]
+for i, (h, q) in enumerate(demo2):
+    y = 1.7 + i * 1.15
+    badge(s, 0.6, y + 0.08, 0.56, "ABCD"[i], fill=TEAL, size=16)
+    text(s, 1.35, y, 6.0, 0.4, h, size=18, bold=True, color=INK)
+    text(s, 1.35, y + 0.4, 6.0, 0.7, q, size=13, color=MUTED)
+card(s, 7.8, 1.7, 4.9, 4.4, fill=SUBTLE, line=None)
+text(s, 8.05, 1.85, 4.5, 4.2, [[("How to run it", {"bold": True, "color": INK, "size": 17})],
+                               "Tasks tab → Or try a sample taxpayer → Start",
+                               "When asked: Fill in the sample taxpayer's answer → Send",
+                               "Approve each card: figures, regime, plan, checklist",
+                               [("Start the long one first and talk over it.", {"color": MUTED, "italic": True})]],
+     size=14, color=INK2, spacing=6)
+notes(s, """
+The second demo is the Tasks tab. We use sample taxpayers; everything about them is fictitious.
+A: a document with a hidden instruction aimed at the AI. Taxot reports it and does not follow it. This one is fast, about 30 seconds, so we start with it.
+B: someone who changed jobs and has two Form 16s. Point at the figures card, where each number shows its source. Answer: ITR-1, the new regime.
+C: a tax-saving request. Only investing in everything and switching to the old regime helps, saving 19,500 rupees. Every option is a real calculator run.
+D: short-term gains on shares. Taxot stops and writes a summary for a CA instead of guessing.
+These tasks take a few minutes because the agents use free AI services. If one stalls, cancel and show the finished results in the experiment log.
+""")
+
 # 22. Limits, ethics, future ---------------------------------------------------------------
 s = new_slide("Limits, ethics, and what comes next", "Honest about the gaps")
 text(s, 0.6, 1.62, 5.9, 0.45, "Limits today", size=20, bold=True, color=INK)
@@ -1131,10 +1285,10 @@ for i, l in enumerate(lims):
     card(s, 0.6, y, 5.9, 0.62, fill=AMBER_BG if warn else WHITE, line=RGBColor(0xFD, 0xE6, 0x8A) if warn else LINE)
     text(s, 0.85, y, 5.55, 0.62, l, size=17, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
 text(s, 6.9, 1.62, 5.8, 0.45, "Next milestones", size=20, bold=True, color=INK)
-fut = [("M4", "Run the sealed test set once; study the errors; better off-topic sorter from real questions"),
-       ("M5", "GPU or hosted model to reach 5 s; multilingual reranker; CA review of the answer key"),
+fut = [("M4", "Done: agents for documents, filing, tax-saving (all targets met). Next: repeat runs, real Form 16 layouts"),
+       ("M5", "Re-score answers with the hosted writer; multilingual reranker; CA review of the answer key"),
        ("M6", "Small user study with our three personas"),
-       ("Agent", "AI picks tools (search, calculator, follow-up); calculator + fact-check stay hard rules")]
+       ("Test", "Run the sealed test set once; better off-topic sorter from real questions")]
 for i, (k, v) in enumerate(fut):
     y = 2.15 + i * 1.12
     c = box(s, 6.9, y, 1.1, 0.95, fill=TEAL)
@@ -1147,10 +1301,10 @@ Real off-topic questions are harder than ours: only {REAL_OOS:.0%} were refused.
 Our library is made of careful summaries, not the full text of the Acts.
 Our answer key was written by us. A real CA has not checked it yet.
 On ethics: this is general information, not professional advice. Every answer says so and links to a CA. We hide PAN, Aadhaar and phone numbers before anything is logged.
-Next steps. In milestone 4 we run the sealed test set once, study the errors, and retrain the off-topic sorter using what we learned from real questions.
-In milestone 5, a GPU or a hosted model to meet the 5-second target, a multilingual reranker, and a CA review of our answer key.
+Next steps. Milestone 4, the agents, is done; next we repeat those runs on other days and test real Form 16 layouts from other employers.
+In milestone 5, we re-score the answers with the faster hosted writer, try a multilingual reranker, and get a CA to review our answer key.
 In milestone 6, a small user study.
-Later, an agent layer: the AI could choose its own tools, but the calculator and the fact-check stay as hard rules it cannot skip.
+We also still have to run the sealed test set once and improve the off-topic sorter with what we learned from real questions.
 """)
 
 # 23. Thanks -------------------------------------------------------------------------------

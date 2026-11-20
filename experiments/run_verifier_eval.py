@@ -143,7 +143,7 @@ def _verifier_used() -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--workers", type=int, default=1)   # free tiers: parallel runs hit rate limits
     a = ap.parse_args(argv)
     with ThreadPoolExecutor(max_workers=a.workers) as pool:
         planted = list(pool.map(run_planted, enumerate(PLANTED)))

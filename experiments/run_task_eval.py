@@ -145,7 +145,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("personas", nargs="*")
     ap.add_argument("--workflow", default=None)
-    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--workers", type=int, default=1)   # free tiers: parallel runs hit rate limits
     ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--resume", action="store_true", help="keep saved rows that did not error; run only the rest")
     a = ap.parse_args(argv)

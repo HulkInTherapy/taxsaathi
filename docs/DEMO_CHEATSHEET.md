@@ -30,6 +30,32 @@ Plain AI: *"…Rs 50,000 for the financial year 2022-23"* (out of date). Taxot: 
 2. **Key facts 10% → 69%**: the same AI from memory vs with retrieval (B0 → C6).
 3. **Calculator 100% exact** (16/16 hand-worked cases, 99 tests). **4 of 5 targets met**; the miss is speed (16.8 s median on CPU).
 
+## Tasks tab (agents, M4)
+
+**Tasks** tab → **Or try a sample taxpayer** → pick one → **Start**. When the agents ask a question, click
+**Fill in the sample taxpayer's answer** → **Send answer**. Approve each card. The agents call free cloud
+AIs, so a task takes **½–5 min**; start the long one first and talk over it. Figures below are from the
+26 Nov 2026 evaluation run (`experiments/agent_results/`).
+
+| # | Sample | Workflow | Point at on screen | Expected result |
+|---|---|---|---|---|
+| A | **Salaried with FD interest (one document hides an instruction aimed at AI)** | Check my documents | The finding that the interest certificate contains an instruction, and that it was ignored | 2 findings: **instruction in a document flagged and ignored**, **interest income not in Form 16** (≈30 s; the fastest, open with this) |
+| B | **Changed jobs mid-year: two Form 16s** | Prepare my return | "Are these figures right?" card (where each figure came from), then the regime card | **ITR-1, new regime ₹1,21,649 vs old ₹2,73,312**; findings: two employers, interest missing from Form 16. 1 question, 3 approvals (≈4 min) |
+| C | **Could investing a little more save tax?** | Save tax legally | "Ways to save, best first" | Only the **combination** helps: +80C, NPS, 80D and parents' 80D and switch to the old regime → **₹1,95,000, saves ₹19,500**. Any single option saves ₹0 (≈4 min) |
+| D | **Sold shares at a short-term gain** | Prepare my return | Amber "This needs a Chartered Accountant" card → **Case summary for your CA** | **Escalated: capital gains** (ITR-2); no tax computed on purpose; a downloadable CA summary. 3 questions (≈5 min) |
+
+**Say while it works:** (A) "Documents are data, never instructions: the hidden line is reported, not obeyed."
+(B) "The AI never does arithmetic: figures are built by code from the documents and your answers, each with
+its source; you approve them before anything is computed." (C) "Every option is a real calculator run, not
+an estimate." (D) "Knowing when to stop is a feature: it hands a CA a summary instead of guessing."
+Throughout: "A verifier agent from a different model family checks every claim before you see it."
+
+**3 agent numbers:** 100% task success on 59 synthetic tasks (target 80%) · single agent with the same tools
+45%, NLP pipeline 4.5% · verifier caught 100% of planted false claims.
+
+**If a task stalls (> 6 min) or errors:** free-tier limits. Cancel, start sample A (shortest), and show the
+finished runs in `docs/M4_agent_experiment_log.md`. Samples need the live server (no offline mode).
+
 ## Backup plan
 
 - **Slow (> 60 s) or error:** keep talking (open "How this was found" on an earlier answer), then retry once.

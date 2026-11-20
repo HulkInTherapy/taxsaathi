@@ -167,7 +167,7 @@ def summarise(rows: list[dict]) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("personas", nargs="*")
-    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--workers", type=int, default=1)   # free tiers: parallel runs hit rate limits
     ap.add_argument("--out", type=Path, default=OUT_DIR / "doc_check.json")
     a = ap.parse_args(argv)
     truth = load_truth()
