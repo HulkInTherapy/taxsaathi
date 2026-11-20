@@ -25,7 +25,7 @@ from pydantic import BaseModel, Field
 
 from src import config
 from src.calculator.tax import PresumptiveLimitExceeded, calculate
-from src.generation.llm import is_available
+from src.generation.llm import is_available, model_name
 from src.guardrails.pii import mask_pii
 from src.pipeline import CONFIGS, get_pipeline
 
@@ -107,9 +107,12 @@ def _warm() -> None:
 # ---------------------------------------------------------------- endpoints
 @app.get("/health")
 def health():
-    from src.llm.provider import provider_order
-    return {"status": "ok", "llm": config.LLM_MODEL, "llm_available": is_available(),
-            "agent_providers": provider_order(role="planner"),
+    from src.llm.provider import provider_order, reachability
+    reach = reachability()
+    # "degraded": the NLP pipeline still answers, but the agent workflows have no LLM provider to use
+    status = "ok" if any(r.get("key_ok") for r in reach.values()) else "degraded"
+    return {"status": status, "llm": model_name(), "llm_backend": config.GEN_BACKEND, "llm_available": is_available(),
+            "agent_providers": provider_order(role="planner"), "providers": reach,
             "chunks": len(get_pipeline().chunks), "today": config.TODAY.isoformat(),
             "rerank_threshold": config.rerank_threshold()}
 

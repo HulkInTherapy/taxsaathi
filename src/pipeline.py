@@ -420,7 +420,8 @@ def config_final_k() -> int:
 
 
 def _llm_name() -> str:
-    return config.LLM_MODEL
+    from src.generation.llm import model_name
+    return model_name()
 
 
 def _disclaimer() -> str:

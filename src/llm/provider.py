@@ -27,7 +27,7 @@ from typing import Any, Sequence
 from src import config
 from src.llm.masking import Masker
 
-ROLES = ("planner", "extractor", "verifier")
+ROLES = ("planner", "extractor", "verifier", "writer")
 
 
 class LLMUnavailable(RuntimeError):
@@ -71,6 +71,42 @@ def _has_key(provider: str) -> bool:
     env = config.PROVIDERS[provider]["key_env"]
     return env is None or bool(os.environ.get(env))
 
+
+
+# ------------------------------------------------------------------ reachability (for /health)
+_REACH: dict[str, Any] = {"at": 0.0, "result": None}
+REACH_TTL_S = 60
+
+
+def reachability(timeout: float = 3.0, ttl: float = REACH_TTL_S) -> dict[str, dict]:
+    """For each API provider with a key: can we reach it, and is the key accepted? One GET of the
+    OpenAI-compatible `/models` list per provider, in parallel, cached for `ttl` seconds so a polled
+    /health does not use the free-tier quotas (listing models is not a completion and costs no tokens)."""
+    with _LOCK:
+        if _REACH["result"] is not None and time.monotonic() - _REACH["at"] < ttl:
+            return _REACH["result"]
+    from concurrent.futures import ThreadPoolExecutor
+    names = [n for n in config.PROVIDERS if n != "ollama" and _has_key(n)]
+    with ThreadPoolExecutor(max_workers=max(1, len(names))) as pool:
+        result = dict(zip(names, pool.map(lambda n: _ping(n, timeout), names)))
+    with _LOCK:
+        _REACH.update(at=time.monotonic(), result=result)
+    return result
+
+
+def _ping(provider: str, timeout: float) -> dict:
+    import requests
+    p = config.PROVIDERS[provider]
+    t0 = time.perf_counter()
+    try:
+        r = requests.get(p["base_url"].rstrip("/") + "/models", timeout=timeout,
+                         headers={"Authorization": f"Bearer {os.environ.get(p['key_env'], '')}"})
+    except requests.RequestException as e:
+        return {"reachable": False, "error": type(e).__name__}
+    ms = round((time.perf_counter() - t0) * 1000)
+    if r.status_code in (401, 403):
+        return {"reachable": True, "key_ok": False, "status": r.status_code, "ms": ms}
+    return {"reachable": r.status_code < 500, "key_ok": r.status_code < 400, "status": r.status_code, "ms": ms}
 
 _LIMITERS: dict[str, Any] = {}
 _MODELS: dict[tuple[str, str], Any] = {}

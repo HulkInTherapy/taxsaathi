@@ -413,7 +413,9 @@ def main(argv=None) -> int:
     for r in results:
         existing[r["name"]] = r
     ordered = [existing[n] for n in CONFIGS if n in existing]
-    detail_path = args.out.with_name(f"results_{args.split}_rows.json")
+    # a custom --out gets its own rows file, so the M3 per-question rows are never overwritten
+    stem = "results" if args.out == config.RESULTS_PATH else args.out.stem
+    detail_path = args.out.with_name(f"{stem}_{args.split}_rows.json")
     detail_path.write_text(json.dumps({c["name"]: c["rows"] for c in ordered}, indent=1, ensure_ascii=False))
     payload = {"configs": [{k: v for k, v in c.items() if k != "rows"} for c in ordered],
                "split": args.split, "dev_size": len(splits["dev"]), "test_size": len(splits["test"]),

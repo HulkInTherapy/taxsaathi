@@ -156,3 +156,60 @@ def test_unmask_accepts_placeholders_without_brackets():
     m.mask("PAN ABCDE1234F")
     assert m.unmask("pan: PAN_1") == "pan: ABCDE1234F" and m.unmask("<PAN_1>") == "ABCDE1234F"
     assert m.unmask("SECTION_80 and PAN_7") == "SECTION_80 and PAN_7"   # unknown tokens untouched
+
+
+# ------------------------------------------------------------------ /health reachability
+def test_reachability_reports_key_and_caches(monkeypatch):
+    import requests
+    from src.llm import provider as P
+    for n in ("NVIDIA_API_KEY", "GROQ_API_KEY"):
+        monkeypatch.setenv(n, "k")
+    for n in ("REGOLO_API_KEY", "GEMINI_API_KEY", "OPENROUTER_API_KEY"):
+        monkeypatch.delenv(n, raising=False)
+    calls = []
+
+    def fake_get(url, timeout, headers):
+        calls.append(url)
+        if "groq" in url:
+            return type("R", (), {"status_code": 401})()
+        if "nvidia" in url:
+            return type("R", (), {"status_code": 200})()
+        raise requests.ConnectionError()
+    monkeypatch.setattr(requests, "get", fake_get)
+    monkeypatch.setattr(P, "_REACH", {"at": 0.0, "result": None})
+    r = P.reachability()
+    assert set(r) == {"nvidia", "groq"}                      # providers without a key are not probed
+    assert r["nvidia"]["key_ok"] and r["groq"]["reachable"] and not r["groq"]["key_ok"]
+    P.reachability()
+    assert len(calls) == 2                                   # second call served from the cache
+
+
+def test_ping_connection_error_is_unreachable(monkeypatch):
+    import requests
+    from src.llm import provider as P
+    monkeypatch.setattr(requests, "get", lambda *a, **k: (_ for _ in ()).throw(requests.Timeout()))
+    assert P._ping("nvidia", 1) == {"reachable": False, "error": "Timeout"}
+
+
+# ------------------------------------------------------------------ Ask/Compare answer writer
+def test_writer_uses_gateway_and_wraps_errors(monkeypatch):
+    from src.generation import llm as gen
+    seen = {}
+
+    def fake_chat(messages, role, **kw):
+        seen["role"] = role
+        return AIMessage(content=" 28% GST [GST-RATE-AC-PRE] ")
+    monkeypatch.setattr(config, "GEN_BACKEND", "api")
+    monkeypatch.setattr(prov, "chat", fake_chat)
+    assert gen.chat([{"role": "user", "content": "q"}]) == "28% GST [GST-RATE-AC-PRE]" and seen["role"] == "writer"
+
+    def down(messages, role, **kw):
+        raise prov.LLMUnavailable("no key")
+    monkeypatch.setattr(prov, "chat", down)
+    with pytest.raises(gen.LLMError):                      # caller falls back to the extractive answer
+        gen.chat([{"role": "user", "content": "q"}])
+
+
+def test_writer_role_has_model_on_every_provider():
+    assert "writer" in prov.ROLES
+    assert all(p["models"].get("writer") for p in config.PROVIDERS.values())

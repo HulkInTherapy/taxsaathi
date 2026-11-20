@@ -119,6 +119,19 @@ PROVIDERS: dict[str, dict] = {
         "models": {"planner": LLM_MODEL, "extractor": LLM_MODEL, "verifier": LLM_MODEL},
     },
 }
+# "writer": phrases the short, cited answers of the Ask/Compare pipeline (src/generation). Answers are 2-5
+# sentences and the user is waiting, so it needs a fast model that does not reason at length. Benchmark on
+# 26 Nov 2026 (3 demo questions, C6): Groq gpt-oss-20b 0.8-3.3 s and Regolo gpt-oss-120b 1.5-4.1 s, both clean
+# and cited; NVIDIA nemotron-3.5-lightning and mistral-large-4 spent the whole 1,200-token budget reasoning
+# and returned no text; NVIDIA gemma-3-12b-it is listed but returned 404.
+_WRITER_DEFAULT = {"groq": "openai/gpt-oss-20b", "ollama": LLM_MODEL}
+for _name, _p in PROVIDERS.items():
+    _p["models"]["writer"] = os.environ.get(f"TAXOT_{_name.upper()}_WRITER",
+                                            _WRITER_DEFAULT.get(_name, _p["models"]["planner"]))
+# Who writes Ask/Compare answers: "api" (the provider gateway, role "writer") or "ollama" (local qwen2.5:3b,
+# the setup the M3 answer-quality numbers were measured with).
+GEN_BACKEND = os.environ.get("TAXOT_GEN_BACKEND", "api")
+
 # Provider order per role (comma list in env, e.g. TAXOT_PROVIDERS_VERIFIER=gemini,groq). Roles not listed use
 # TAXOT_LLM_PROVIDER first, then the rest. The verifier runs on other model families than the agents it checks,
 # and spreading roles across providers spreads the free-tier quotas.
@@ -127,6 +140,7 @@ ROLE_PROVIDERS = {
     for role in ("planner", "extractor", "verifier") if os.environ.get(f"TAXOT_PROVIDERS_{role.upper()}")
 }
 ROLE_PROVIDERS.setdefault("verifier", ["regolo", "gemini", "groq", "nvidia", "openrouter"])
+ROLE_PROVIDERS.setdefault("writer", ["groq", "regolo", "gemini", "nvidia", "openrouter"])
 AGENT_LLM_TIMEOUT_S = float(os.environ.get("TAXOT_AGENT_LLM_TIMEOUT", "60"))
 AGENT_MAX_TOKENS = int(os.environ.get("TAXOT_AGENT_MAX_TOKENS", "1500"))
 # Output budget per role. Reasoning models think before answering, and a Form 16 has ~30 fields,
@@ -135,7 +149,8 @@ AGENT_MAX_TOKENS = int(os.environ.get("TAXOT_AGENT_MAX_TOKENS", "1500"))
 # was cut off (no verdicts -> every claim counted as unsupported), so it gets its own, larger budget.
 ROLE_MAX_TOKENS = {"planner": AGENT_MAX_TOKENS,
                    "verifier": int(os.environ.get("TAXOT_VERIFIER_MAX_TOKENS", "4000")),
-                   "extractor": int(os.environ.get("TAXOT_EXTRACTOR_MAX_TOKENS", "6000"))}
+                   "extractor": int(os.environ.get("TAXOT_EXTRACTOR_MAX_TOKENS", "6000")),
+                   "writer": int(os.environ.get("TAXOT_WRITER_MAX_TOKENS", "1200"))}
 MAX_TOOL_CALLS = int(os.environ.get("TAXOT_MAX_TOOL_CALLS", "15"))  # per task (plan: safety boundary)
 LLM_USAGE_LOG = LOG_DIR / "llm_usage.jsonl"
 
