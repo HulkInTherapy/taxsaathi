@@ -8,7 +8,7 @@ Numbers come from a calculator, never from the AI. If it isn't sure, it says so 
 **M4 agents** done: three multi-agent workflows that read your documents and do the work, evaluated in
 [`docs/M4_agent_experiment_log.md`](docs/M4_agent_experiment_log.md).
 
-🔴 **Live demo:** http://167.86.114.152:8000  (tabs: Ask · Plain LLM vs Taxot · Calculator · Tasks · Experiments · How it works)
+🔴 **Live demo:** http://167.86.114.152:8000  (tabs: Ask · Tasks · Compare · Calculator · Results · Monitor · How it works)
 
 ---
 
@@ -17,14 +17,16 @@ Numbers come from a calculator, never from the AI. If it isn't sure, it says so 
 | You want to… | Open |
 |---|---|
 | Understand the whole thing with zero NLP background | [`docs/EXPLAINED_SIMPLY.md`](docs/EXPLAINED_SIMPLY.md) |
-| Present it | [`presentation/Taxot.pptx`](presentation/Taxot.pptx) (speaker notes on every slide) |
+| Present it | [`presentation/Taxot_Short.pptx`](presentation/Taxot_Short.pptx) (17 slides) or the full [`presentation/Taxot.pptx`](presentation/Taxot.pptx); speaker notes on every slide |
 | Prepare for the viva + demo script | [`docs/viva_prep.md`](docs/viva_prep.md) |
 | M1 — problem & business case | [`docs/M1_problem_brief.md`](docs/M1_problem_brief.md) |
 | M2 — data card, EDA | [`docs/data_card.md`](docs/data_card.md), [`docs/eda.md`](docs/eda.md) |
 | M3 — experiment log & results | [`docs/M3_experiment_log.md`](docs/M3_experiment_log.md) |
 | M4 — agents: plan, experiment log | [`docs/AGENTIC_PLAN.md`](docs/AGENTIC_PLAN.md), [`docs/M4_agent_experiment_log.md`](docs/M4_agent_experiment_log.md) |
 | Demo script (Ask + Tasks) | [`docs/DEMO_CHEATSHEET.md`](docs/DEMO_CHEATSHEET.md) |
-| Research-paper-style report | [`docs/report_draft.md`](docs/report_draft.md) |
+| Final report (IEEE format) | [`docs/report/taxot_ieee_report.pdf`](docs/report/taxot_ieee_report.pdf) (source `.tex` alongside); longer draft in [`docs/report_draft.md`](docs/report_draft.md) |
+| M4 — held-out test set, robustness, load test | `experiments/results_test.json`, `docs/battery_after.json`, `experiments/load_test.json` |
+| M5 — monitoring dashboard | Monitor tab in the app (`GET /monitoring`, built from `logs/*.jsonl`) |
 | Literature review (20 real papers) | [`docs/related_work.md`](docs/related_work.md) |
 | Where every tax fact came from | [`docs/research/`](docs/research/) |
 
