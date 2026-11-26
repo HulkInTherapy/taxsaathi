@@ -1,0 +1,47 @@
+% Numbers from experiments/results_test.json (held-out test, 123 questions, run 26 Nov 2026),
+% docs/battery_before.json / docs/battery_after.json and experiments/load_test.json.
+\newcommand{\TestRfive}{0.904}
+\newcommand{\TestMRR}{0.822}
+\newcommand{\TestOOS}{84.6\%$^\ddagger$}
+\newcommand{\TestCalc}{100\%}
+\newcommand{\TestRows}{%
+B1 & 0.839 & 0.722 & 0.725 & 0.889 & 0.959 & 1.00 \\
+C1 & 0.847 & 0.747 & 0.750 & 0.833 & 0.959 & 1.00 \\
+C2 & 0.877 & 0.766 & 0.767 & 0.944 & 0.959 & 1.00 \\
+C3 & 0.888 & 0.770 & 0.784 & 0.833 & 0.951 & 1.00 \\
+C4 & 0.888 & 0.805 & 0.802 & \textbf{1.000} & 0.951 & 1.00 \\
+C5 & 0.897 & 0.808 & 0.807 & \textbf{1.000} & 0.959 & 1.00 \\
+\textbf{C6} & \textbf{0.904} & \textbf{0.822} & \textbf{0.819} & \textbf{1.000} & \textbf{0.959} & 1.00 \\
+}
+\newcommand{\TestDiscussion}{%
+The final configuration generalises: C6 is again the best on every ranking metric (Recall@5 0.904 vs 0.917
+on dev; MRR 0.822 vs 0.830), period accuracy stays at 1.000 on the 18 test time traps, and the calculator is
+exact on all 13 test calculations. The ladder keeps its shape---fusion beats either retriever and the date
+filter fixes period errors (C3 0.833 $\to$ C4 1.000)---with one difference: on test, letting the reranker
+reorder (C3) did not hurt ranking (MRR 0.766 $\to$ 0.770), so the dev finding that reordering is harmful is
+weaker than it looked on 53 questions. Per category, Recall@5 is 1.00 for GST and Hinglish, 0.96 for income
+tax and 0.94 for time traps, but only 0.38 for calculations (the explanation passages retrieved are often
+not the gold ones; the computed numbers are unaffected).
+
+\textbf{One target is missed on test.} Out-of-scope refusal is 84.6\% (11/13), below the 90\% target that dev
+(100\%, 5/5) appeared to meet. Both misses are GST enforcement or evasion questions phrased like ordinary
+GST questions (a search and seizure under section~67; splitting a shop's sales between spouses to stay under
+the registration threshold), which the intent classifier labels \emph{question} and the gate passes because
+GST passages score well. Three answerable questions were wrongly refused (false-refusal rate 2.7\%), e.g.\
+``My client paid my invoice but kept back 10\%. Why?''. Both are classifier errors, and the fix---more
+enforcement and evasion examples in the intent training data, and a topic rule for ``search'', ``seizure'' and
+``split sales''---must be validated on new questions, since the test set has now been used.}
+\newcommand{\RobustText}{%
+Before the real-question fixes, the battery passed 61/80 real and 12/28 hard cases; with the final code it
+passes 69/80 and 24/28. The remaining failures are mostly intent errors at the edges: foreign-currency
+salary phrased as ``\$3000 per month from a US client'', implicit amounts (``my wife earns 25k pm''), a
+Hinglish monthly figure (``mera mahine ka 40 hazaar hai''), and procedural questions about the 2025 Act
+classified as out of scope.}
+\newcommand{\PerfText}{%
+With a single user, the C6 pipeline without the writer (scrub, normalisation, intent, period, hybrid
+retrieval, cross-encoder gate, calculator, citation check) takes p50 2.2\,s and p95 2.9\,s per question on a
+laptop CPU; the hosted writer adds about 6\,s (end-to-end p50 8.1\,s, p95 18.3\,s on dev). Under 10 concurrent
+users the throughput does not rise (0.45 $\to$ 0.37 questions/s) and p50 grows to 25\,s: the cross-encoder
+saturates the CPU, so concurrency needs a GPU, a smaller or quantised gate model, or more replicas. The writer
+uses about 730 input and 450 output tokens per answer (73k and 45k per 100 queries), which costs nothing on the
+free tiers used; the cost per 100 queries at paid rates depends on the provider chosen.}
