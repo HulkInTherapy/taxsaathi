@@ -1,0 +1,26 @@
+{
+  "config": "C6",
+  "writer": "off (extractive)",
+  "questions": 53,
+  "levels": [
+    {
+      "users": 1,
+      "requests": 106,
+      "wall_s": 237.44,
+      "throughput_qps": 0.45,
+      "p50_ms": 2168,
+      "p95_ms": 2933,
+      "max_ms": 4224
+    },
+    {
+      "users": 10,
+      "requests": 106,
+      "wall_s": 288.06,
+      "throughput_qps": 0.37,
+      "p50_ms": 25254,
+      "p95_ms": 39360,
+      "max_ms": 44466
+    }
+  ],
+  "generated_at": "2026-11-26T09:14:45+00:00"
+}
