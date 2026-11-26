@@ -29,6 +29,7 @@
         <button class="tab" role="tab" data-view="compare" id="tab-compare" aria-controls="view-compare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.5 20.5h9M5 7.5h14M5 7.5l-2.6 6.2a3 3 0 0 0 5.2 0zM19 7.5l-2.6 6.2a3 3 0 0 0 5.2 0z"/></svg><span class="tab-label">Compare</span></button>
         <button class="tab" role="tab" data-view="calculator" id="tab-calculator" aria-controls="view-calculator"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="2.5" width="15" height="19" rx="3"/><path d="M8.5 7h7M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15v2.5M8.5 18h.01M12 18h.01"/></svg><span class="tab-label">Calculator</span></button>
         <button class="tab" role="tab" data-view="experiments" id="tab-experiments" aria-controls="view-experiments"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5h16M7 16.5v-4M12 16.5v-9M17 16.5V10"/></svg><span class="tab-label">Results</span></button>
+        <button class="tab" role="tab" data-view="monitor" id="tab-monitor" aria-controls="view-monitor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12h3.5l2.5-6 4 12 2.5-6h4.5"/></svg><span class="tab-label">Monitor</span></button>
         <button class="tab" role="tab" data-view="how" id="tab-how" aria-controls="view-how"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.3"/><circle cx="19" cy="5.5" r="2.3"/><circle cx="19" cy="18.5" r="2.3"/><path d="M7.3 12h3.2c1.5 0 2-.6 3-2l2.6-3.4M10.5 12c1.5 0 2 .6 3 2l2.6 3.4"/></svg><span class="tab-label">How it works</span></button>
       </nav>
       <span class="nav-div" aria-hidden="true"></span>
@@ -216,6 +217,16 @@
       <div id="expBody"><div class="kpis"><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div></div><div class="skeleton sk-block"></div></div>
     </section>
 
+    <!-- ============================ MONITOR ============================ -->
+    <section class="view page res-page mon-page" id="view-monitor" role="tabpanel" aria-labelledby="tab-monitor" hidden>
+      <header class="page-head center">
+        <h1 class="page-title">How is Taxot doing live?</h1>
+        <p class="page-sub">Built from the server's own logs: every question (with personal details masked), refusals, speed, feedback and AI-provider calls.</p>
+        <div class="page-meta" id="monMeta"></div>
+      </header>
+      <div id="monBody"><div class="kpis"><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div><div class="skeleton kpi-sk"></div></div><div class="skeleton sk-block"></div></div>
+    </section>
+
     <!-- ============================ HOW ================================ -->
     <section class="view page how-page" id="view-how" role="tabpanel" aria-labelledby="tab-how" hidden>
       <header class="page-head center">
@@ -245,5 +256,6 @@
   <script src="app.js" defer></script>
   <script src="views.js" defer></script>
   <script src="agent.js?v=7c" defer></script>
+  <script src="monitor.js" defer></script>
 </body>
 </html>

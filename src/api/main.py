@@ -180,6 +180,13 @@ def feedback(req: FeedbackRequest):
     return {"ok": True}
 
 
+@app.get("/monitoring")
+def monitoring(days: int = 14):
+    """Dashboard data: query volume, refusals, latency, near-gate questions, feedback, LLM providers."""
+    from src.api.monitoring import summarize
+    return summarize(config.LOG_DIR, threshold=config.rerank_threshold(), days=max(1, min(days, 90)))
+
+
 @app.get("/configs")
 def configs():
     return {k: v["description"] for k, v in CONFIGS.items()}

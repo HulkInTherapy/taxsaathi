@@ -874,6 +874,11 @@
         return delay(200, KB);
       case "/feedback":
         return delay(150, { ok: true });
+      case "/monitoring":
+        return delay(200, { generated_at: new Date().toISOString(), threshold: -5.83, mock: true,
+          queries: { total: 0, last_24h: 0, refusal_rate: null, refusal_reasons: {}, latency_p50_ms: null, latency_p95_ms: null,
+                     intents: {}, languages: {}, endpoints: {}, per_day: [], near_gate: [], near_gate_count: 0, recent_refused: [], top_citations: [] },
+          feedback: { up: 0, down: 0, recent_down: [] }, llm: { calls: 0, ok_rate: null, by_role: {}, providers: [] } });
       default:
         return Promise.reject(new Error("Mock: no handler for " + p));
     }
