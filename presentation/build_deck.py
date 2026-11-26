@@ -1274,6 +1274,43 @@ These tasks take a few minutes because the agents use free AI services. If one s
 """)
 
 # 22. Limits, ethics, future ---------------------------------------------------------------
+# Business: cost per query and how it could make money ---------------------------------------
+s = new_slide("Cost per answer and how Taxot could earn", "Business")
+text(s, 0.6, 1.62, 5.6, 0.45, "What one answer costs today", size=20, bold=True, color=INK)
+cost = [("~1,200", "AI tokens per answer (about 730 in, 450 out)"),
+        ("₹0", "on the free AI tiers we use; failed calls fall back to the next provider"),
+        ("1 server", "4-core CPU runs search, the safety gate and the calculator; no GPU"),
+        ("2–3 s", "for everything except the AI writer; the writer adds about 6 s")]
+for i, (big, small) in enumerate(cost):
+    y = 2.15 + i * 1.08
+    card(s, 0.6, y, 5.6, 0.92)
+    text(s, 0.85, y, 1.75, 0.92, big, size=24, bold=True, color=TEAL, anchor=MSO_ANCHOR.MIDDLE)
+    text(s, 2.65, y, 3.45, 0.92, small, size=14, color=INK3, anchor=MSO_ANCHOR.MIDDLE)
+text(s, 6.75, 1.62, 6.0, 0.45, "How it could make money", size=20, bold=True, color=INK)
+plans = [("Free", "Individuals", "Ask, Compare and Calculator with sources: brings users in", WHITE, LINE),
+         ("Premium", "Individuals", "Tasks: document check, return preparation, tax-saving plan, CA summary",
+          TEAL_SOFT, MINT),
+         ("B2B", "CA firms", "A first-line assistant for their clients: routine questions answered with "
+                             "citations, complex cases arrive with a ready summary", AMBER_BG,
+          RGBColor(0xFD, 0xE6, 0x8A))]
+for i, (k, who, body, fill, ln) in enumerate(plans):
+    y = 2.15 + i * 1.45
+    card(s, 6.75, y, 5.95, 1.3, fill=fill, line=ln)
+    text(s, 7.0, y + 0.15, 1.6, 0.45, k, size=20, bold=True, color=INK)
+    text(s, 7.0, y + 0.62, 1.6, 0.4, who, size=13, color=MUTED)
+    text(s, 8.6, y, 3.95, 1.3, body, size=14, color=INK2, anchor=MSO_ANCHOR.MIDDLE)
+text(s, 0.6, 6.55, 12.1, 0.35, "Token counts are averages from our logs. Paid-tier prices depend on the provider chosen; "
+     "the business model is a proposal, not yet tested with users.", size=12, color=MUTED, italic=True)
+notes(s, """
+How much does an answer cost, and how could this become a business?
+One answer uses about 1,200 AI tokens: roughly 730 going in and 450 coming out. On the free tiers we use, that costs nothing; if one provider is busy, the next one takes over.
+Everything else, the search, the safety gate and the calculator, runs on one ordinary 4-core server with no graphics card, in two to three seconds.
+The business idea has three parts. Free for individuals: ask questions, compare with a plain chatbot, use the calculator. That brings people in.
+Premium for individuals: the agents that check your documents, prepare your return and find legal tax savings.
+And B2B for CA firms: Taxot as a first-line assistant for their clients. Routine questions get cited answers; complex cases reach the CA with a summary already written, so the visit is shorter. That is exactly the business objective we set in milestone 1.
+To be honest, this is a proposal; we have not tested pricing with real users.
+""")
+
 s = new_slide("Limits, ethics, and what comes next", "Honest about the gaps")
 text(s, 0.6, 1.62, 5.9, 0.45, "Limits today", size=20, bold=True, color=INK)
 lims = [f"Slow: {secs(LAT)} per answer on a CPU", f"Only {REAL_OOS:.0%} of real off-topic questions refused",
