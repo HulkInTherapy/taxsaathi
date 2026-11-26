@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/ritesh/Dev/taxsaathi/experiments/mlruns/939064117342323462/f7b82ae495d24e00a953b4645c4a7ff3/artifacts
+end_time: 1795682409911
+entry_point_name: ''
+experiment_id: '939064117342323462'
+lifecycle_stage: active
+run_id: f7b82ae495d24e00a953b4645c4a7ff3
+run_name: B1-test
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1795682409883
+status: 3
+tags: []
+user_id: ritesh

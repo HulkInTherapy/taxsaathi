@@ -1,0 +1,9 @@
+artifact_location: file:///Users/ritesh/Dev/taxsaathi/experiments/mlruns/939064117342323462
+creation_time: 1795682409738
+effective_trace_archival_retention: null
+experiment_id: '939064117342323462'
+last_update_time: 1795682409738
+lifecycle_stage: active
+name: taxot-m3
+trace_location: null
+workspace: default
